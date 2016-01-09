@@ -1,0 +1,41 @@
+﻿*:focus {
+    outline: 0;
+}
+
+.white-fg {
+    color: transparent;
+}
+
+#paged-list-demo .filters > div {
+    display: inline-block;
+}
+
+#paged-list-demo thead th span {
+    cursor: pointer;
+    user-select: none;
+}
+
+#paged-list-demo tbody tr {
+    cursor: pointer;
+}
+
+#paged-list-demo tr td:first-child {
+    width: 40px;
+}
+
+#paged-list-demo [disabled] {
+    pointer-events: initial;
+}
+
+#paged-list-demo .check-mark {
+    color: #EBEBEB;
+}
+
+    #paged-list-demo .check-mark.checked {
+        color: #289c2b;
+    }
+
+#paged-list-demo .btn {
+    position: relative;
+    padding: 0.4em 1.7em;
+}

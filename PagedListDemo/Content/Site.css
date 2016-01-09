@@ -1,0 +1,50 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.radio-button-toggle.btn-group label.btn {
+    padding: 3px !important;
+    min-width: 30px;
+    min-height: 20px;
+}
+
+.radio-button-toggle.btn-group .radio-button-toggle-true.active {
+    background-color: #3276b1 !important;
+    color: white;
+    cursor: default;
+}
+
+.radio-button-toggle.btn-group .radio-button-toggle-false.active {
+    background-color: #d7d7d7 !important;
+    color: white;
+    cursor: default;
+}
+
+.radio-button-toggle.btn-group .radio-button-toggle-true,
+.radio-button-toggle.btn-group .radio-button-toggle-false {
+    color: transparent;
+}
+
+    .radio-button-toggle.btn-group .radio-button-toggle-true:not(.active):hover {
+        /* uncomment background color to display text on hover */
+        /*color: white;*/
+    }
+
+    .radio-button-toggle.btn-group .radio-button-toggle-false:not(.active):hover {
+        /* uncomment background color to display text on hover */
+        /*color: black;*/
+    }
