@@ -1,0 +1,76 @@
+﻿@using PagedListDemo.Common
+@model PagedListDemo.Models.BooksModel.BooksModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Components";
+
+    var toggleButtons = new
+    {
+        @class = "btn-default",
+        @style = "width:40px",
+        labelTrue = "ON",
+        labelFalse = "OFF"
+    };
+}
+
+
+<h1>Components</h1>
+
+<h2>Radio Button Toggle</h2>
+
+<h3>Option 1</h3>
+@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree)
+<p>Using the default template</p>
+<pre class="prettyprint">
+@@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree)
+</pre>
+
+<h3>Option 2</h3>
+@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree, "~/Views/Shared/_RadioButtonToggleTemplate.cshtml")
+<p>Using custom HTML template</p>
+<pre class="prettyprint">
+@@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree, "~/Views/Shared/_RadioButtonToggleTemplate.cshtml")
+</pre>
+
+<h3>Option 3</h3>
+@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree, new { @id = "test", @class = "my-class", toggleButtons = toggleButtons })
+<p>Customize using helper parameters</p>
+<pre class="prettyprint">
+@@{
+    var toggleButtons = new
+    {
+        @@class = "btn-default",
+        @@style = "width:40px",
+        labelTrue = "ON",
+        labelFalse = "OFF"
+    };
+}
+@@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree, new { id = "test", @@class = "my-class", toggleButtons = toggleButtons })
+</pre>
+
+<h3>Sample generated HTML</h3>
+<pre class="prettyprint"><xmp><div class="radio-button-toggle btn-group" data-toggle="buttons">
+    <label class="btn btn-default radio-button-toggle-true" for="AcceptAndAgreeTrue">
+        <input data-val="true" data-val-required="The I Accept and Agree to the terms and conditions field is required." id="AcceptAndAgreeTrue" name="AcceptAndAgree" type="radio" value="True">Yes
+    </label>
+    <label class="btn btn-default radio-button-toggle-false active" for="AcceptAndAgreeFalse">
+        <input checked="checked" id="AcceptAndAgreeFalse" name="AcceptAndAgree" type="radio" value="False">No
+    </label>
+</div></xmp></pre>
+
+<h3>Sample HTML template</h3>
+<pre class="prettyprint">
+<xmp><div class='radio-button-toggle btn-group' data-toggle='buttons'>
+    <label class='btn btn-default radio-button-toggle-true{0}' for='{1}'>
+        {2}Yes
+    </label>
+    <label class='btn btn-default radio-button-toggle-false{3}' for='{4}'>
+        {5}No
+    </label>
+</div></xmp></pre>
+
+@section scripts {
+    @Styles.Render("~/Content/components")
+    <link href="http://jmblog.github.io/color-themes-for-google-code-prettify/css/themes/github.css" rel="stylesheet" />
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+}

@@ -18,7 +18,7 @@ namespace PagedListDemo.Models.BooksModel
         public string Author { get; set; }
 
         [JsonIgnore]
-        [Display(Name = "I Accept and Agree.")]
-        public bool YesOrNo { get; set; }
+        [Display(Name = "I Accept and Agree to the terms and conditions")]
+        public bool AcceptAndAgree { get; set; }
     }
 }

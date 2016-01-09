@@ -164,6 +164,7 @@
     <Compile Include="Common\PagedList\PagedListExtension.cs" />
     <Compile Include="Common\PagedList\PagedListOptions.cs" />
     <Compile Include="Common\PagedList\PagedListResult.cs" />
+    <Compile Include="Controllers\ComponentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -196,6 +197,8 @@
     <Content Include="Scripts\PagedListDemo\BooksViewModel.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="src\css\Components\components.css" />
+    <Content Include="src\css\Components\radio-button-toggle.css" />
     <Content Include="src\css\PagedListDemo\paged-llist-demo.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -213,6 +216,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\NextPage.cshtml" />
     <Content Include="Views\Shared\_RadioButtonToggleTemplate.cshtml" />
+    <Content Include="Views\Components\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

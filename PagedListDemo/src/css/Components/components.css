@@ -1,0 +1,23 @@
+﻿pre {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.radio-button-toggle {
+    margin-bottom: 15px;
+}
+
+xmp {
+    margin: 0;
+}
+
+pre.prettyprint {
+    background: #F9F9F9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: block;
+    overflow: auto;
+    width: auto;
+    white-space: pre;
+    word-wrap: normal;
+}

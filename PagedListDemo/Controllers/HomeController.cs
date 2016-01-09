@@ -15,7 +15,7 @@ namespace PagedListDemo.Controllers
 
             return View(new BooksModel()
             {
-                YesOrNo = false 
+                AcceptAndAgree = false 
             });
         }
 

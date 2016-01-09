@@ -29,6 +29,9 @@ namespace PagedListDemo
 
             bundles.Add(new StyleBundle("~/Content/paged-list-demo").Include(
                       "~/src/css/PagedListDemo/*.css"));
+
+            bundles.Add(new StyleBundle("~/Content/components").Include(
+                      "~/src/css/Components/*.css"));
         }
     }
 }

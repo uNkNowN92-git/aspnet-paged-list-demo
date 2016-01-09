@@ -12,13 +12,6 @@ namespace PagedListDemo.Common
 {
     public static class HtmlHelpers
     {
-        static HtmlHelpers()
-        {
-            HtmlHelperActionFunc = () => new HtmlHelperActionInvoker();
-        }
-
-        public static Func<HtmlHelperActionInvoker> HtmlHelperActionFunc { get; set; }
-
         public static string GetJsonPropertyName<TModel, TValue>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression)
         {
             var data = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
@@ -48,25 +41,22 @@ namespace PagedListDemo.Common
             labelTrue = "Yes",
             labelFalse = "No"
         };
-
-        private static string _template = "~/Views/Shared/_RadioButtonToggleTemplate.cshtml";
+        
+        private static string _template = @"<div class='radio-button-toggle btn-group' data-toggle='buttons'>
+            <label class='btn btn-default radio-button-toggle-true{0}' for='{1}'>
+                {2}Yes
+            </label>
+            <label class='btn btn-default radio-button-toggle-false{3}' for='{4}'>
+                {5}No
+            </label>
+        </div>";
 
         public static MvcHtmlString RadioButtonToggleFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression)
         {
-            string template = string.Empty;
-            try
-            {
-                template = helper.Partial(_template).ToHtmlString();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
             var data = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
 
             Func<TModel, TProperty> method = expression.Compile();
-            bool value = Convert.ToBoolean(method(helper.ViewData.Model));
+            bool value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
 
             string radioTrueActive = value ? " active" : "";
             string radioFalseActive = !value ? " active" : "";
@@ -75,7 +65,7 @@ namespace PagedListDemo.Common
             MvcHtmlString radioTrue = helper.RadioButton(data.PropertyName, true, value, new { id = radioTrueId });
             MvcHtmlString radioFalse = helper.RadioButton(data.PropertyName, false, !value, new { id = radioFalseId });
 
-            var result = string.Format(template, radioTrueActive, radioTrueId, radioTrue, radioFalseActive, radioFalseId, radioFalse);
+            var result = string.Format(_template, radioTrueActive, radioTrueId, radioTrue, radioFalseActive, radioFalseId, radioFalse);
 
             return new MvcHtmlString(result);
         }
@@ -89,13 +79,13 @@ namespace PagedListDemo.Common
             }
             catch
             {
-                template = helper.Partial(_template).ToHtmlString();
+                template = _template;
             }
 
             var data = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
 
             Func<TModel, TProperty> method = expression.Compile();
-            bool value = Convert.ToBoolean(method(helper.ViewData.Model));
+            bool value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
 
             string radioTrueActive = value ? " active" : "";
             string radioFalseActive = !value ? " active" : "";
@@ -114,8 +104,8 @@ namespace PagedListDemo.Common
             var data = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
 
             Func<TModel, TProperty> method = expression.Compile();
-            bool value = Convert.ToBoolean(method(helper.ViewData.Model));
-
+            bool value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
+            
             var _attrs = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             var _defaultDivAttrs = HtmlHelper.AnonymousObjectToHtmlAttributes(_radioButtonToggleDivDefaultAttrs);
             var _buttonLabel = HtmlHelper.AnonymousObjectToHtmlAttributes(_radioButtonToggleDefaultLabel);
@@ -248,13 +238,5 @@ namespace PagedListDemo.Common
 
         //    //return new MvcHtmlString(result);
         //}
-    }
-
-    public class HtmlHelperActionInvoker
-    {
-        public virtual MvcHtmlString InvokeAction(HtmlHelper helper, string action, string controller)
-        {
-            return helper.Action(action, controller);
-        }
     }
 }

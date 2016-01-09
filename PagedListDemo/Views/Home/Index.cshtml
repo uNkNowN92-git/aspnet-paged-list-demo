@@ -4,13 +4,6 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var toggleButtons = new
-    {
-        @class = "btn-default",
-        @style = "width:40px",
-        labelTrue = "ON",
-        labelFalse = "OFF"
-    };
 }
 
 @Styles.Render("~/Content/paged-list-demo")
@@ -19,11 +12,6 @@
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @id = "paged-list-demo", @data_bind = "visible: ready", @style = "display: none" }))
 {
-    @Html.RadioButtonToggleFor(Model => Model.YesOrNo)
-    @Html.RadioButtonToggleFor(Model => Model.YesOrNo, "~/Views/Shared/_RadioButtonToggleTemplate.cshtml")
-    @Html.RadioButtonToggleFor(Model => Model.YesOrNo, new { @id = "test", @class = "my-class", toggleButtons = toggleButtons })
-
-    <input class="btn btn-primary" type="submit" name="name" value="Submit" />
     @Html.ValidationSummary()
     <div class="filters">
         <h3>Filter by</h3>
