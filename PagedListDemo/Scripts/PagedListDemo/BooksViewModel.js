@@ -9,15 +9,12 @@ var BookModel = function (data) {
         }
         return 0;
     }, this);
-    // will also add this.__ko_mapping__
 };
 
 var BooksViewModel = function (params) {
     var self = this;
     PagedList.call(self, params);
-
-    var count = 0;
-
+    
     self.sortIcon = function (value) {
         var result;
         if (self.activeSort().column === value) {
@@ -52,6 +49,10 @@ var BooksViewModel = function (params) {
 
     self.selectedItem = ko.observable(null);
 
+    self.validInput = ko.computed(function () {
+        return self.selectedItem() !== null;
+    });
+
     self.getResult = function (data, event) {
         self.selectedItem(null);
         self.getList(data, event);
@@ -69,10 +70,6 @@ var BooksViewModel = function (params) {
     self.isSelected = function (id) {
         return self.selectedItem() === id;
     }
-
-    self.validInput = ko.computed(function () {
-        return self.selectedItem() !== null;
-    });
 
     self.selectItem = function (data) {
         var id = typeof(data.id) === "function" ? data.id() : data.id;
@@ -93,7 +90,7 @@ var BooksViewModel = function (params) {
         'X-PartnerKey': '3252352-sdgds-sdgd-dsgs-sgs332fs3f'
     };
 
-    self.headers = ko.observable(headers);
+    self.headers(headers);
 
     self.ready(true);
 
