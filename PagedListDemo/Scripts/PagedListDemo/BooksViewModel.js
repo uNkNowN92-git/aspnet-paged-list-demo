@@ -1,42 +1,92 @@
+var BookModel = function (data) {
+    ko.mapping.fromJS(data, {}, this);
+
+    // Sample additional attribute or property not coming from the server
+    this.titleLength = ko.computed(function () {
+        // check variable if it is an observable before accessing
+        if (typeof (this.title) === "function") {
+            return this.title().length;
+        }
+        return 0;
+    }, this);
+    // will also add this.__ko_mapping__
+};
+
 var BooksViewModel = function (params) {
     var self = this;
     PagedList.call(self, params);
 
-    self.ready = ko.observable(true);
+    var count = 0;
+
+    self.sortIcon = function (value) {
+        var result;
+        if (self.activeSort().column === value) {
+            result = 'glyphicon ' + (self.activeSort().asc ? 'glyphicon-sort-by-attributes' : 'glyphicon-sort-by-attributes-alt');
+        }
+        return { 'class': result };
+    };
+
+    self.description = ko.pureComputed({
+        write: function (value) {
+            console.log(value);
+            self.filter().Description = value;
+            self.getResult();
+        },
+        read: function () {
+            return;
+        }
+    });
+
+    self.author = ko.pureComputed({
+        write: function (value) {
+            console.log(value);
+            self.filter().Author = value;
+            self.getResult();
+        },
+        read: function () {
+            return;
+        }
+    });
+
+    self.ready = ko.observable(false);
 
     self.selectedItem = ko.observable(null);
 
     self.getResult = function (data, event) {
         self.selectedItem(null);
         self.getList(data, event);
-    }
+    };
+
+    self.isChecked = function (data) {
+        if (data !== undefined && typeof (data.id) === "function") {
+            return self.isSelected(data.id());
+        }
+        else {
+            return self.isSelected(data.id);
+        }
+    };
 
     self.isSelected = function (id) {
         return self.selectedItem() === id;
     }
-
-    self.isVisible = function (data) {
-        return self.isSelected(data.id);
-    }
-
-    self.rowItemEnabled = function (data) {
-        console.log(data);
-        return self.isSelected(data.id);
-    };
 
     self.validInput = ko.computed(function () {
         return self.selectedItem() !== null;
     });
 
     self.selectItem = function (data) {
-        var id = data.id;
-        
+        var id = typeof(data.id) === "function" ? data.id() : data.id;
+
         if (self.isSelected(id) === false) {
             self.selectedItem(id);
         } else {
             self.selectedItem(null);
         }
     };
+
+    function GetValue(data) {
+        return typeof (data) === "object" ? data.id : data.id();
+    }
 
     var headers = {
         'Authorization': 'Basic faskd52352rwfsdfs',
@@ -45,20 +95,33 @@ var BooksViewModel = function (params) {
 
     self.headers = ko.observable(headers);
 
-    console.log(self.headers()['Authorization']);
+    self.ready(true);
 
-    headers['Authorization'] = 'new value';
-    self.headers = ko.observable(headers);
+    //console.log(self.headers()['Authorization']);
 
-    console.log(self.headers()['Authorization']);
-    console.log(self.headers()['Authorization']);
+    //headers['Authorization'] = 'new value';
+    //self.headers = ko.observable(headers);
+
+    //console.log(self.headers()['Authorization']);
 };
 
-var viewModel = new BooksViewModel({
+var viewModel1 = new BooksViewModel({
     url: "/api/values",
     entriesPerPage: 5,
-    queryOnLoad: false,
     queryOnFilterChangeOnly: false
 });
 
-ko.applyBindings(viewModel, $("#paged-list-demo")[0]);
+var viewModel2 = new BooksViewModel({
+    url: "/api/values",
+    entriesPerPage: 5,
+    queryOnLoad: false,
+    //queryOnFilterChangeOnly: false
+    mapping: {
+        create: function (options) {
+            return new BookModel(options.data);
+        }
+    }
+});
+
+ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
+ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);

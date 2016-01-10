@@ -3,3 +3,9 @@
 }
 
 <h2>Next Page</h2>
+
+@if (ViewData["Books"] != null)
+{
+    var books = (PagedListDemo.Models.BooksModel.BooksModel)ViewData["Books"];
+    <pre>Selected ID: @books.Id</pre>
+}

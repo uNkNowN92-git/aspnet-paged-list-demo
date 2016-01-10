@@ -1,0 +1,95 @@
+﻿@using PagedListDemo.Common
+@model PagedListDemo.Models.BooksModel.BooksModel
+
+@{
+    var toggleButtons = new
+    {
+        @class = "btn-default",
+        @style = "width:40px",
+        labelTrue = "ON",
+        labelFalse = "OFF"
+    };
+}
+<h2>Radio Button Toggle</h2>
+
+<h4>Option 1</h4>
+@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree)
+<p>Using the default template</p>
+<pre class="prettyprint">
+@@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree)
+</pre>
+
+<h4>Option 2</h4>
+@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree, "~/Views/Shared/_RadioButtonToggleTemplate.cshtml")
+<p>Using custom HTML template</p>
+<pre class="prettyprint">
+@@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree, "~/Views/Shared/_RadioButtonToggleTemplate.cshtml")
+</pre>
+
+<h4>Option 3</h4>
+@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree, new { @id = "test", @class = "my-class", toggleButtons = toggleButtons })
+<p>Customize using helper parameters</p>
+<pre class="prettyprint">
+@@{
+    var toggleButtons = new
+    {
+        @@class = "btn-default",
+        @@style = "width:40px",
+        labelTrue = "ON",
+        labelFalse = "OFF"
+    };
+}
+@@Html.RadioButtonToggleFor(Model => Model.AcceptAndAgree, new { id = "test", @@class = "my-class", toggleButtons = toggleButtons })
+</pre>
+
+<h4>Sample generated HTML</h4>
+<pre class="prettyprint"><xmp><div class="radio-button-toggle btn-group" data-toggle="buttons">
+<label class="btn btn-default radio-button-toggle-true" for="AcceptAndAgreeTrue">
+<input data-val="true" data-val-required="The I Accept and Agree to the terms and conditions field is required." id="AcceptAndAgreeTrue" name="AcceptAndAgree" type="radio" value="True">Yes
+    </label>
+<label class="btn btn-default radio-button-toggle-false active" for="AcceptAndAgreeFalse">
+<input checked="checked" id="AcceptAndAgreeFalse" name="AcceptAndAgree" type="radio" value="False">No
+    </label>
+</div></xmp></pre>
+
+<h4>Sample HTML template</h4>
+<pre class="prettyprint">
+<xmp><div class='radio-button-toggle btn-group' data-toggle='buttons'>
+<label class='btn btn-default radio-button-toggle-true{0}' for='{1}'>
+        {2}Yes
+    </label>
+<label class='btn btn-default radio-button-toggle-false{3}' for='{4}'>
+        {5}No
+    </label>
+</div></xmp></pre>
+
+<h4>Sample CSS</h4>
+<pre class="prettyprint">
+.radio-button-toggle.btn-group label.btn {
+    padding: 3px !important;
+    min-width: 35px;
+    min-height: 20px;
+}
+.radio-button-toggle.btn-group .radio-button-toggle-true.active {
+    background-color: #3276b1 !important;
+    color: white;
+    cursor: default;
+}
+.radio-button-toggle.btn-group .radio-button-toggle-false.active {
+    background-color: #d7d7d7 !important;
+    color: white;
+    cursor: default;
+}
+.radio-button-toggle.btn-group .radio-button-toggle-true,
+.radio-button-toggle.btn-group .radio-button-toggle-false {
+    color: transparent;
+}
+    .radio-button-toggle.btn-group .radio-button-toggle-true:not(.active):hover {
+        /* uncomment background color to display text on hover */
+        /*color: white;*/
+    }
+    .radio-button-toggle.btn-group .radio-button-toggle-false:not(.active):hover {
+        /* uncomment background color to display text on hover */
+        /*color: black;*/
+    }
+</pre>

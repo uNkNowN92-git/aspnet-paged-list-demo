@@ -189,10 +189,14 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\knockout-2.0.0.debug.js" />
+    <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
     <Content Include="Scripts\knockout-paged-list.js" />
     <Content Include="Scripts\knockout-paged-list.min.js" />
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\PagedListDemo\BooksViewModel.js" />
     <Content Include="Scripts\respond.js" />
@@ -217,6 +221,9 @@
     <Content Include="Views\Home\NextPage.cshtml" />
     <Content Include="Views\Shared\_RadioButtonToggleTemplate.cshtml" />
     <Content Include="Views\Components\Index.cshtml" />
+    <Content Include="Views\Home\_PagedListDemo1.cshtml" />
+    <Content Include="Views\Home\_PagedListDemo2.cshtml" />
+    <Content Include="Views\Components\_RadioButtonToggle.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,9 +1,3 @@
-/*
- * knockout-paged-list v1.0.5
- * A KnockoutJS Plugin for Paged List/Grid
- * @repository https://github.com/uNkNowN92-git/knockout-paged-list.git
- * @license ISC
- */
 var PagedList = function (option) {
     return function (option) {
         var self = this;
@@ -20,13 +14,33 @@ var PagedList = function (option) {
 
         /* VARIABLES */
 
+        /* Mapping variables */
+
+        var _mapping = {
+            create: function (options) {
+                return options.data;
+            }
+        };
+
+        var _dataPropertyCount = 0;
+
+        /* Data variables */
+
+        var _currentData = [];
+
+        /* Paging variables */
+
+        var _url;
+        var _requestedPage = ko.observable(1);
+        var _requestedEntriesPerPage = ko.observable(1);
+
         /* Settings/Options variables */
 
-        self.defaultUrl = undefined;
-        self.queryOnLoad = true;
-        self.defaultEntriesPerPage = 5;
-        self.clearLoadedDataOnError = false;
-        self.queryOnFilterChangeOnly = true;
+        var _defaultUrl;
+        var _queryOnLoad = true;
+        var _defaultEntriesPerPage = 5;
+        var _clearLoadedDataOnError = false;
+        var _queryOnFilterChangeOnly = true;
 
         /* Server-related variables */
 
@@ -35,17 +49,6 @@ var PagedList = function (option) {
 
         /* CONFIGURE OPTIONS */
 
-        function ConfigureOptions() {
-
-            if (option) {
-                self.defaultUrl = option.url !== undefined ? option.url : self.defaultUrl;
-                self.queryOnLoad = option.queryOnLoad !== undefined ? option.queryOnLoad : self.queryOnLoad;
-                self.defaultEntriesPerPage = option.entriesPerPage !== undefined ? option.entriesPerPage : self.defaultEntriesPerPage;
-                self.clearLoadedDataOnError = option.clearLoadedDataOnError !== undefined ? option.clearLoadedDataOnError : self.clearLoadedDataOnError;
-                self.queryOnFilterChangeOnly = option.queryOnFilterChangeOnly !== undefined ? option.queryOnFilterChangeOnly : self.queryOnFilterChangeOnly;
-            }
-        }
-
         ConfigureOptions();
 
 
@@ -53,11 +56,9 @@ var PagedList = function (option) {
 
         /* Paging observables */
 
-        self.url = ko.observable();
-        self.data = ko.observableArray();
+        self.data = ko.observableArray([]);
         self.currentPage = ko.observable(1);
-        self.requestedPage = ko.observable(1);
-        self.entriesPerPage = ko.observable(self.defaultEntriesPerPage);
+        self.entriesPerPage = ko.observable(_defaultEntriesPerPage);
         self.totalEntries = ko.observable(0);
 
         /* Server-related observables */
@@ -83,78 +84,84 @@ var PagedList = function (option) {
         /* Paging helpers */
 
         // Entries to display
-        self.entries = ko.computed(function () {
+        self.entries = ko.pureComputed(function () {
             var first = GetCurrentPageStartIndex();
             return self.data.slice(first, first + self.entriesPerPage());
         });
 
-        self.hasEntries = ko.computed(function () {
+        self.hasEntries = ko.pureComputed(function () {
             return self.totalEntries() > 0;
         });
 
-        self.totalPages = ko.computed(function () {
+        self.totalPages = ko.pureComputed(function () {
             var pages = Math.ceil(self.totalEntries() / self.entriesPerPage());
             return pages > 0 ? pages : 1;
         });
 
-        self.previousEnabled = ko.computed(function () {
+        self.previousEnabled = ko.pureComputed(function () {
             return self.currentPage() !== 1 && self.loading() === false;
         });
 
-        self.nextEnabled = ko.computed(function () {
+        self.nextEnabled = ko.pureComputed(function () {
             return self.currentPage() !== self.totalPages() && self.loading() === false;
         });
 
-        self.showFirstEntriesEnabled = ko.computed(function () {
-            return self.hasEntries() && self.totalEntries() > self.defaultEntriesPerPage && self.loading() === false;
+        self.showFirstEntriesEnabled = ko.pureComputed(function () {
+            return self.hasEntries() && self.totalEntries() > _defaultEntriesPerPage && self.loading() === false;
         });
 
-        self.firstEntriesCount = ko.computed(function () {
-            return self.totalEntries() < self.entriesPerPage() ? self.totalEntries() : self.defaultEntriesPerPage;
+        self.firstEntriesCount = ko.pureComputed(function () {
+            return self.totalEntries() < self.entriesPerPage() ? self.totalEntries() : _defaultEntriesPerPage;
         });
 
-        self.previousItemsCount = ko.computed(function () {
-            return self.defaultEntriesPerPage;
+        self.previousItemsCount = ko.pureComputed(function () {
+            return _defaultEntriesPerPage;
         });
 
-        self.nextItemsCount = ko.computed(function () {
+        self.nextItemsCount = ko.pureComputed(function () {
             return self.totalPages() - self.currentPage() == 1 ?
                 self.totalEntries() - (self.entriesPerPage() * (self.totalPages() - 1)) :
-                self.defaultEntriesPerPage;
+                _defaultEntriesPerPage;
         });
 
-        self.loadedEntriesCount = ko.computed(function () {
-            return NotEmptyItemsCount(self.data());
+        self.loadedEntriesCount = ko.pureComputed(function () {
+            var data = self.data();
+
+            if (typeof (data) === "function") {
+                return NotEmptyItemsCount(data());
+            }
+            return 0;
         });
 
-        self.shownAll = ko.computed(function () {
+        self.shownAll = ko.pureComputed(function () {
             return self.entriesPerPage() >= self.totalEntries();
         });
 
         self.totalEntriesOnNextPage = function () {
-            return self.requestedPage() * self.entriesPerPage();
+            return _requestedPage() * _requestedEntriesPerPage();
         };
 
         /* Server-related helpers */
 
-        self.hasError = ko.computed(function () {
+        self.hasError = ko.pureComputed(function () {
             return self.error().length !== 0;
         });
 
-        self.errorCode = ko.computed(function () {
+        self.errorCode = ko.pureComputed(function () {
             return self.error().jqXHR !== undefined ? self.error().jqXHR.status : null;
         });
 
-        self.parserError = ko.computed(function () {
+        self.parserError = ko.pureComputed(function () {
             return self.error().status !== undefined ? self.error().status === "parsererror" : false;
         });
+
 
         /* FUNCTIONS */
 
         /* Paging functions */
 
         self.firstPage = function () {
-            self.requestedPage(1);
+            _requestedPage(1);
             UpdateDisplayedEntries();
         };
 
@@ -165,7 +172,7 @@ var PagedList = function (option) {
 
         self.next = function () {
             if (self.currentPage() < self.totalPages()) {
-                self.requestedPage(self.currentPage() + 1);
+                _requestedPage(self.currentPage() + 1);
 
                 UpdateDisplayedEntries();
             }
@@ -173,22 +180,22 @@ var PagedList = function (option) {
 
         self.previous = function () {
             if (self.currentPage() > 1) {
-                self.requestedPage(self.currentPage() - 1);
+                _requestedPage(self.currentPage() - 1);
 
                 UpdateDisplayedEntries();
             }
         };
 
         self.showFirstEntries = function () {
-            self.requestedPage(1);
-            self.entriesPerPage(self.defaultEntriesPerPage);
+            _requestedPage(1);
+            _requestedEntriesPerPage(_defaultEntriesPerPage);
 
             UpdateDisplayedEntries();
         };
 
         self.showAll = function () {
-            self.requestedPage(1);
-            self.entriesPerPage(self.totalEntries());
+            _requestedPage(1);
+            _requestedEntriesPerPage(self.totalEntries());
 
             UpdateDisplayedEntries();
         };
@@ -226,34 +233,70 @@ var PagedList = function (option) {
         /* Server-related functions */
 
         self.setUrl = function (url) {
-            self.url(url !== undefined ? url : self.defaultUrl);
+            _url = url !== undefined ? url : _defaultUrl;
         };
 
         self.getList = function (data, event) {
-            self.requestedPage(1);
+            _requestedPage(1);
             GetDataUrl(event);
 
             UpdateDisplayedEntries();
         };
 
 
+        /* *** PRIVATE *** */
+
         /* METHODS */
+
+        /* Mapping methods */
+
+        function MapData() {
+            // make all data observable
+            var mappedData = ko.mapping.fromJS(_currentData, _mapping);
+
+            // update data from mappedData observable
+            self.data(mappedData);
+        }
+
+        function isEmptyObject(obj) {
+            var property = [],
+                name;
+
+            for (name in obj) {
+                property.push(name);
+
+                if (property.length > _dataPropertyCount)
+                    return false;
+            }
+            return true;
+        }
+
+        function GetPropertiesCount(obj) {
+            var property = [],
+                name;
+
+            for (name in obj) {
+                property.push(name);
+            }
+
+            return property.length;
+        }
 
         /* Paging methods */
 
         function ShowAll() {
-            return self.requestedPage() === 1 && self.entriesPerPage() === self.totalEntries();
+            return _requestedPage() === 1 && self.entriesPerPage() === self.totalEntries();
         }
 
         function UpdateDisplayedEntries() {
             // Order by priority
             if (FiltersHasChanged()) {
                 // Request fresh data
-                self.requestedPage(1);
-                self.entriesPerPage(self.defaultEntriesPerPage);
+                _requestedPage(1);
+                _requestedEntriesPerPage(_defaultEntriesPerPage);
                 ExecuteQuery();
 
-            } else if (self.queryOnFilterChangeOnly === false) {
+            } else if (_queryOnFilterChangeOnly === false) {
                 // Request on filter change only
                 ExecuteQuery();
 
@@ -267,7 +310,8 @@ var PagedList = function (option) {
 
             } else {
                 // Update paging only
-                self.currentPage(self.requestedPage());
+                self.currentPage(_requestedPage());
+                self.entriesPerPage(_requestedEntriesPerPage());
 
             }
         }
@@ -287,8 +331,9 @@ var PagedList = function (option) {
         }
 
         function UpdateNeeded() {
-            return self.loadedEntriesCount() < self.totalEntriesOnNextPage() &&
-                self.loadedEntriesCount() != self.totalEntries();
+            return (self.loadedEntriesCount() < self.totalEntriesOnNextPage() ||
+                self.entriesPerPage() !== _requestedEntriesPerPage()) &&
+                self.loadedEntriesCount() !== self.totalEntries();
         }
 
 
@@ -308,7 +353,7 @@ var PagedList = function (option) {
         }
 
         function ExecuteQuery() {
-            if (self.url() !== undefined) {
+            if (_url !== undefined) {
                 CancelPreviousRequest();
                 self.loading(true);
                 self.error([]);
@@ -316,7 +361,7 @@ var PagedList = function (option) {
                 var queryOptions = BuildQueryOptions();
 
                 self.request = $.ajax({
-                    url: self.url(),
+                    url: _url,
                     method: 'get',
                     dataType: 'json',
                     data: queryOptions,
@@ -325,6 +370,7 @@ var PagedList = function (option) {
                     beforeSend: SetHeader
                 }).always(function () {
                     self.loading(false);
+                    self.entriesPerPage(_requestedEntriesPerPage());
                 });
             }
         }
@@ -344,8 +390,8 @@ var PagedList = function (option) {
         function BuildQueryOptions() {
             // Paging options
             var queryOptions = {
-                page: self.requestedPage(),
-                perPage: self.entriesPerPage(),
+                page: _requestedPage(),
+                perPage: _requestedEntriesPerPage(),
                 currentEntries: self.loadedEntriesCount(),
                 showAll: ShowAll()
             };
@@ -371,7 +417,7 @@ var PagedList = function (option) {
                 ProcessResponseData(response);
 
                 // Update current page to requested page
-                self.currentPage(self.requestedPage());
+                self.currentPage(_requestedPage());
             }
 
             ProcessResponseDetails(response.details);
@@ -381,10 +427,16 @@ var PagedList = function (option) {
         function ProcessResponseData(response) {
             var data = CreateEmptyObjectArray(response.details.totalEntries);
 
-            // update items from existing data
+            // retrieve existing data
             var existingData = self.data();
-            existingData.splice(response.details.totalEntries, existingData.length - response.details.totalEntries); // trim excess
-            data.updateItems(0, existingData);
+
+            if (typeof (existingData) === "function") {
+                // trim excess
+                existingData.splice(response.details.totalEntries, existingData().length - response.details.totalEntries);
+
+                // update items from existing data
+                data.updateItems(0, existingData());
+            }
 
             // update items from response data
             if (self.sortOnly()) {
@@ -394,17 +446,20 @@ var PagedList = function (option) {
                 data.updateItems(GetRequestedPageStartIndex(), response.data);
             }
 
-            // update ko data
-            self.data(data);
-
             // extract columns
             ExtractColumns(data[0]);
+
+            // store to global variable currentData
+            _currentData = data;
+
+            // map current data to observble data
+            MapData();
         }
 
         // Used in determining whether column to be sort is valid
         // or existing in the columns array
         function ExtractColumns(data) {
-            if (self.columns().length === 0 || self.queryOnFilterChangeOnly === false) {
+            if (self.columns().length === 0 || _queryOnFilterChangeOnly === false) {
                 var columns = $.map(data, function (v, i) { return i; });
                 self.columns(columns);
             }
@@ -427,7 +482,7 @@ var PagedList = function (option) {
             // Clear applied filters
             self.appliedFilter([]);
 
-            if (self.clearLoadedDataOnError) {
+            if (_clearLoadedDataOnError) {
                 // Clear previous laoded data
                 self.data([]);
             }
@@ -438,7 +493,7 @@ var PagedList = function (option) {
         }
 
         function GetRequestedPageStartIndex() {
-            return (self.requestedPage() - 1) * self.entriesPerPage();
+            return (_requestedPage() - 1) * self.entriesPerPage();
         }
 
         function CreateEmptyObjectArray(size) {
@@ -447,22 +502,41 @@ var PagedList = function (option) {
 
         function NotEmptyItemsCount(array) {
             return $.map(array, function (item, index) {
-                if (!$.isEmptyObject(item)) {
+                if (!isEmptyObject(item)) {
                     return index;
                 }
             }).length;
         }
 
+        /* Helpers */
 
-        /* INITIALIZATION */
+        function ValueOrDefault(value, defaultValue) {
+            return value !== undefined ? value : defaultValue;
+        }
+
+        /* Initialization */
+
+        function ConfigureOptions() {
+
+            if (option) {
+                _defaultUrl = ValueOrDefault(option.url, _defaultUrl);
+                _queryOnLoad = ValueOrDefault(option.queryOnLoad, _queryOnLoad);
+                _defaultEntriesPerPage = ValueOrDefault(option.entriesPerPage, _defaultEntriesPerPage);
+                _clearLoadedDataOnError = ValueOrDefault(option.clearLoadedDataOnError, _clearLoadedDataOnError);
+                _queryOnFilterChangeOnly = ValueOrDefault(option.queryOnFilterChangeOnly, _queryOnFilterChangeOnly);
+                _mapping = ValueOrDefault(option.mapping, _mapping);
+
+                _dataPropertyCount = GetPropertiesCount(_mapping.create({ data: {} }));
+            }
+        }
 
         function Init() {
 
-            if (self.defaultUrl !== undefined) {
-                self.setUrl(self.defaultUrl);
+            if (_defaultUrl !== undefined) {
+                self.setUrl(_defaultUrl);
 
                 // Load initial data
-                if (self.queryOnLoad)
+                if (_queryOnLoad)
                     self.getList();
             }
         }

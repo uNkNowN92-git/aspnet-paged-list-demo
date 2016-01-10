@@ -25,7 +25,8 @@ namespace PagedListDemo
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-                      "~/Scripts/knockout-3.4.0.js"));
+                      "~/Scripts/knockout-3.4.0.js",
+                      "~/Scripts/knockout.mapping-latest.debug.js"));
 
             bundles.Add(new StyleBundle("~/Content/paged-list-demo").Include(
                       "~/src/css/PagedListDemo/*.css"));

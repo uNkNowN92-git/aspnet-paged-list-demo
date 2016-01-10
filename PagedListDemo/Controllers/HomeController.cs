@@ -27,11 +27,14 @@ namespace PagedListDemo.Controllers
                 return View(books);
             }
 
+            TempData["Books"] = books;
             return RedirectToAction("NextPage", "Home");
         }
 
         public ActionResult NextPage()
         {
+            ViewData["Books"] = (BooksModel)TempData["Books"];
+
             return View();
         }
     }
