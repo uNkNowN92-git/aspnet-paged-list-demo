@@ -4,6 +4,7 @@ using PagedListDemo.Models;
 using System.Collections.Generic;
 using System.Linq;
 using PagedListDemo.Models.BooksModel;
+using System.Linq.Dynamic;
 
 namespace PagedListDemo.Repositories.BooksRepository
 {
@@ -14,22 +15,27 @@ namespace PagedListDemo.Repositories.BooksRepository
         public PagedListResult<Book> GetList(BooksFilterOptions filters, PagedListOptions pagedListOptions)
         {
             var data = db.Books.AsQueryable();
+                        
+            // filter Description
+            if (!string.IsNullOrEmpty(filters.Title))
+            {
+                data = data.Where("Title.Contains(@0)", filters.Title);
+            }
 
-            // filter data
+            // filter Author
             if (!string.IsNullOrEmpty(filters.Author))
             {
-                data = data.Where(x => x.Author.ToLower().Contains(filters.Author.ToLower()));
-                //data = data.Where("Author.Contains(@0)", filters.Author);
+                data = data.Where("Author.Contains(@0)", filters.Author);
             }
 
-            // filter data
+            // filter Description
             if (!string.IsNullOrEmpty(filters.Description))
             {
-                data = data.Where(x => x.Description.ToLower().Contains(filters.Description.ToLower()));
+                data = data.Where("Description.Contains(@0)", filters.Description);
             }
 
-            // set default sort field
-            pagedListOptions.SortBy = pagedListOptions.SortBy ?? "BookId";
+            // set default sort field (OPTIONAL)
+            //pagedListOptions.SortBy = pagedListOptions.SortBy ?? "BookId";
 
             // get paged list result
             var pagedListResult = data.ToPagedListResult(pagedListOptions);

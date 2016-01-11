@@ -25,8 +25,8 @@ namespace PagedListDemo.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Models.Book> Books { get; set; }
+        public virtual DbSet<Book> Books { get; set; }
 
-        public System.Data.Entity.DbSet<PagedListDemo.Models.Book> Books1 { get; set; }
+        public DbSet<Book> Books1 { get; set; }
     }
 }
