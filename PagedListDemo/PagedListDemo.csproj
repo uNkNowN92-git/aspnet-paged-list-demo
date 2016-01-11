@@ -44,6 +44,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -80,6 +88,7 @@
       <HintPath>..\packages\System.Linq.Dynamic.1.0.5\lib\net40\System.Linq.Dynamic.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -164,14 +173,33 @@
     <Compile Include="Common\PagedList\PagedListExtension.cs" />
     <Compile Include="Common\PagedList\PagedListOptions.cs" />
     <Compile Include="Common\PagedList\PagedListResult.cs" />
+    <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\ComponentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Book.cs">
+      <DependentUpon>PagedListDemoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BooksModel\BooksFilterOptions.cs" />
     <Compile Include="Models\BooksModel\BooksModel.cs" />
+    <Compile Include="Models\PagedListDemoModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PagedListDemoModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PagedListDemoModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PagedListDemoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PagedListDemoModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PagedListDemoModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BooksRepository\BooksRepository.cs" />
     <Compile Include="Repositories\BooksRepository\IBooksRepository.cs" />
@@ -182,8 +210,25 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Models\PagedListDemoModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PagedListDemoModel.edmx</DependentUpon>
+      <LastGenOutput>PagedListDemoModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\PagedListDemoModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PagedListDemoModel.edmx</DependentUpon>
+      <LastGenOutput>PagedListDemoModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="Models\PagedListDemoModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PagedListDemoModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\PagedListDemoModel.edmx.diagram">
+      <DependentUpon>PagedListDemoModel.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Somee.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -201,6 +246,7 @@
     <Content Include="Scripts\PagedListDemo\BooksViewModel.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="SQL\PagedListDemo.sql" />
     <Content Include="src\css\Components\components.css" />
     <Content Include="src\css\Components\radio-button-toggle.css" />
     <Content Include="src\css\PagedListDemo\paged-llist-demo.css" />
@@ -224,8 +270,11 @@
     <Content Include="Views\Components\Index.cshtml" />
     <Content Include="Views\Home\_PagedListDemo2.cshtml" />
     <Content Include="Views\Components\_RadioButtonToggle.cshtml" />
+    <Content Include="Views\Shared\_KoPagedListPager.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

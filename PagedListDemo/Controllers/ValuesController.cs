@@ -1,4 +1,5 @@
 ﻿using PagedListDemo.Common.PagedList;
+using PagedListDemo.Models;
 using PagedListDemo.Models.BooksModel;
 using PagedListDemo.Repositories.BooksRepository;
 using System.Web.Http;
@@ -15,11 +16,9 @@ namespace PagedListDemo.Controllers
             iBooksRepository = DependencyResolver.Current.GetService<IBooksRepository>();
         }
 
-        public PagedListResult<BooksModel> GetList([FromUri]BooksFilterOptions filters, [FromUri]PagedListOptions pagedListOptions)
+        public PagedListResult<Book> GetList([FromUri]BooksFilterOptions filters, [FromUri]PagedListOptions pagedListOptions)
         {
-            var result = iBooksRepository.GetList(filters, pagedListOptions);
-
-            return result;
+            return iBooksRepository.GetList(filters, pagedListOptions);
         }
     }
 }

@@ -59,11 +59,11 @@ var BooksViewModel = function (params) {
     };
 
     self.isChecked = function (data) {
-        if (data !== undefined && typeof (data.id) === "function") {
-            return self.isSelected(data.id());
+        if (data !== undefined && typeof (data.bookId) === "function") {
+            return self.isSelected(data.bookId());
         }
         else {
-            return self.isSelected(data.id);
+            return self.isSelected(data.bookId);
         }
     };
 
@@ -72,7 +72,7 @@ var BooksViewModel = function (params) {
     }
 
     self.selectItem = function (data) {
-        var id = typeof(data.id) === "function" ? data.id() : data.id;
+        var id = typeof(data.bookId) === "function" ? data.bookId() : data.bookId;
 
         if (self.isSelected(id) === false) {
             self.selectedItem(id);
@@ -82,7 +82,7 @@ var BooksViewModel = function (params) {
     };
 
     function GetValue(data) {
-        return typeof (data) === "object" ? data.id : data.id();
+        return typeof (data) === "object" ? data.bookId : data.bookId();
     }
 
     var headers = {
@@ -104,7 +104,7 @@ var BooksViewModel = function (params) {
 
 var viewModel1 = new BooksViewModel({
     url: "/api/values",
-    entriesPerPage: 5,
+    entriesPerPage: 10,
     queryOnFilterChangeOnly: false
 });
 

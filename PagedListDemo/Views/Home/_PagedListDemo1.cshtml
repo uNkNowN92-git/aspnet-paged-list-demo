@@ -1,5 +1,5 @@
 ﻿@using PagedListDemo.Common
-@model PagedListDemo.Models.BooksModel.BooksModel
+@model PagedListDemo.Models.Book
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @id = "paged-list-demo", @class = "paged-list-demo", @data_bind = "visible: ready", @style = "display: none" }))
 {
@@ -60,7 +60,7 @@
                 <tr>
                     <td data-bind="click: $root.selectItem">
                         <span data-bind="css: { 'checked': $root.isChecked($data) }" class="glyphicon glyphicon-ok check-mark"></span>
-                        <input type="radio" class="hidden" name="book" data-bind="value: @Html.GetJsonPropertyName(x => x.Id),
+                        <input type="radio" class="hidden" name="book" data-bind="value: @Html.GetJsonPropertyName(x => x.BookId),
                                                        checked: $root.selectedItem" />
                     </td>
                     <td data-bind="text: @Html.GetJsonPropertyName(x => x.Title)"></td>
@@ -83,22 +83,7 @@
         </table>
     </div>
 
-    <div class="pager">
-        <button class="btn" data-bind="click: showAll, visible: !shownAll()">
-            Show all <span data-bind="text: totalEntries"></span> available entries
-        </button>
-        <button class="btn" data-bind="click: showFirstEntries, enable: showFirstEntriesEnabled, visible: shownAll">
-            Show first <span data-bind="text: firstEntriesCount"></span> available entries
-        </button>
-        <button class="btn" data-bind="click: previous, enable: previousEnabled">
-            <span class="previous glyphicon glyphicon-chevron-left"></span>
-            Previous <span data-bind="text: previousItemsCount"></span> results
-        </button>
-        <button class="btn" data-bind="click: next, enable: nextEnabled">
-            Next <span data-bind="text: nextItemsCount"></span> results
-            <span class="next glyphicon glyphicon-chevron-right"></span>
-        </button>
-    </div>
+    @Html.KoPagedListPager();
 
     <div class="pager">
         <button data-bind="enable: validInput" class="btn btn-success" type="submit">Submit</button>

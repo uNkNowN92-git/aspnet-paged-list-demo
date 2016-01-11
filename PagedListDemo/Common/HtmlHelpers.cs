@@ -25,6 +25,23 @@ namespace PagedListDemo.Common
             return jsonPropertyName;
         }
 
+        private static string _koPagedListPagerTemplate = "~/Views/Shared/_KoPagedListPager.cshtml";
+
+        public static MvcHtmlString KoPagedListPager(this HtmlHelper helper, string template = null)
+        {
+            var result = new MvcHtmlString("");
+            try
+            {
+                result = helper.Partial(template);
+            }
+            catch
+            {
+                result = helper.Partial(_koPagedListPagerTemplate);
+            }
+
+            return result;
+        }
+
         private static object _radioButtonToggleDivDefaultAttrs = new
         {
             @class = "radio-button-toggle btn-group",
