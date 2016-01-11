@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Linq.Dynamic;
 
 namespace PagedListDemo.Common.PagedList
 {
     public static class PagedListExtension
     {
-        public static PagedListResult<T> ToPagedListResult<T>(this IEnumerable<T> data, PagedListOptions pagedListOptions)
+        public static PagedListResult<T> ToPagedListResult<T>(this IQueryable<T> data, PagedListOptions pagedListOptions)
         {
             if (!string.IsNullOrEmpty(pagedListOptions.OrderBy))
                 data = data.OrderBy(pagedListOptions.OrderBy);

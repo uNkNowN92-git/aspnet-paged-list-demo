@@ -204,6 +204,7 @@
     <Content Include="src\css\Components\components.css" />
     <Content Include="src\css\Components\radio-button-toggle.css" />
     <Content Include="src\css\PagedListDemo\paged-llist-demo.css" />
+    <Content Include="Views\Home\_PagedListDemo1.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -221,7 +222,6 @@
     <Content Include="Views\Home\NextPage.cshtml" />
     <Content Include="Views\Shared\_RadioButtonToggleTemplate.cshtml" />
     <Content Include="Views\Components\Index.cshtml" />
-    <Content Include="Views\Home\_PagedListDemo1.cshtml" />
     <Content Include="Views\Home\_PagedListDemo2.cshtml" />
     <Content Include="Views\Components\_RadioButtonToggle.cshtml" />
   </ItemGroup>

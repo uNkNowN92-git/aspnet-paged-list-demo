@@ -1,0 +1,106 @@
+﻿@using PagedListDemo.Common
+@model PagedListDemo.Models.BooksModel.BooksModel
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @id = "paged-list-demo", @class = "paged-list-demo", @data_bind = "visible: ready", @style = "display: none" }))
+{
+    @Html.ValidationSummary()
+    <div class="filters">
+        <h4>Filter by</h4>
+
+
+        @*<pre data-bind="text: description"></pre>*@
+        <div class="form-group">
+            <label class="control-label" for="description">Description</label>
+            <div class="input-group">
+                <input data-bind="textInput: description" type="text" class="form-control" id="description">
+                @*<input data-bind="value: filter().Description" type="text" class="form-control" id="description">*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="author">Author</label>
+            <div class="input-group">
+                <input data-bind="textInput: author" type="text" class="form-control" id="description">
+                @*<input data-bind="value: filter().Author" type="text" class="form-control" id="author">*@
+            </div>
+        </div>
+    </div>
+    <span class="text-muted">Using <kbd>data-bind="textInput: variableName"</kbd> in input element</span>
+    
+    @*<span data-bind="attr: $root.sortIcon('title')"></span>*@
+    @*<pre data-bind="text: ko.toJSON($root, null, 2)"></pre>*@
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Title)">
+                            @Html.DisplayNameFor(x => x.Title)
+                        </span>
+                        <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Title)')"></span>
+                    </th>
+                    <th>
+                        <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Description)">
+                            @Html.DisplayNameFor(x => x.Description)
+                        </span>
+                        <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Description)')"></span>
+                    </th>
+                    <th>
+                        <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Author)">
+                            @Html.DisplayNameFor(x => x.Author)
+                        </span>
+                        <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Author)')"></span>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody data-bind="foreach: entries">
+                <tr>
+                    <td data-bind="click: $root.selectItem">
+                        <span data-bind="css: { 'checked': $root.isChecked($data) }" class="glyphicon glyphicon-ok check-mark"></span>
+                        <input type="radio" class="hidden" name="book" data-bind="value: @Html.GetJsonPropertyName(x => x.Id),
+                                                       checked: $root.selectedItem" />
+                    </td>
+                    <td data-bind="text: @Html.GetJsonPropertyName(x => x.Title)"></td>
+                    <td data-bind="text: @Html.GetJsonPropertyName(x => x.Description)"></td>
+                    <td data-bind="text: @Html.GetJsonPropertyName(x => x.Author)"></td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr data-bind="visible: !hasEntries()">
+                    <td colspan="4">No Results</td>
+                </tr>
+                <tr data-bind="visible: hasError">
+                    <td colspan="4">
+                        An Error has occured!
+                        Error Code: <span data-bind="text: errorCode"></span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="pager">
+        <button class="btn" data-bind="click: showAll, visible: !shownAll()">
+            Show all <span data-bind="text: totalEntries"></span> available entries
+        </button>
+        <button class="btn" data-bind="click: showFirstEntries, enable: showFirstEntriesEnabled, visible: shownAll">
+            Show first <span data-bind="text: firstEntriesCount"></span> available entries
+        </button>
+        <button class="btn" data-bind="click: previous, enable: previousEnabled">
+            <span class="previous glyphicon glyphicon-chevron-left"></span>
+            Previous <span data-bind="text: previousItemsCount"></span> results
+        </button>
+        <button class="btn" data-bind="click: next, enable: nextEnabled">
+            Next <span data-bind="text: nextItemsCount"></span> results
+            <span class="next glyphicon glyphicon-chevron-right"></span>
+        </button>
+    </div>
+
+    <div class="pager">
+        <button data-bind="enable: validInput" class="btn btn-success" type="submit">Submit</button>
+    </div>
+}
