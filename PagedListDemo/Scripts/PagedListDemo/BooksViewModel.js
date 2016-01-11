@@ -23,10 +23,19 @@ var BooksViewModel = function (params) {
         return { 'class': result };
     };
 
+    self.title = ko.pureComputed({
+        write: function (value) {
+            self.filter().title = value;
+            self.getResult();
+        },
+        read: function () {
+            return;
+        }
+    });
+
     self.description = ko.pureComputed({
         write: function (value) {
-            console.log(value);
-            self.filter().Description = value;
+            self.filter().description = value;
             self.getResult();
         },
         read: function () {
@@ -36,8 +45,7 @@ var BooksViewModel = function (params) {
 
     self.author = ko.pureComputed({
         write: function (value) {
-            console.log(value);
-            self.filter().Author = value;
+            self.filter().author = value;
             self.getResult();
         },
         read: function () {

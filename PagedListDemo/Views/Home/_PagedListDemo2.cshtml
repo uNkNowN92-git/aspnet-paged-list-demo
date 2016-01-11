@@ -8,6 +8,13 @@
         <h3>Filter by</h3>
 
         <div class="form-group">
+            <label class="control-label" for="title">Title</label>
+            <div class="input-group">
+                <input data-bind="value: filter().Title" type="text" class="form-control" id="title">
+            </div>
+        </div>
+
+        <div class="form-group">
             <label class="control-label" for="description">Description</label>
             <div class="input-group">
                 <input data-bind="value: filter().Description" type="text" class="form-control" id="description">
@@ -26,7 +33,6 @@
                 <span class="white-fg">.</span>
             </label>
             <div class="input-group">
-                @*<input data-bind="value: filter().Author" type="text" class="form-control" id="author">*@
                 <button data-bind="click: getResult" class="btn btn-primary">Search</button>
             </div>
         </div>
