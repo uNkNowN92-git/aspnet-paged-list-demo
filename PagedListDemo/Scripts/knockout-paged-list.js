@@ -1,5 +1,5 @@
 /*
- * knockout-paged-list v1.1.3
+ * knockout-paged-list v1.1.4
  * A KnockoutJS Plugin for Paged List/Grid
  * @repository https://github.com/uNkNowN92-git/knockout-paged-list.git
  * @license ISC
@@ -22,7 +22,9 @@ var PagedList = (function () {
 
         /* Mapping variables */
 
-        var _mapping = {
+        var _mapping;
+
+        var _mappingNotAsObservable = {
             create: function (options) {
                 return options.data;
             }
@@ -36,13 +38,15 @@ var PagedList = (function () {
 
         /* Paging variables */
 
-        var _url;
+        var _url = ko.observable();
+        var _queryOptions = ko.observable();
         var _requestedPage = ko.observable(1);
         var _requestedEntriesPerPage = ko.observable(1);
 
         /* Settings/Options variables */
 
         var _defaultUrl;
+        var _dataAsObservable;
         var _queryOnLoad = true;
         var _defaultEntriesPerPage = 5;
         var _clearLoadedDataOnError = false;
@@ -153,6 +157,14 @@ var PagedList = (function () {
 
         /* Server-related helpers */
 
+        self.url = ko.pureComputed(function () {
+            return _url();
+        });
+
+        self.queryOptions = ko.pureComputed(function () {
+            return _queryOptions();
+        });
+
         self.hasError = ko.pureComputed(function () {
             return self.error().length !== 0;
         });
@@ -243,7 +255,7 @@ var PagedList = (function () {
         /* Server-related functions */
 
         self.setUrl = function (url) {
-            _url = url !== undefined ? url : _defaultUrl;
+            _url(url !== undefined ? url : _defaultUrl);
         };
 
         self.getList = function (data, event) {
@@ -261,10 +273,23 @@ var PagedList = (function () {
         /* Mapping methods */
 
         function MapData() {
-            // make all data observable
-            var mappedData = ko.mapping.fromJS(_currentData, _mapping);
+            var mappedData;
 
-            // update data from mappedData observable
+            if (_dataAsObservable === false) {
+                // dont make all data observable
+                mappedData = ko.mapping.fromJS(_currentData, _mappingNotAsObservable);
+
+            } else if (_mapping === undefined) {
+                // make all data observable
+                mappedData = ko.mapping.fromJS(_currentData);
+
+            } else {
+                // make all data observable
+                mappedData = ko.mapping.fromJS(_currentData, _mapping);
+
+            }
+
+            // update data from mappedData
             self.data(mappedData);
         }
 
@@ -363,18 +388,18 @@ var PagedList = (function () {
         }
 
         function ExecuteQuery() {
-            if (_url !== undefined) {
+            if (_url() !== undefined) {
                 CancelPreviousRequest();
                 self.loading(true);
                 self.error([]);
 
-                var queryOptions = BuildQueryOptions();
+                _queryOptions(BuildQueryOptions());
 
                 self.request = $.ajax({
-                    url: _url,
+                    url: _url().toString(),
                     method: 'get',
                     dataType: 'json',
-                    data: queryOptions,
+                    data: _queryOptions(),
                     success: ProcessResponse,
                     error: ProcessError,
                     beforeSend: SetHeader
@@ -489,8 +514,7 @@ var PagedList = (function () {
                 error: error
             });
 
-            // Clear applied filters
-            self.appliedFilter([]);
+            $.extend(self.appliedFilter(), { error: true });
 
             if (_clearLoadedDataOnError) {
                 // Clear previous laoded data
@@ -535,8 +559,15 @@ var PagedList = (function () {
                 _clearLoadedDataOnError = ValueOrDefault(option.clearLoadedDataOnError, _clearLoadedDataOnError);
                 _queryOnFilterChangeOnly = ValueOrDefault(option.queryOnFilterChangeOnly, _queryOnFilterChangeOnly);
                 _mapping = ValueOrDefault(option.mapping, _mapping);
+                // setting dataAsObservable to false will make the mapping option to be useless
+                _dataAsObservable = ValueOrDefault(option.dataAsObservable,
+                    _dataAsObservable === undefined && _mapping !== undefined ? true : false);
 
-                _dataPropertyCount = GetPropertiesCount(_mapping.create({ data: {} }));
+                if (_dataAsObservable === true && _mapping !== undefined) {
+                    _dataPropertyCount = GetPropertiesCount(_mapping.create({ data: {} }));
+                } else {
+                    _dataPropertyCount = 0;
+                }
             }
         }
 

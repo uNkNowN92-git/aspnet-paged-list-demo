@@ -16,7 +16,7 @@ namespace PagedListDemo.Controllers
             iBooksRepository = DependencyResolver.Current.GetService<IBooksRepository>();
         }
 
-        public PagedListResult<Book> GetList([FromUri]BooksFilterOptions filters, [FromUri]PagedListOptions pagedListOptions)
+        public PagedListResult<BooksModel> GetList([FromUri]BooksFilterOptions filters, [FromUri]PagedListOptions pagedListOptions)
         {
             return iBooksRepository.GetList(filters, pagedListOptions);
         }

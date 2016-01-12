@@ -28,62 +28,77 @@
             </div>
         </div>
     </div>
-        <span class="text-muted">Using <kbd>data-bind="textInput: variableName"</kbd> in input element</span>
+    
+    <span class="text-muted">Using <kbd>data-bind="textInput: variableName"</kbd> in input element</span>
 
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>
-                            <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Title)">
-                                @Html.DisplayNameFor(x => x.Title)
-                            </span>
-                            <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Title)')"></span>
-                        </th>
-                        <th>
-                            <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Description)">
-                                @Html.DisplayNameFor(x => x.Description)
-                            </span>
-                            <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Description)')"></span>
-                        </th>
-                        <th>
-                            <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Author)">
-                                @Html.DisplayNameFor(x => x.Author)
-                            </span>
-                            <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Author)')"></span>
-                        </th>
-                    </tr>
-                </thead>
+    @*<pre data-bind="text: ko.toJSON($root.appliedFilter, null, 2)"></pre>*@
 
-                <tbody data-bind="foreach: entries">
-                    <tr>
-                        <td data-bind="click: $root.selectItem">
-                            <span data-bind="css: { 'checked': $root.isChecked($data) }" class="glyphicon glyphicon-ok check-mark"></span>
-                            <input type="radio" class="hidden" name="book" data-bind="value: @Html.GetJsonPropertyName(x => x.BookId),
-                                                       checked: $root.selectedItem" />
-                        </td>
-                        <td data-bind="text: @Html.GetJsonPropertyName(x => x.Title)"></td>
-                        <td data-bind="text: @Html.GetJsonPropertyName(x => x.Description)"></td>
-                        <td data-bind="text: @Html.GetJsonPropertyName(x => x.Author)"></td>
-                    </tr>
-                </tbody>
+    @Html.TextBoxFor(x => x.BookId,
+    new
+    {
+        @type = "radio",
+        @class = "hidden",
+        data_bind = "value: $root.selectedItem(), checked: $root.selectedItem"
+    })
 
-                <tfoot>
-                    <tr data-bind="visible: !hasEntries()">
-                        <td colspan="4">No Results</td>
-                    </tr>
-                    <tr data-bind="visible: hasError">
-                        <td colspan="4">
-                            An Error has occured!
-                            Error Code: <span data-bind="text: errorCode"></span>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Title)">
+                            @Html.DisplayNameFor(x => x.Title)
+                        </span>
+                        <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Title)')"></span>
+                    </th>
+                    <th>
+                        <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Description)">
+                            @Html.DisplayNameFor(x => x.Description)
+                        </span>
+                        <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Description)')"></span>
+                    </th>
+                    <th>
+                        <span data-bind="click: sort" data-sort-field="@Html.GetJsonPropertyName(x => x.Author)">
+                            @Html.DisplayNameFor(x => x.Author)
+                        </span>
+                        <span data-bind="attr: $root.sortIcon('@Html.GetJsonPropertyName(x => x.Author)')"></span>
+                    </th>
+                </tr>
+            </thead>
 
-        @Html.KoPagedListPager();
+            <tbody data-bind="foreach: entries">
+                <tr>
+                    <td data-bind="click: $root.selectItem">
+                        <span data-bind="css: { 'checked': $root.isChecked($data) }" class="glyphicon glyphicon-ok check-mark"></span>
+                        <input type="radio" class="hidden" name="bookId"
+                               data-bind="value: @Html.GetJsonPropertyName(x => x.BookId),
+                                          checked: $root.selectedItem" />
+                    </td>
+                    <td>
+                        <span data-bind="text: @Html.GetJsonPropertyName(x => x.Title)"></span>
+                        @Html.TextBoxFor(x => x.Title, new { @data_bind = "textInput: " + @Html.GetJsonPropertyName(x => x.Title), @class = "form-control" })
+                    </td>
+                    <td data-bind="text: @Html.GetJsonPropertyName(x => x.Description)"></td>
+                    <td data-bind="text: @Html.GetJsonPropertyName(x => x.Author)"></td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr data-bind="visible: !hasEntries()">
+                    <td colspan="4">No Results</td>
+                </tr>
+                <tr data-bind="visible: hasError">
+                    <td colspan="4">
+                        An Error has occured!
+                        Error Code: <span data-bind="text: errorCode"></span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    @Html.KoPagedListPager();
 
     <div class="pager">
         <button data-bind="enable: validInput" class="btn btn-success" type="submit">Submit</button>

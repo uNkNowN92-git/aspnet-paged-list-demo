@@ -14,7 +14,7 @@ var BookModel = function (data) {
 var BooksViewModel = function (params) {
     var self = this;
     PagedList.call(self, params);
-    
+
     self.sortIcon = function (value) {
         var result;
         if (self.activeSort().column === value) {
@@ -80,7 +80,7 @@ var BooksViewModel = function (params) {
     }
 
     self.selectItem = function (data) {
-        var id = typeof(data.bookId) === "function" ? data.bookId() : data.bookId;
+        var id = typeof (data.bookId) === "function" ? data.bookId() : data.bookId;
 
         if (self.isSelected(id) === false) {
             self.selectedItem(id);
@@ -112,8 +112,9 @@ var BooksViewModel = function (params) {
 
 var viewModel1 = new BooksViewModel({
     url: "/api/values",
-    entriesPerPage: 10,
-    queryOnFilterChangeOnly: false
+    entriesPerPage: 5,
+    queryOnFilterChangeOnly: false,
+    dataAsObservable: true,
 });
 
 var viewModel2 = new BooksViewModel({
@@ -121,6 +122,8 @@ var viewModel2 = new BooksViewModel({
     entriesPerPage: 5,
     queryOnLoad: false,
     //queryOnFilterChangeOnly: false
+    //dataAsObservable: true,
+    // setting dataAsObservable to false will make the mapping option to be useless
     mapping: {
         create: function (options) {
             return new BookModel(options.data);

@@ -12,10 +12,17 @@ namespace PagedListDemo.Repositories.BooksRepository
     {
         private Models.PagedListDemoEntities db = new Models.PagedListDemoEntities();
 
-        public PagedListResult<Book> GetList(BooksFilterOptions filters, PagedListOptions pagedListOptions)
+        public PagedListResult<BooksModel> GetList(BooksFilterOptions filters, PagedListOptions pagedListOptions)
         {
-            var data = db.Books.AsQueryable();
-                        
+            var data = db.Books
+                .Select(x => new BooksModel()
+                {
+                    BookId = x.BookId,
+                    Title = x.Author,
+                    Description = x.Description,
+                    Author = x.Author
+                });
+
             // filter Description
             if (!string.IsNullOrEmpty(filters.Title))
             {
@@ -34,13 +41,12 @@ namespace PagedListDemo.Repositories.BooksRepository
                 data = data.Where("Description.Contains(@0)", filters.Description);
             }
 
-            // set default sort field (OPTIONAL)
-            //pagedListOptions.SortBy = pagedListOptions.SortBy ?? "BookId";
+            // REQUIRED
+            pagedListOptions.SortBy = pagedListOptions.SortBy ?? "BookId";
 
-            // get paged list result
-            var pagedListResult = data.ToPagedListResult(pagedListOptions);
-
-            return pagedListResult;
+            return data.ToPagedListResult(pagedListOptions);
+            
+            //return pagedListResult;
             //// sample data
 
             //var sampleData = new List<Book>() {

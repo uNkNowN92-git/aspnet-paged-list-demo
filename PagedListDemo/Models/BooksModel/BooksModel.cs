@@ -5,8 +5,8 @@ namespace PagedListDemo.Models.BooksModel
 {
     public class BooksModel
     {
-        [JsonProperty(PropertyName = "id")]
-        public long Id { get; set; }
+        [JsonProperty(PropertyName = "bookId")]
+        public long BookId { get; set; }
         
         [JsonProperty(PropertyName = "title")]
         public string Title { get; set; }

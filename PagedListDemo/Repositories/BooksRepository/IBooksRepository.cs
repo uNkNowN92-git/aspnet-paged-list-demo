@@ -6,6 +6,6 @@ namespace PagedListDemo.Repositories.BooksRepository
 {
     public interface IBooksRepository
     {
-        PagedListResult<Book> GetList(BooksFilterOptions filters, PagedListOptions pagedListOptions);
+        PagedListResult<BooksModel> GetList(BooksFilterOptions filters, PagedListOptions pagedListOptions);
     }
 }

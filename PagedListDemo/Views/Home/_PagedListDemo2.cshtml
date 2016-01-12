@@ -40,6 +40,15 @@
 
     <span class="text-muted">Using <kbd>data-bind="value: variableName"</kbd> in input element</span>
 
+    @*<pre data-bind="text: ko.toJSON($root.appliedFilter, null, 2)"></pre>*@
+
+    @Html.TextBoxFor(x => x.BookId,
+    new
+    {
+        @type = "radio",
+        @class = "hidden",
+        data_bind = "value: $root.selectedItem(), checked: $root.selectedItem"
+    })
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
@@ -72,19 +81,13 @@
                 <tr>
                     <td data-bind="click: $root.selectItem" title="Click to select or unselect">
                         <span data-bind="css: { 'checked': $root.isChecked($data) }" class="glyphicon glyphicon-ok check-mark"></span>
-                        @Html.TextBoxFor(x => x.BookId,
-                        new
-                        {
-                            @class = "hidden",
-                            data_bind = "value: $root.selectedItem(), checked: $root.selectedItem"
-                        })
                     </td>
                     @*<td>
-                            <pre data-bind="text: ko.toJSON($root.selectedItem)"></pre>
-                            <pre data-bind="text: ko.toJSON($data.id())"></pre>
-                            <pre data-bind="text: ko.toJSON($root.selectedItem() == $data.id())"></pre>
-                            <pre data-bind="text: ko.toJSON($data)"></pre>
-                        </td>*@
+                        <pre data-bind="text: ko.toJSON($root.selectedItem)"></pre>
+                        <pre data-bind="text: ko.toJSON($data.id())"></pre>
+                        <pre data-bind="text: ko.toJSON($root.selectedItem() == $data.id())"></pre>
+                        <pre data-bind="text: ko.toJSON($data)"></pre>
+                    </td>*@
                     <td data-bind="text: @Html.GetJsonPropertyName(x => x.Title)"></td>
                     <td data-bind="text: titleLength"></td>
                     <td>

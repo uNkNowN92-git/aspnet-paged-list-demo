@@ -7,10 +7,13 @@ namespace PagedListDemo.Common.PagedList
     {
         public static PagedListResult<T> ToPagedListResult<T>(this IQueryable<T> data, PagedListOptions pagedListOptions)
         {
-            if (!string.IsNullOrEmpty(pagedListOptions.OrderBy))
-                data = data.OrderBy(pagedListOptions.OrderBy);
+            if (string.IsNullOrEmpty(pagedListOptions.OrderBy))
+            {
+                return null;
+            }
 
             var pagedList = data
+                .OrderBy(pagedListOptions.OrderBy)
                 .Skip(pagedListOptions.Start)
                 .Take(pagedListOptions.ShowAll ? data.Count() : pagedListOptions.Entries);
 

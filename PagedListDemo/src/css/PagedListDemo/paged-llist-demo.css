@@ -2,6 +2,11 @@
     outline: 0;
 }
 
+pre {
+    max-height: 400px;
+    overflow: auto;
+}
+
 .table-responsive {
     overflow-x: auto;
 }
