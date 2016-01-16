@@ -14,19 +14,19 @@ namespace PagedListDemo.Controllers
 {
     public class BooksController : ApiController
     {
-        private PagedListDemoEntities db = new PagedListDemoEntities();
+        private Models.PagedListDemo db = new Models.PagedListDemo();
 
         // GET: api/Books
         public IQueryable<Book> GetBooks()
         {
-            return db.Books1;
+            return db.Books;
         }
 
         // GET: api/Books/5
         [ResponseType(typeof(Book))]
         public IHttpActionResult GetBook(long id)
         {
-            Book book = db.Books1.Find(id);
+            Book book = db.Books.Find(id);
             if (book == null)
             {
                 return NotFound();
@@ -79,7 +79,7 @@ namespace PagedListDemo.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Books1.Add(book);
+            db.Books.Add(book);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = book.BookId }, book);
@@ -89,13 +89,13 @@ namespace PagedListDemo.Controllers
         [ResponseType(typeof(Book))]
         public IHttpActionResult DeleteBook(long id)
         {
-            Book book = db.Books1.Find(id);
+            Book book = db.Books.Find(id);
             if (book == null)
             {
                 return NotFound();
             }
 
-            db.Books1.Remove(book);
+            db.Books.Remove(book);
             db.SaveChanges();
 
             return Ok(book);
@@ -112,7 +112,7 @@ namespace PagedListDemo.Controllers
 
         private bool BookExists(long id)
         {
-            return db.Books1.Count(e => e.BookId == id) > 0;
+            return db.Books.Count(e => e.BookId == id) > 0;
         }
     }
 }

@@ -10,18 +10,177 @@ namespace PagedListDemo.Repositories.BooksRepository
 {
     internal class BooksRepository : IBooksRepository
     {
-        private Models.PagedListDemoEntities db = new Models.PagedListDemoEntities();
+        private Models.PagedListDemo db = new Models.PagedListDemo();
+        private void Seed()
+        {
+            var r = new Random();
+
+            // Add person
+            var person = new Person()
+            {
+                PersonId = r.Next(1, 10000),
+                FirstName = "First Name " + r.Next(1, 10),
+                LastName = "Last Name " + r.Next(1, 10),
+                BirthDate = DateTime.Now.AddYears(r.Next(1, 20)).AddMonths(r.Next(1, 12)).AddDays(r.Next(1, 31))
+                //, new Person()
+                //{
+                //    FirstName = "First Name 2",
+                //    LastName = "Last Name 2",
+                //    BirthDate = DateTime.Now.AddYears(-20).AddMonths(2)
+                //},
+            };
+
+            db.Persons.Add(person);
+
+
+            // Add author
+            var author = new Author()
+            {
+                AuthorId = r.Next(1, 10000),
+                PersonId = person.PersonId
+            };
+            db.Authors.Add(author);
+
+            // Add books
+
+            switch (r.Next(1, 4))
+            {
+                case 1:
+                    var books = new List<Book>() {
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "Description",
+                    Title = "Title"
+                },
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "Descridsaasns",
+                    Title = "Tiasffsle"
+                },
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "asdagw",
+                    Title = "dasdfgsd"
+                }
+            };
+                    db.Books.AddRange(books);
+
+                    break;
+                case 2:
+                    var books2 = new List<Book>() {
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "sdfasdfasdf",
+                    Title = "asdfasdfasdf"
+                },
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "asdfasdfasd",
+                    Title = "asdfasdfsdf"
+                },
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "fsdfsdfhfg",
+                    Title = "jtyryheraef"
+                }
+            };
+                    db.Books.AddRange(books2);
+                    break;
+                case 3:
+                    var book2 = new List<Book>() {
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "hsfghhshse",
+                    Title = "sdhrthsdsgfd"
+                },
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "trhrthdrth",
+                    Title = "jyukktgerre"
+                },
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "regsrtjdtyhsre",
+                    Title = "iluytgsrthsrtgs"
+                },
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "dytjuklythd",
+                    Title = "strh6kyt"
+                }
+            };
+                    db.Books.AddRange(book2);
+                    break;
+                default:
+
+                    var books3 = new List<Book>() {
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "hdrhyjdyjdtyj",
+                    Title = "ilktrhgfsd"
+                },
+                new Book()
+                {
+                    BookId = r.Next(1, 10000),
+                    Author = author,
+                    AuthorId = author.AuthorId,
+                    Description = "hrdthtkytdj",
+                    Title = "gsegesrgergr"
+                }
+            };
+                    db.Books.AddRange(books3);
+
+                    break;
+            }
+
+            db.SaveChanges();
+        }
 
         public PagedListResult<BooksModel> GetList(BooksFilterOptions filters, PagedListOptions pagedListOptions)
         {
-            var data = db.Books
-                .Select(x => new BooksModel()
-                {
-                    BookId = x.BookId,
-                    Title = x.Author,
-                    Description = x.Description,
-                    Author = x.Author
-                });
+            try
+            {
+                //Seed();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            var data = db.Books.AsQueryable();
 
             // filter Description
             if (!string.IsNullOrEmpty(filters.Title))
@@ -32,7 +191,8 @@ namespace PagedListDemo.Repositories.BooksRepository
             // filter Author
             if (!string.IsNullOrEmpty(filters.Author))
             {
-                data = data.Where("Author.Contains(@0)", filters.Author);
+                data = data.Where("Author.Person.LastName.Contains(@0) OR Author.Person.FirstName.Contains(@0)", filters.Author);
+                //data = data.Where("Author.Person.FirstName.Contains(@0)", filters.Author);
             }
 
             // filter Description
@@ -44,98 +204,42 @@ namespace PagedListDemo.Repositories.BooksRepository
             // REQUIRED
             pagedListOptions.SortBy = pagedListOptions.SortBy ?? "BookId";
 
-            return data.ToPagedListResult(pagedListOptions);
-            
+            var pagedListResult = data
+                .Select(x => new BooksModel()
+                {
+                    BookId = x.BookId,
+                    Title = x.Title,
+                    Description = x.Description,
+                    Author = x.Author.Person.FirstName + " " + x.Author.Person.LastName,
+                    PublishDate = x.PublishDate
+                }).ToPagedListResult(pagedListOptions);
+
+            return pagedListResult;
+
+            //var pagedListResult = data
+            //    .OrderBy(pagedListOptions.OrderBy)
+            //    .Skip(pagedListOptions.Start)
+            //    .Take(pagedListOptions.ShowAll ? data.Count() : pagedListOptions.Entries)
+            //    .Select(x => new BooksModel()
+            //    {
+            //        BookId = x.BookId,
+            //        Title = x.Title,
+            //        Description = x.Description,
+            //        Author = x.Author.Person.FirstName + " " + x.Author.Person.LastName,
+            //        PublishDate = x.PublishDate
+            //    });//.ToPagedListResult(pagedListOptions);
+
+            //var result = new PagedListResult<BooksModel>(pagedListResult, new PagedListDetails()
+            //{
+            //    TotalEntries = data.Count()
+            //});
+            //return result;
+
+
             //return pagedListResult;
             //// sample data
 
-            //var sampleData = new List<Book>() {
 
-            //    new Book()
-            //    {
-            //        BookId = 1,
-            //        Author = "Author",
-            //        Description = "Description",
-            //        Title = "Title"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 2,
-            //        Author = "Fasdkds",
-            //        Description = "Descridsaasns",
-            //        Title = "Tiasffsle"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 3,
-            //        Author = "gwerwe",
-            //        Description = "asdagw",
-            //        Title = "dasdfgsd"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 4,
-            //        Author = "Autwefasfhor",
-            //        Description = "sdfasdfasdf",
-            //        Title = "asdfasdfasdf"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 5,
-            //        Author = "Authasdfasdfor",
-            //        Description = "asdfasdfasd",
-            //        Title = "asdfasdfsdf"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 6,
-            //        Author = "athgfsdfsd",
-            //        Description = "fsdfsdfhfg",
-            //        Title = "jtyryheraef"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 7,
-            //        Author = "hyjwrfsdfag",
-            //        Description = "hsfghhshse",
-            //        Title = "sdhrthsdsgfd"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 8,
-            //        Author = "grtjijhsergreg",
-            //        Description = "trhrthdrth",
-            //        Title = "jyukktgerre"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 9,
-            //        Author = "sergergrjs",
-            //        Description = "regsrtjdtyhsre",
-            //        Title = "iluytgsrthsrtgs"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 10,
-            //        Author = "hsrthukjjsrtyhs",
-            //        Description = "dytjuklythd",
-            //        Title = "strh6kyt"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 11,
-            //        Author = "hsrthtyikdtyj",
-            //        Description = "hdrhyjdyjdtyj",
-            //        Title = "ilktrhgfsd"
-            //    },
-            //    new Book()
-            //    {
-            //        BookId = 12,
-            //        Author = "mghjfdhfgh",
-            //        Description = "hrdthtkytdj",
-            //        Title = "gsegesrgergr"
-            //    }
-            //};
 
             //try
             //{

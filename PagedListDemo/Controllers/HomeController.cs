@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using PagedListDemo.Models;
+using PagedListDemo.Models.BooksModel;
 
 namespace PagedListDemo.Controllers
 {
@@ -13,14 +13,15 @@ namespace PagedListDemo.Controllers
         {
             ViewBag.Title = "Home Page";
 
-            return View(new Book()
+            return View(new BooksModel()
             {
-                AcceptAndAgree = false 
+                BookId = 1
+                //AcceptAndAgree = false 
             });
         }
 
         [HttpPost]
-        public ActionResult Index(Book book)
+        public ActionResult Index(BooksModel book)
         {
             if(!ModelState.IsValid)
             {
@@ -28,12 +29,13 @@ namespace PagedListDemo.Controllers
             }
 
             TempData["Books"] = book;
-            return RedirectToAction("NextPage", "Home");
+            return RedirectToRoute(new { @controller = "Components", @id = book.BookId });
+            //return RedirectToAction("NextPage", "Home");
         }
 
         public ActionResult NextPage()
         {
-            ViewData["Books"] = (Book)TempData["Books"];
+            ViewData["Books"] = (BooksModel)TempData["Books"];
 
             return View();
         }

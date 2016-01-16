@@ -1,0 +1,1 @@
+﻿$.validator.unobtrusive.adapters.addBool("mustbetrue", "required");

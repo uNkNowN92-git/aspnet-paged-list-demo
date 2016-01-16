@@ -114,7 +114,7 @@ var viewModel1 = new BooksViewModel({
     url: "/api/values",
     entriesPerPage: 5,
     queryOnFilterChangeOnly: false,
-    dataAsObservable: true,
+    dataAsObservable: false,
 });
 
 var viewModel2 = new BooksViewModel({
@@ -132,4 +132,4 @@ var viewModel2 = new BooksViewModel({
 });
 
 ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
-ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);
+//ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);

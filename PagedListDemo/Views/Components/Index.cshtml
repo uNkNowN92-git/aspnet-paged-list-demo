@@ -6,7 +6,10 @@
 
 <h1>Components</h1>
 
-@Html.Partial("_RadioButtonToggle")
+<pre>@ViewBag.Id</pre>
+<pre>@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["Books"], Newtonsoft.Json.Formatting.Indented))</pre>
+
+@*@Html.Partial("_RadioButtonToggle")*@
 
 @section scripts {
     @Styles.Render("~/Content/components")
