@@ -1,22 +1,21 @@
-﻿if ($.validator !== undefined) {
-    $.validator.unobtrusive.options = {
-        errorPlacement: function ($error, $element) {
-            $element.triggerHandler("updateErrorTooltip");
-        }
-    };
-}
+﻿
+var ErrorTooltip = (function () {
+    var _errorTooltipTemplate;
 
-var _errorTooltipTemplate;
+    if ($.validator && $.validator.unobtrusive) {
+        $.validator.unobtrusive.options = {
+            errorPlacement: function ($error, $element) {
+                $element.triggerHandler("updateErrorTooltip");
+            }
+        };
+    }
 
-var ErrorTooltip = function () {
     return {
         Init: function (containerIds, _url) {
             var url = _url !== undefined ? _url : "/Components/ErrorTooltip",
                 $form = $("form");
 
             $("input").on("updateErrorTooltip", function () {
-                //var validationSummary = $('.validation-summary-errors').html();
-
                 // get errors that were created using jQuery.validate.unobtrusive
                 var $errors = $form.find(".field-validation-error span");
 
@@ -25,11 +24,9 @@ var ErrorTooltip = function () {
                 $errors.each(function () {
                     var errorMessage = $(this).html();
 
-                    if (errorMessage != "") {
+                    if (errorMessage)
                         fieldValidationList.append('<li>' + errorMessage);
-                    }
                 });
-
 
                 var attrs = {
                     'data-original-title': fieldValidationList.html(),
@@ -37,9 +34,9 @@ var ErrorTooltip = function () {
                 };
 
                 $.each(containerIds, function (index, value) {
-                    $(value).removeAttr('title');
-                    $(value).attr(attrs);
-                    $(value).addClass('error-tooltip');
+                    $(value).removeAttr('title')
+                        .attr(attrs)
+                        .addClass('error-tooltip');
                 });
 
                 ErrorTooltip.ActivateErrorTooltip();
@@ -63,4 +60,4 @@ var ErrorTooltip = function () {
             });
         },
     };
-}();
+})(jQuery);
