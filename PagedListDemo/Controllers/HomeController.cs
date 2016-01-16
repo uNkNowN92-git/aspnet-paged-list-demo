@@ -29,7 +29,7 @@ namespace PagedListDemo.Controllers
             }
 
             TempData["Books"] = book;
-            return RedirectToRoute(new { @controller = "Components", @id = book.BookId });
+            return RedirectToRoute(new { @controller = "Components", @action = "Index", @id = book.BookId });
             //return RedirectToAction("NextPage", "Home");
         }
 

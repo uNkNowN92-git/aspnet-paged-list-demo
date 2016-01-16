@@ -3,7 +3,10 @@
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @id = "paged-list-demo", @class = "paged-list-demo", @data_bind = "visible: ready", @style = "display: none" }))
 {
+    @Html.HiddenFor(x => x.AcceptAndAgree, new { @Value = true })
+
     @Html.ValidationSummary()
+
     <div class="filters">
         <h4>Filter by</h4>
 
@@ -28,7 +31,7 @@
             </div>
         </div>
     </div>
-    
+
     <span class="text-muted">Using <kbd>data-bind="textInput: variableName"</kbd> in input element</span>
 
     @*<pre data-bind="text: ko.toJSON($root.appliedFilter, null, 2)"></pre>*@
@@ -40,6 +43,7 @@
         @class = "hidden",
         data_bind = "value: $root.selectedItem(), checked: $root.selectedItem"
     })
+    @Html.ValidationMessageFor(x => x.BookId)
 
     <div class="table-responsive">
         <table class="table table-hover">
@@ -71,9 +75,9 @@
                 <tr>
                     <td data-bind="click: $root.selectItem">
                         <span data-bind="css: { 'checked': $root.isChecked($data) }" class="glyphicon glyphicon-ok check-mark"></span>
-                        <input type="radio" class="hidden" name="bookId"
-                               data-bind="value: @Html.GetJsonPropertyName(x => x.BookId),
-                                          checked: $root.selectedItem" />
+                        @*<input type="radio" class="hidden" name="bookId"
+                            data-bind="value: @Html.GetJsonPropertyName(x => x.BookId),
+                                       checked: $root.selectedItem" />*@
                     </td>
                     <td>
                         <span data-bind="text: @Html.GetJsonPropertyName(x => x.Title)"></span>

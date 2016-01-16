@@ -4,7 +4,7 @@ namespace PagedListDemo.Common.PagedList
 {
     public class PagedListDetails
     {
-        [JsonProperty(PropertyName = "totalEntries")]
+        //[JsonProperty(PropertyName = "totalEntries")]
         public int TotalEntries { get; set; }
     }
 }

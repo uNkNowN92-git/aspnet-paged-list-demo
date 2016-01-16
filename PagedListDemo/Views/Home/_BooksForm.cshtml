@@ -1,0 +1,50 @@
+﻿@model PagedListDemo.Models.BooksModel.BooksModel
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Author)
+        @Html.TextBoxFor(x => x.Author, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Author)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.BookId)
+        @Html.TextBoxFor(x => x.BookId, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.BookId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Description)
+        @Html.TextBoxFor(x => x.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Description)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.PublishDate)
+        @Html.TextBoxFor(x => x.PublishDate, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.PublishDate)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Title)
+        @Html.TextBoxFor(x => x.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Title)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.ShareTransport)
+        @Html.RadioButton("ShareTransport", true, Model.ShareTransport)
+        Yes
+        @Html.RadioButton("ShareTransport", false, !Model.ShareTransport)
+        No
+        @Html.TextBoxFor(x => x.SharingMessage, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.SharingMessage)
+    </div>
+
+    <div class="form-group">
+        @Html.CheckBox("AcceptAndAgree", Model.AcceptAndAgree)
+        @Html.LabelFor(x => x.AcceptAndAgree)
+        @Html.ValidationMessageFor(x => x.AcceptAndAgree)
+    </div>
+
+    <input id="submit" class="btn btn-primary" type="submit" name="submit" value="Submit" />
+}

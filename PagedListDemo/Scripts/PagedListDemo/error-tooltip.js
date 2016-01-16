@@ -15,22 +15,24 @@ var ErrorTooltip = function () {
                 $form = $("form");
 
             $("input").on("updateErrorTooltip", function () {
+                //var validationSummary = $('.validation-summary-errors').html();
 
                 // get errors that were created using jQuery.validate.unobtrusive
                 var $errors = $form.find(".field-validation-error span");
 
-                var validationSummaryList = $('<ul>');
+                var fieldValidationList = $('<ul>');
 
                 $errors.each(function () {
                     var errorMessage = $(this).html();
 
                     if (errorMessage != "") {
-                        validationSummaryList.append('<li>' + errorMessage);
+                        fieldValidationList.append('<li>' + errorMessage);
                     }
                 });
 
+
                 var attrs = {
-                    'data-original-title': validationSummaryList.html(),
+                    'data-original-title': fieldValidationList.html(),
                     'data-html': 'true',
                 };
 

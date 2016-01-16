@@ -2,6 +2,8 @@
 using PagedListDemo.Models;
 using PagedListDemo.Models.BooksModel;
 using PagedListDemo.Repositories.BooksRepository;
+using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Mvc;
 
@@ -18,7 +20,14 @@ namespace PagedListDemo.Controllers
 
         public PagedListResult<BooksModel> GetList([FromUri]BooksFilterOptions filters, [FromUri]PagedListOptions pagedListOptions)
         {
-            return iBooksRepository.GetList(filters, pagedListOptions);
+            try
+            {
+                return iBooksRepository.GetList(filters, pagedListOptions);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

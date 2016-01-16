@@ -11,10 +11,10 @@ namespace PagedListDemo.Common.PagedList
             Details = details;
         }
 
-        [JsonProperty(PropertyName = "data")]
+        //[JsonProperty(PropertyName = "data")]
         public IEnumerable<T> Data { get; private set; }
 
-        [JsonProperty(PropertyName = "details")]
+        //[JsonProperty(PropertyName = "details")]
         public PagedListDetails Details { get; private set; }
     }
 }

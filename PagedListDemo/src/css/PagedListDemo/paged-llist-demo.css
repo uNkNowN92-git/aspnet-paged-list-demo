@@ -57,15 +57,16 @@ div.validation-summary-errors li {
 span.field-validation-error {
     display: block;
     color: #d9534f;
-    pre;
+}
 
-{
+pre {
     max-height: 400px;
     overflow: auto;
 }
 
 .table-responsive {
     overflow-x: auto;
+    max-height: 500px;
 }
 
     .table-responsive input {
