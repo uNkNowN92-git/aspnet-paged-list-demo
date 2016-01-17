@@ -1,5 +1,7 @@
-﻿
-var ErrorTooltip = (function () {
+﻿var ErrorTooltip = (function () {
+    'use strict';
+
+    var ErrorTooltip = {};
     var _errorTooltipTemplate;
 
     if ($.validator && $.validator.unobtrusive) {
@@ -10,54 +12,56 @@ var ErrorTooltip = (function () {
         };
     }
 
-    return {
-        Init: function (containerIds, _url) {
-            var url = _url !== undefined ? _url : "/Components/ErrorTooltip",
-                $form = $("form");
+    ErrorTooltip.Init = function (containerIds, _url) {
+        var url = _url !== undefined ? _url : "/Components/ErrorTooltip",
+            $form = $("form");
 
-            $("input").on("updateErrorTooltip", function () {
-                // get errors that were created using jQuery.validate.unobtrusive
-                var $errors = $form.find(".field-validation-error span");
+        $("input").on("updateErrorTooltip", function () {
+            // get errors that were created using jQuery.validate.unobtrusive
+            var $errors = $form.find(".field-validation-error span");
 
-                var fieldValidationList = $('<ul>');
+            var fieldValidationList = $('<ul>');
 
-                $errors.each(function () {
-                    var errorMessage = $(this).html();
+            $errors.each(function () {
+                var errorMessage = $(this).html();
 
-                    if (errorMessage)
-                        fieldValidationList.append('<li>' + errorMessage);
-                });
-
-                var attrs = {
-                    'data-original-title': fieldValidationList.html(),
-                    'data-html': 'true',
-                };
-
-                $.each(containerIds, function (index, value) {
-                    $(value).removeAttr('title')
-                        .attr(attrs)
-                        .addClass('error-tooltip');
-                });
-
-                ErrorTooltip.ActivateErrorTooltip();
+                if (errorMessage)
+                    fieldValidationList.append('<li>' + errorMessage);
             });
 
-            ErrorTooltip.GetErrorTooltipTemplate(url);
-        },
-        ActivateErrorTooltip: function () {
-            $('.error-tooltip').tooltip({
-                template: _errorTooltipTemplate
+            var attrs = {
+                'data-original-title': fieldValidationList.html(),
+                'data-html': 'true',
+            };
+
+            $.each(containerIds, function (index, value) {
+                $(value).removeAttr('title')
+                    .attr(attrs)
+                    .addClass('error-tooltip');
             });
-        },
-        GetErrorTooltipTemplate: function (url) {
-            $.ajax({
-                url: url,
-                type: "GET",
-                dataType: "html",
-                success: function (html) {
-                    _errorTooltipTemplate = html;
-                }
-            });
-        },
+
+            ErrorTooltip.ActivateErrorTooltip();
+        });
+
+        ErrorTooltip.GetErrorTooltipTemplate(url);
     };
+
+    ErrorTooltip.ActivateErrorTooltip = function () {
+        $('.error-tooltip').tooltip({
+            template: _errorTooltipTemplate
+        });
+    };
+
+    ErrorTooltip.GetErrorTooltipTemplate = function (url) {
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "html",
+            success: function (html) {
+                _errorTooltipTemplate = html;
+            }
+        });
+    };
+
+    return ErrorTooltip;
 })(jQuery);

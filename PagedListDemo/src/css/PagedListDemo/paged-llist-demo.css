@@ -78,6 +78,7 @@ pre {
 }
 
 .paged-list-demo pre {
+    -ms-word-break: initial;
     word-break: initial;
 }
 
@@ -87,6 +88,9 @@ pre {
 
 .paged-list-demo thead th span {
     cursor: pointer;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
     user-select: none;
 }
 
