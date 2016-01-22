@@ -1,5 +1,4 @@
-﻿var ErrorTooltip = (function () {
-    'use strict';
+﻿var ErrorTooltip = (function ($) { 'use strict';
 
     var ErrorTooltip = {};
     var _errorTooltipTemplate;

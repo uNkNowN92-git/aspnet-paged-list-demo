@@ -4,7 +4,8 @@
  * @repository https://github.com/uNkNowN92-git/knockout-paged-list.git
  * @license ISC
  */
-var PagedList = (function () {
+var PagedList = (function () { 'use strict';
+
     return function (option) {
         var self = this;
 

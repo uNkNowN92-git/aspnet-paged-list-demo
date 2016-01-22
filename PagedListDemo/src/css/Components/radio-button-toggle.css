@@ -4,6 +4,11 @@
     min-height: 20px;
 }
 
+    .radio-button-toggle.btn-group label.btn input[type="radio"] {
+        visibility: hidden;
+        position: absolute;
+    }
+
 .radio-button-toggle.btn-group .radio-button-toggle-true.active {
     background-color: #3276b1 !important;
     color: white;

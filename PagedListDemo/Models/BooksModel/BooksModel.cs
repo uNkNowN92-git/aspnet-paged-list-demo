@@ -49,6 +49,7 @@ namespace PagedListDemo.Models.BooksModel
         /// Determines whether to share the vehicle or not
         /// </summary>
         [Required]
+        [MustBeTrue(ErrorMessage = "You must select yes")]
         public bool ShareTransport { get; set; }
 
         /// <summary>

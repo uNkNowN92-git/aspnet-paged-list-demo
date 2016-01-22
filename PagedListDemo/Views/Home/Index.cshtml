@@ -27,15 +27,16 @@
 
 @section styles {
     @Styles.Render("~/Content/paged-list-demo")
+    @Styles.Render("~/Content/components")
 }
 
-@section scripts{
+@section scripts {
     @Scripts.Render("~/bundles/knockout")
     <script src="~/Scripts/knockout-paged-list.js"></script>
     <script src="~/Scripts/PagedListDemo/BooksViewModel.js"></script>
+    <script src="~/Scripts/PagedListDemo/radio-button-toggle.js"></script>
     <script>
         $(function () {
-            
             ErrorTooltip.Init(['[type="submit"]']);
         });
     </script>
