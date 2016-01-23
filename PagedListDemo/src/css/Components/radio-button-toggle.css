@@ -35,3 +35,14 @@
         /* uncomment background color to display text on hover */
         /*color: black;*/
     }
+
+
+/* Button styles */
+.disabled-look {
+    cursor: not-allowed !important;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+/* Button styles end*/

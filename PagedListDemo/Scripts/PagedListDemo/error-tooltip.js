@@ -28,15 +28,21 @@
                     fieldValidationList.append('<li>' + errorMessage);
             });
 
+            var hasErrors = $.trim(fieldValidationList.html()).length > 0;
+
             var attrs = {
                 'data-original-title': fieldValidationList.html(),
-                'data-html': 'true',
+                'data-html': 'true'
             };
 
-            $.each(containerIds, function (index, value) {
-                $(value).removeAttr('title')
+
+            $.each(containerIds, function (index, selector) {
+                $(selector).removeAttr('title')
                     .attr(attrs)
                     .addClass('error-tooltip');
+
+                if (hasErrors) $(selector).addClass('disabled-look');
+                else $(selector).removeClass('disabled-look');
             });
 
             ErrorTooltip.ActivateErrorTooltip();
