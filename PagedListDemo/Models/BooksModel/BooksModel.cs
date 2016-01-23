@@ -45,17 +45,29 @@ namespace PagedListDemo.Models.BooksModel
         [MustBeTrue(ErrorMessageResourceName = "BooksAcceptAndAgree", ErrorMessageResourceType = typeof(ErrorMessages))]
         public bool AcceptAndAgree { get; set; }
 
+        [MustBeTrue(ErrorMessage = "You must select yes")]
+        public bool Conferencing { get; set; }
+
         /// <summary>
         /// Determines whether to share the vehicle or not
         /// </summary>
         [Required]
-        [MustBeTrue(ErrorMessage = "You must select yes")]
         public bool ShareTransport { get; set; }
 
+        private string sharingMessage;
         /// <summary>
         /// The sharing message
         /// </summary>
-        public string SharingMessage { get; set; }
-
+        public string SharingMessage
+        {
+            get
+            {
+                return ShareTransport ? sharingMessage : null;
+            }
+            set
+            {
+                sharingMessage = value;
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ var BookModel = function (data) {
     // Sample additional attribute or property not coming from the server
     this.titleLength = ko.computed(function () {
         // check variable if it is an observable before accessing
-        if (typeof (this.title) === "function") {
+        if (typeof (this.title) === "function" && this.title() !== null) {
             return this.title().length;
         }
         return 0;
@@ -122,7 +122,7 @@ var viewModel2 = new BooksViewModel({
     entriesPerPage: 5,
     queryOnLoad: false,
     //queryOnFilterChangeOnly: false
-    //dataAsObservable: true,
+    dataAsObservable: true,
     // setting dataAsObservable to false will make the mapping option to be useless
     mapping: {
         create: function (options) {
@@ -131,5 +131,5 @@ var viewModel2 = new BooksViewModel({
     }
 });
 
-ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
-//ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);
+//ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
+ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);

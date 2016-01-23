@@ -3,7 +3,7 @@
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Post))
 {
-    @Html.ValidationSummary()
+    @*@Html.ValidationSummary()*@
 
     <div class="form-group">
         @Html.LabelFor(x => x.Author)
@@ -31,6 +31,21 @@
         @Html.ValidationMessageFor(x => x.Title)
     </div>
 
+
+    <div class="form-group">
+        <div class="radio-button-toggle btn-group">
+            <label class="btn btn-default radio-button-toggle-true" for="conferencing-true">
+                @Html.RadioButton("Conferencing", true, Model.Conferencing, new { id = "conferencing-true" })
+                Yes
+            </label>
+            <label class="btn btn-default radio-button-toggle-false" for="conferencing-false">
+                @Html.RadioButton("Conferencing", false, !Model.Conferencing, new { id = "conferencing-false" })
+                No
+            </label>
+        </div>
+        @Html.LabelFor(x => x.Conferencing)
+        @Html.ValidationMessageFor(x => x.Conferencing)
+    </div>
 
     <div class="form-group">
         <div class="radio-button-toggle btn-group">
