@@ -9,6 +9,11 @@
         }
     }
 
+    $('.radio-button-toggle label').click(function (event) {
+        var htmlFor = event.target.htmlFor;
+        if ($.trim(htmlFor).length) $('#' + htmlFor).trigger('click');
+    });
+
     $('.radio-button-toggle input[type="radio"]').change(function (event) {
         var $parent = $(this).closest('.radio-button-toggle');
 
@@ -20,7 +25,7 @@
         }
 
         $(this).parent().toggleClass('active');
-    })
+    });
 
     Init();
 })(jQuery);
