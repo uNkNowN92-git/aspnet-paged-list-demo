@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Optimization;
 
 namespace PagedListDemo.Common
 {
@@ -34,7 +36,27 @@ namespace PagedListDemo.Common
 			return new MvcHtmlString(null);
 		}
 		
-		public static List<string> GetControllerNames()
+		public static void RegisterDynamicBundles(BundleCollection bundles)
+		{
+			MvcHelper.GetControllerNames().ForEach(controllerName => {
+				var contentPath = string.Format(MvcHelper.contentPathTemplate, controllerName);
+				var scriptsPath = string.Format(MvcHelper.scriptsPathTemplate, controllerName);
+				var bundlesPath = string.Format(MvcHelper.bundlesPathTemplate, controllerName);
+			
+				var contentServerPath = HttpContext.Current.Server.MapPath(contentPath);
+				var scriptsServerPath = HttpContext.Current.Server.MapPath(scriptsPath);
+			
+				if (System.IO.Directory.Exists(contentServerPath))
+					bundles.Add(new StyleBundle(contentPath)
+	            .Include(string.Format("{0}/*.css", contentPath)));
+			
+				if (System.IO.Directory.Exists(scriptsServerPath))
+					bundles.Add(new ScriptBundle(bundlesPath)
+	            .Include(string.Format("{0}/*.js", scriptsPath)));
+			});
+		}
+		
+		private static List<string> GetControllerNames()
 		{
 			var controllerNames = new List<string>();
 			GetSubClasses<Controller>().ForEach(
