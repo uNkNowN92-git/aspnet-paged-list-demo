@@ -45,23 +45,21 @@ namespace PagedListDemo
 		
         public static void RegisterDynamicBundles(BundleCollection bundles)
         {
-            var controllers = MvcHelper.GetControllerNames();
-            
-            controllers.ForEach(controllerName => {
-		var contentPath = string.Format(MvcHelper.contentPathTemplate, controllerName);
-		var scriptsPath = string.Format(MvcHelper.scriptsPathTemplate, controllerName);
-		var bundlesPath = string.Format(MvcHelper.bundlesPathTemplate, controllerName);
-	
-		var contentServerPath = HttpContext.Current.Server.MapPath(contentPath);
-		var scriptsServerPath = HttpContext.Current.Server.MapPath(scriptsPath);
+            	MvcHelper.GetControllerNames().ForEach(controllerName => {
+			var contentPath = string.Format(MvcHelper.contentPathTemplate, controllerName);
+			var scriptsPath = string.Format(MvcHelper.scriptsPathTemplate, controllerName);
+			var bundlesPath = string.Format(MvcHelper.bundlesPathTemplate, controllerName);
 		
-		if (System.IO.Directory.Exists(contentServerPath))
-			bundles.Add(new StyleBundle(contentPath)
-			    .Include(string.Format("{0}/*.css", contentPath)));
-		
-		if (System.IO.Directory.Exists(scriptsServerPath))
-			bundles.Add(new ScriptBundle(bundlesPath)
-			    .Include(string.Format("{0}/*.js", scriptsPath)));
+			var contentServerPath = HttpContext.Current.Server.MapPath(contentPath);
+			var scriptsServerPath = HttpContext.Current.Server.MapPath(scriptsPath);
+			
+			if (System.IO.Directory.Exists(contentServerPath))
+				bundles.Add(new StyleBundle(contentPath)
+				    .Include(string.Format("{0}/*.css", contentPath)));
+			
+			if (System.IO.Directory.Exists(scriptsServerPath))
+				bundles.Add(new ScriptBundle(bundlesPath)
+				    .Include(string.Format("{0}/*.js", scriptsPath)));
 		});
         }
     }
