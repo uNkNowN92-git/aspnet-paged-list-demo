@@ -40,27 +40,7 @@ namespace PagedListDemo
             bundles.Add(new StyleBundle("~/Content/components").Include(
                       "~/src/css/Components/*.css"));
         
-            RegisterDynamicBundles(bundles);
-        }
-		
-        public static void RegisterDynamicBundles(BundleCollection bundles)
-        {
-            	MvcHelper.GetControllerNames().ForEach(controllerName => {
-			var contentPath = string.Format(MvcHelper.contentPathTemplate, controllerName);
-			var scriptsPath = string.Format(MvcHelper.scriptsPathTemplate, controllerName);
-			var bundlesPath = string.Format(MvcHelper.bundlesPathTemplate, controllerName);
-		
-			var contentServerPath = HttpContext.Current.Server.MapPath(contentPath);
-			var scriptsServerPath = HttpContext.Current.Server.MapPath(scriptsPath);
-			
-			if (System.IO.Directory.Exists(contentServerPath))
-				bundles.Add(new StyleBundle(contentPath)
-				    .Include(string.Format("{0}/*.css", contentPath)));
-			
-			if (System.IO.Directory.Exists(scriptsServerPath))
-				bundles.Add(new ScriptBundle(bundlesPath)
-				    .Include(string.Format("{0}/*.js", scriptsPath)));
-		});
+            MvcHelper.RegisterDynamicBundles(bundles);
         }
     }
 }
