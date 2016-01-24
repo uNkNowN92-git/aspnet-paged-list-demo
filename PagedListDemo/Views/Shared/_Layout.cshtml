@@ -39,7 +39,8 @@
     </div>
 
     @Scripts.Render("~/bundles/scripts")
-    @Html.RenderControllerStyleBundle()
+    @Html.RenderControllerScriptBundle()
+    @Html.RenderToastNotification()
     @RenderSection("scripts", required: false)
 </body>
 </html>

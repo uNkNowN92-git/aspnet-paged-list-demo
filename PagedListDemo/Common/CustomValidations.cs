@@ -7,7 +7,7 @@ using System.Resources;
 namespace PagedListDemo.Common
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class MustBeTrueAttribute : ValidationAttribute, IClientValidatable
+    public sealed class MustBeTrueAttribute : ValidationAttribute, IClientValidatable
     {
         public override bool IsValid(object value)
         {
@@ -21,7 +21,7 @@ namespace PagedListDemo.Common
 
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            string errorMessage = String.Empty;
+            var errorMessage = String.Empty;
             if (String.IsNullOrWhiteSpace(ErrorMessage))
             {
                 if (ErrorMessageResourceType != null && !String.IsNullOrWhiteSpace(ErrorMessageResourceName))

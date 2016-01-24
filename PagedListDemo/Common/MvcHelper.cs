@@ -11,10 +11,10 @@ namespace PagedListDemo.Common
 {
     public static class MvcHelper
     {
-        private const string _contentPathTemplate = "~/Content/{0}";
-        private const string _scriptsPathTemplate = "~/Scripts/PagedListDemo/{0}";
-        private const string _bundlesPathTemplate = "~/bundles/{0}";
-        private const string _stylesPathTemplate = "~/Content/{0}Styles";
+        private static readonly string _contentPathTemplate = "~/Content/{0}";
+        private static readonly string _scriptsPathTemplate = "~/Scripts/PagedListDemo/{0}";
+        private static readonly string _bundlesPathTemplate = "~/bundles/{0}";
+        private static readonly string _stylesPathTemplate = "~/Content/{0}Styles";
 
         public static MvcHtmlString RenderControllerStyleBundle(this HtmlHelper helper)
         {
@@ -52,11 +52,11 @@ namespace PagedListDemo.Common
 
                 if (Directory.Exists(contentServerPath))
                     bundles.Add(new StyleBundle(stylesPath).Include(
-                        string.Format("{0}/*.css", contentPath)));
+                        $"{contentPath}/*.css"));
 
                 if (Directory.Exists(scriptsServerPath))
                     bundles.Add(new ScriptBundle(bundlesPath).Include(
-                        string.Format("{0}/*.js", scriptsPath)));
+                        $"{scriptsPath}/*.js"));
             });
         }
 

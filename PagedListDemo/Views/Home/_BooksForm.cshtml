@@ -1,7 +1,7 @@
 ﻿@using PagedListDemo.Common
 @model   PagedListDemo.Models.BooksModel.BooksModel
 
-@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "books-form" }))
 {
     @*@Html.ValidationSummary()*@
 

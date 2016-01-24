@@ -13,6 +13,15 @@ namespace PagedListDemo.Controllers
         {
             ViewBag.Title = "Home Page";
 
+            var message = new Models.NotificationMessage.NotificationMessageModel
+            {
+                Message = "test"
+            };
+            Session["test"] = "sd";
+            
+            TempData["NotificationMessage"] = message;
+
+            var t = (Models.NotificationMessage.NotificationMessageModel)TempData["NotificationMessage"];
             return View(new BooksModel()
             {
                 BookId = 1

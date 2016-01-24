@@ -5,13 +5,28 @@ using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Web.Routing;
+using PagedListDemo.Models.NotificationMessage;
 
 namespace PagedListDemo.Common
 {
     public static class HtmlHelpers
     {
+        //public static NotificationMessageModel NotificationMessage
+        //{
+        //    get
+        //    {
+        //        return Session["sdf"];
+        //    }
+        //}
+
+        public static MvcHtmlString RenderToastNotification(this HtmlHelper helper)
+        {
+            var notificationMessageModel = (NotificationMessageModel)helper.ViewContext.TempData["NotificationMessage"]
+                ?? new NotificationMessageModel();
+
+            return helper.Partial("~/Views/Shared/_NotificationMessage.cshtml", notificationMessageModel);
+        }
+
         public static string GetJsonPropertyName<TModel, TValue>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression)
         {
             var data = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
@@ -25,21 +40,21 @@ namespace PagedListDemo.Common
             return jsonPropertyName;
         }
 
-        private static string _koPagedListPagerTemplate = "~/Views/Shared/_KoPagedListPager.cshtml";
+        private static readonly string _koPagedListPagerTemplate = "~/Views/Shared/_KoPagedListPager.cshtml";
 
         public static MvcHtmlString KoPagedListPager(this HtmlHelper helper, string template = null)
         {
-            var result = new MvcHtmlString("");
+            var result = new MvcHtmlString(string.Empty);
             try
             {
                 result = helper.Partial(template);
             }
-            catch
+            catch (Exception)
             {
-                result = helper.Partial(_koPagedListPagerTemplate);
+                throw;
             }
 
-            return result;
+            return helper.Partial(_koPagedListPagerTemplate);
         }
 
         private static object _radioButtonToggleDivDefaultAttrs = new
@@ -58,7 +73,7 @@ namespace PagedListDemo.Common
             labelTrue = "Yes",
             labelFalse = "No"
         };
-        
+
         private static string _template = @"<div class='radio-button-toggle btn-group' data-toggle='buttons'>
             <label class='btn btn-default radio-button-toggle-true{0}' for='{1}'>
                 {2}Yes
@@ -72,15 +87,15 @@ namespace PagedListDemo.Common
         {
             var data = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
 
-            Func<TModel, TProperty> method = expression.Compile();
-            bool value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
+            var method = expression.Compile();
+            var value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
 
-            string radioTrueActive = value ? " active" : "";
-            string radioFalseActive = !value ? " active" : "";
-            string radioTrueId = data.PropertyName + "True";
-            string radioFalseId = data.PropertyName + "False";
-            MvcHtmlString radioTrue = helper.RadioButton(data.PropertyName, true, value, new { id = radioTrueId });
-            MvcHtmlString radioFalse = helper.RadioButton(data.PropertyName, false, !value, new { id = radioFalseId });
+            var radioTrueActive = value ? " active" : "";
+            var radioFalseActive = !value ? " active" : "";
+            var radioTrueId = data.PropertyName + "True";
+            var radioFalseId = data.PropertyName + "False";
+            var radioTrue = helper.RadioButton(data.PropertyName, true, value, new { id = radioTrueId });
+            var radioFalse = helper.RadioButton(data.PropertyName, false, !value, new { id = radioFalseId });
 
             var result = string.Format(_template, radioTrueActive, radioTrueId, radioTrue, radioFalseActive, radioFalseId, radioFalse);
 
@@ -89,27 +104,27 @@ namespace PagedListDemo.Common
 
         public static MvcHtmlString RadioButtonToggleFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, string templateName)
         {
-            string template = string.Empty;
+            var template = string.Empty;
             try
             {
                 template = helper.Partial(templateName).ToHtmlString();
             }
-            catch
+            catch (Exception)
             {
                 template = _template;
             }
 
             var data = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
 
-            Func<TModel, TProperty> method = expression.Compile();
-            bool value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
+            var method = expression.Compile();
+            var value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
 
-            string radioTrueActive = value ? " active" : "";
-            string radioFalseActive = !value ? " active" : "";
-            string radioTrueId = data.PropertyName + "True";
-            string radioFalseId = data.PropertyName + "False";
-            MvcHtmlString radioTrue = helper.RadioButton(data.PropertyName, true, value, new { id = radioTrueId });
-            MvcHtmlString radioFalse = helper.RadioButton(data.PropertyName, false, !value, new { id = radioFalseId });
+            var radioTrueActive = value ? " active" : "";
+            var radioFalseActive = !value ? " active" : "";
+            var radioTrueId = data.PropertyName + "True";
+            var radioFalseId = data.PropertyName + "False";
+            var radioTrue = helper.RadioButton(data.PropertyName, true, value, new { id = radioTrueId });
+            var radioFalse = helper.RadioButton(data.PropertyName, false, !value, new { id = radioFalseId });
 
             var result = string.Format(template, radioTrueActive, radioTrueId, radioTrue, radioFalseActive, radioFalseId, radioFalse);
 
@@ -120,9 +135,9 @@ namespace PagedListDemo.Common
         {
             var data = ModelMetadata.FromLambdaExpression(expression, helper.ViewData);
 
-            Func<TModel, TProperty> method = expression.Compile();
-            bool value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
-            
+            var method = expression.Compile();
+            var value = helper.ViewData.Model == null ? false : Convert.ToBoolean(method(helper.ViewData.Model));
+
             var _attrs = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
             var _defaultDivAttrs = HtmlHelper.AnonymousObjectToHtmlAttributes(_radioButtonToggleDivDefaultAttrs);
             var _buttonLabel = HtmlHelper.AnonymousObjectToHtmlAttributes(_radioButtonToggleDefaultLabel);
@@ -149,19 +164,19 @@ namespace PagedListDemo.Common
             var buttonLabel = _buttonLabel.Concat(toggleButtons)
                 .GroupBy(kvp => kvp.Key, kvp => kvp.Value)
                 .ToDictionary(g => g.Key, g => g.LastOrDefault());
-            
-            string radioTrueActive = (value ? " active" : "") + " radio-button-toggle-true";
-            string radioFalseActive = (!value ? " active" : "") + " radio-button-toggle-false";
-            string toggleTrueId = data.PropertyName + (string.IsNullOrEmpty(Convert.ToString(buttonLabel["labelTrue"])) ? "True" : buttonLabel["labelTrue"]);
-            string toggleFalseId = data.PropertyName + (string.IsNullOrEmpty(Convert.ToString(buttonLabel["labelFalse"])) ? "False" : buttonLabel["labelFalse"]);
 
-            MvcHtmlString radioTrue = helper.RadioButton(data.PropertyName, true, value, new { id = toggleTrueId });
-            MvcHtmlString radioFalse = helper.RadioButton(data.PropertyName, false, !value, new { id = toggleFalseId });
+            var radioTrueActive = (value ? " active" : "") + " radio-button-toggle-true";
+            var radioFalseActive = (!value ? " active" : "") + " radio-button-toggle-false";
+            var toggleTrueId = data.PropertyName + (string.IsNullOrEmpty(Convert.ToString(buttonLabel["labelTrue"])) ? "True" : buttonLabel["labelTrue"]);
+            var toggleFalseId = data.PropertyName + (string.IsNullOrEmpty(Convert.ToString(buttonLabel["labelFalse"])) ? "False" : buttonLabel["labelFalse"]);
 
-            TagBuilder div = new TagBuilder("div");
+            var radioTrue = helper.RadioButton(data.PropertyName, true, value, new { id = toggleTrueId });
+            var radioFalse = helper.RadioButton(data.PropertyName, false, !value, new { id = toggleFalseId });
+
+            var div = new TagBuilder("div");
             div.MergeAttributes(attrs);
 
-            TagBuilder labelTrue = new TagBuilder("label");
+            var labelTrue = new TagBuilder("label");
 
             labelTrueAttrs["id"] = toggleTrueId;
             labelTrueAttrs["class"] += radioTrueActive;
@@ -169,7 +184,7 @@ namespace PagedListDemo.Common
             labelTrue.InnerHtml += radioTrue;
             labelTrue.InnerHtml += buttonLabel["labelTrue"];
 
-            TagBuilder labelFalse = new TagBuilder("label");
+            var labelFalse = new TagBuilder("label");
 
             labelFalseAttrs["id"] = toggleFalseId;
             labelFalseAttrs["class"] += radioFalseActive;

@@ -14,7 +14,7 @@ namespace PagedListDemo.Controllers
 {
     public class BooksController : ApiController
     {
-        private Models.PagedListDemo db = new Models.PagedListDemo();
+        private readonly Models.PagedListDemo db = new Models.PagedListDemo();
 
         // GET: api/Books
         public IQueryable<Book> GetBooks()
@@ -26,7 +26,7 @@ namespace PagedListDemo.Controllers
         [ResponseType(typeof(Book))]
         public IHttpActionResult GetBook(long id)
         {
-            Book book = db.Books.Find(id);
+            var book = db.Books.Find(id);
             if (book == null)
             {
                 return NotFound();
@@ -89,7 +89,7 @@ namespace PagedListDemo.Controllers
         [ResponseType(typeof(Book))]
         public IHttpActionResult DeleteBook(long id)
         {
-            Book book = db.Books.Find(id);
+            var book = db.Books.Find(id);
             if (book == null)
             {
                 return NotFound();
