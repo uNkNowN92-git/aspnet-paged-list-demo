@@ -14,8 +14,9 @@ namespace PagedListDemo.Models.NotificationMessage
 
     public enum Severity
     {
+        Info,
         Success,
         Error,
-        Info
+        Warning
     }
 }

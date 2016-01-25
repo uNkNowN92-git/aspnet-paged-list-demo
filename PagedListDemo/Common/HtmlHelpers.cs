@@ -11,13 +11,27 @@ namespace PagedListDemo.Common
 {
     public static class HtmlHelpers
     {
-        //public static NotificationMessageModel NotificationMessage
-        //{
-        //    get
-        //    {
-        //        return Session["sdf"];
-        //    }
-        //}
+        public static void SetNotificationMessage(this Controller controller, string message, Severity severity)
+        {
+            var notificationMessage = new NotificationMessageModel()
+            {
+                Message = message,
+                Severity = severity
+            };
+            controller.TempData["NotificationMessage"] = notificationMessage;
+        }
+
+        public static NotificationMessageModel GetNotificationMessage(Controller controller)
+        {
+            try
+            {
+                return controller.TempData["NotificationMessage"] as NotificationMessageModel;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
         public static MvcHtmlString RenderToastNotification(this HtmlHelper helper)
         {

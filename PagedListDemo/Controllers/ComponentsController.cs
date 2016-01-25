@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedListDemo.Common;
+using PagedListDemo.Models.NotificationMessage;
 
 namespace PagedListDemo.Controllers
 {
@@ -15,6 +17,9 @@ namespace PagedListDemo.Controllers
         {
             ViewData["Books"] = (BooksModel)TempData["Books"];
             ViewBag.Id = id;
+
+            this.SetNotificationMessage("test", Severity.Success);
+
             return View();
         }
 

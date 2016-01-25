@@ -1,7 +1,5 @@
-﻿@using Newtonsoft.Json
-@using PagedListDemo.Models.NotificationMessage
-@model PagedListDemo.Models.NotificationMessage.NotificationMessageModel
-
+﻿@using PagedListDemo.Models.NotificationMessage
+@model NotificationMessageModel
 
 @if (!string.IsNullOrEmpty(Model.Message)) {
     <script>
@@ -19,6 +17,10 @@
                     break;
 
                 case '@Severity.Info.ToString()':
+                    alert(severity);
+                    break;
+
+                case '@Severity.Warning.ToString()':
                     alert(severity);
                     break;
             }

@@ -47,8 +47,11 @@
         {
             get
             {
-                return string.IsNullOrEmpty(SortBy) ? null : $"{SortBy} {(SortAsc ? "ASC" : "DESC")}";
+                return string.IsNullOrEmpty(SortBy) ? null :
+                    IsMultipleSort ? SortBy : $"{SortBy} {(SortAsc ? "ASC" : "DESC")}";
             }
         }
+
+        public bool IsMultipleSort { get; set; }
     }
 }
