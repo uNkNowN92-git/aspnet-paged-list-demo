@@ -48,7 +48,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = result.Data.Count();
             var expected = 1;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.Entries;
             var expected = 2;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.Entries;
             var expected = 2;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.Entries;
             var expected = 2;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -113,7 +113,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.Entries;
             var expected = 1;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -130,7 +130,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.Start;
             var expected = 2;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -147,7 +147,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.Start;
             var expected = 0;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -164,7 +164,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = result.Data.Count();
             var expected = 0;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
 
@@ -182,7 +182,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = result.Data.Count();
             var expected = 2;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -196,7 +196,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.OrderBy;
             var expected = "Author ASC";
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -211,7 +211,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.OrderBy;
             var expected = "Author DESC";
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -240,7 +240,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.OrderBy;
             var expected = pagedListQueryOptions.SortBy;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -256,7 +256,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = pagedListQueryOptions.OrderBy;
             var expected = pagedListQueryOptions.SortBy + " DESC";
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -273,7 +273,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = result.Data.Count();
             var expected = 3;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -289,7 +289,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = result.Details.TotalEntries;
             var expected = 3;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -306,7 +306,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = result.Details.TotalEntries;
             var expected = 3;
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -322,7 +322,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = result.Data.Select(x => x.Author).First();
             var expected = data.Select(x => x.Author).First();
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -339,7 +339,7 @@ namespace PagedListDemo.Common.PagedList.Tests
             var actual = result.Data.Select(x => x.Author).First();
             var expected = data.Select(x => x.Author).Last();
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]

@@ -57,6 +57,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Common\HtmlHelpersTests.cs" />
     <Compile Include="Common\MustBeTrueAttributeTests.cs" />
     <Compile Include="Common\PagedList\PagedListExtensionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

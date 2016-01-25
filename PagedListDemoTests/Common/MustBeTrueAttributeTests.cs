@@ -5,63 +5,75 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace PagedListDemo.Common.Tests
 {
     [TestClass()]
     public class MustBeTrueAttributeTests
     {
-        [TestMethod()]
+        private MustBeTrueAttribute mustBetrueAttribute;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            mustBetrueAttribute = new MustBeTrueAttribute();
+        }
+
+        [TestMethod]
         public void TrueIsValid()
         {
-            var mustBetrueAttribute = new MustBeTrueAttribute();
-
             var actual = mustBetrueAttribute.IsValid(true);
 
             Assert.IsTrue(actual);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void NullIsInvalid()
         {
-            var mustBetrueAttribute = new MustBeTrueAttribute();
-
             var actual = mustBetrueAttribute.IsValid(null);
-            //return value != null && value is bool && (bool)value;
 
             Assert.IsFalse(actual);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void StringIsInvalid()
         {
-            var mustBetrueAttribute = new MustBeTrueAttribute();
-
             var actual = mustBetrueAttribute.IsValid("string");
 
             Assert.IsFalse(actual);
         }
 
-        [TestMethod()]
+        [TestMethod]
+        public void ObjectIsInvalid()
+        {
+            var actual = mustBetrueAttribute.IsValid(new object());
+
+            Assert.IsFalse(actual);
+        }
+
+        [TestMethod]
         public void FalseIsInvalid()
         {
-            var mustBetrueAttribute = new MustBeTrueAttribute();
-
             var actual = mustBetrueAttribute.IsValid(false);
 
             Assert.IsFalse(actual);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void FormatErrorMessageTest()
         {
-            Assert.Fail();
+            var actual = mustBetrueAttribute.FormatErrorMessage("name");
+            var expected = "The name field must be checked in order to continue.";
+
+            Assert.AreEqual(expected, actual);
         }
 
-        [TestMethod()]
-        public void GetClientValidationRulesTest()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod]
+        //public void GetClientValidationRulesTest()
+        //{
+        //    //var result = mustBetrueAttribute.GetClientValidationRules()
+        //    Assert.Fail();
+        //}
     }
 }
