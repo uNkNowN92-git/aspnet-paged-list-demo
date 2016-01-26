@@ -21,21 +21,13 @@
 
 <div class="panel">
     <div class="panel-body">
-        @*@Html.Partial("_PagedListDemo2")*@
+        @Html.Partial("_PagedListDemo2")
     </div>
 </div>
 
-@section styles {
-    @Styles.Render("~/Content/paged-list-demo")
-}
-
-@section scripts{
-    @Scripts.Render("~/bundles/knockout")
-    <script src="~/Scripts/knockout-paged-list.js"></script>
-    <script src="~/Scripts/PagedListDemo/BooksViewModel.js"></script>
+@section scripts {
     <script>
         $(function () {
-            
             ErrorTooltip.Init(['[type="submit"]']);
         });
     </script>

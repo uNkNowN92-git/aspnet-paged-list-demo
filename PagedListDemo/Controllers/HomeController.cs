@@ -12,7 +12,7 @@ namespace PagedListDemo.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
-
+            
             return View(new BooksModel()
             {
                 BookId = 1

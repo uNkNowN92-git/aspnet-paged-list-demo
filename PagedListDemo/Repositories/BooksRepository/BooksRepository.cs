@@ -10,7 +10,9 @@ namespace PagedListDemo.Repositories.BooksRepository
 {
     internal class BooksRepository : IBooksRepository
     {
-        private Models.PagedListDemo db = new Models.PagedListDemo();
+        private readonly Models.PagedListDemo db = new Models.PagedListDemo();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CC0068:Unused Method", Justification = "<Pending>")]
         private void Seed()
         {
             var r = new Random();

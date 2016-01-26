@@ -11,7 +11,7 @@ namespace PagedListDemo.Controllers
 {
     public class ValuesController : ApiController
     {
-        private IBooksRepository iBooksRepository;
+        private readonly IBooksRepository iBooksRepository;
 
         public ValuesController()
         {
@@ -24,9 +24,9 @@ namespace PagedListDemo.Controllers
             {
                 return iBooksRepository.GetList(filters, pagedListOptions);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
     }

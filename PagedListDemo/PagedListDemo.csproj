@@ -170,6 +170,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Common\CustomValidations.cs" />
     <Compile Include="Common\HtmlHelpers.cs" />
+    <Compile Include="Common\MvcHelper.cs" />
     <Compile Include="Common\PagedList\PagedListDetails.cs" />
     <Compile Include="Common\PagedList\PagedListExtension.cs" />
     <Compile Include="Common\PagedList\PagedListOptions.cs" />
@@ -210,6 +211,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\NotificationMessage\NotificationMessageModel.cs" />
     <Compile Include="Models\Person.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -256,20 +258,22 @@
     <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
-    <Content Include="Scripts\knockout-paged-list.js" />
-    <Content Include="Scripts\knockout-paged-list.min.js" />
+    <Content Include="Scripts\PagedListDemo\Common\knockout-paged-list.js" />
+    <Content Include="Scripts\PagedListDemo\Common\knockout-paged-list.min.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\PagedListDemo\BooksViewModel.js" />
-    <Content Include="Scripts\PagedListDemo\error-tooltip.js" />
-    <Content Include="Scripts\PagedListDemo\jquery.custom-validation.js" />
+    <Content Include="Scripts\PagedListDemo\Home\BooksFormViewModel.js" />
+    <Content Include="Scripts\PagedListDemo\Home\BooksViewModel.js" />
+    <Content Include="Scripts\PagedListDemo\Common\error-tooltip.js" />
+    <Content Include="Scripts\PagedListDemo\Common\jquery.custom-validation.js" />
+    <Content Include="Scripts\PagedListDemo\Common\radio-button-toggle.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="SQL\PagedListDemo.sql" />
-    <Content Include="src\css\Components\components.css" />
-    <Content Include="src\css\Components\radio-button-toggle.css" />
-    <Content Include="src\css\PagedListDemo\paged-llist-demo.css" />
+    <Content Include="Content\Common\components.css" />
+    <Content Include="Content\Common\radio-button-toggle.css" />
+    <Content Include="Content\Home\paged-llist-demo.css" />
     <Content Include="Views\Home\_PagedListDemo1.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -280,7 +284,9 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -293,6 +299,7 @@
     <Content Include="Views\Shared\_KoPagedListPager.cshtml" />
     <Content Include="Views\Components\_ErrorTooltip.cshtml" />
     <Content Include="Views\Home\_BooksForm.cshtml" />
+    <Content Include="Views\Shared\_NotificationMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -1,0 +1,29 @@
+﻿@using PagedListDemo.Models.NotificationMessage
+@model NotificationMessageModel
+
+@if (!string.IsNullOrEmpty(Model.Message)) {
+    <script>
+        $(function () {
+            var message = '@Model.Message';
+            var severity = '@Model.Severity.ToString()';
+
+            switch (severity) {
+                case '@Severity.Success.ToString()':
+                    alert(severity);
+                    break;
+
+                case '@Severity.Error.ToString()':
+                    alert(severity);
+                    break;
+
+                case '@Severity.Info.ToString()':
+                    alert(severity);
+                    break;
+
+                case '@Severity.Warning.ToString()':
+                    alert(severity);
+                    break;
+            }
+        });
+    </script>
+}

@@ -1,5 +1,6 @@
-﻿using System.Web;
+using System.Web;
 using System.Web.Optimization;
+using PagedListDemo.Common;
 
 namespace PagedListDemo
 {
@@ -38,6 +39,8 @@ namespace PagedListDemo
 
             bundles.Add(new StyleBundle("~/Content/components").Include(
                       "~/src/css/Components/*.css"));
+        
+            MvcHelper.RegisterDynamicBundles(bundles);
         }
     }
 }

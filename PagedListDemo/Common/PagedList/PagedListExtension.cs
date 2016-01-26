@@ -17,7 +17,7 @@ namespace PagedListDemo.Common.PagedList
                 .Skip(pagedListOptions.Start)
                 .Take(pagedListOptions.ShowAll ? data.Count() : pagedListOptions.Entries);
 
-            var details = new PagedListDetails()
+            var details = new PagedListDetails
             {
                 TotalEntries = data.Count()
             };
