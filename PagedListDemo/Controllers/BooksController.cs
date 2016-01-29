@@ -14,12 +14,20 @@ namespace PagedListDemo.Controllers
 {
     public class BooksController : ApiController
     {
-        private readonly Models.PagedListDemo db = new Models.PagedListDemo();
+        private readonly Models.PagedListDemoEntities1 db = new Models.PagedListDemoEntities1();
 
         // GET: api/Books
         public IQueryable<Book> GetBooks()
         {
-            return db.Books;
+            return db.Books.Select(x => new Book
+            {
+                Author = x.Author,
+                BookId = x.BookId,
+                Description = x.Description,
+                AuthorId = x.AuthorId,
+                PublishDate = x.PublishDate,
+                Title = x.Title
+            });
         }
 
         // GET: api/Books/5

@@ -13,10 +13,10 @@ namespace PagedListDemo.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class PagedListDemo : DbContext
+    public partial class PagedListDemoEntities1 : DbContext
     {
-        public PagedListDemo()
-            : base("name=PagedListDemo")
+        public PagedListDemoEntities1()
+            : base("name=PagedListDemoEntities1")
         {
         }
     
@@ -27,6 +27,5 @@ namespace PagedListDemo.Models
     
         public virtual DbSet<Author> Authors { get; set; }
         public virtual DbSet<Book> Books { get; set; }
-        public virtual DbSet<Person> Persons { get; set; }
     }
 }

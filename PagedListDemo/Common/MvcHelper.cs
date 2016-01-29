@@ -51,12 +51,12 @@ namespace PagedListDemo.Common
                 var scriptsServerPath = HttpContext.Current.Server.MapPath(scriptsPath);
 
                 if (Directory.Exists(contentServerPath))
-                    bundles.Add(new StyleBundle(stylesPath).Include(
-                        $"{contentPath}/*.css"));
+                    bundles.Add(new StyleBundle(stylesPath).IncludeDirectory(
+                        contentPath, "*.css", true));
 
                 if (Directory.Exists(scriptsServerPath))
-                    bundles.Add(new ScriptBundle(bundlesPath).Include(
-                        $"{scriptsPath}/*.js"));
+                    bundles.Add(new ScriptBundle(bundlesPath).IncludeDirectory(
+                        scriptsPath, "*.js", true));
             });
         }
 

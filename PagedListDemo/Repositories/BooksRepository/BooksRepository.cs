@@ -10,36 +10,36 @@ namespace PagedListDemo.Repositories.BooksRepository
 {
     internal class BooksRepository : IBooksRepository
     {
-        private readonly Models.PagedListDemo db = new Models.PagedListDemo();
+        private readonly Models.PagedListDemoEntities1 db = new Models.PagedListDemoEntities1();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CC0068:Unused Method", Justification = "<Pending>")]
         private void Seed()
         {
             var r = new Random();
 
-            // Add person
-            var person = new Person()
-            {
-                PersonId = r.Next(1, 10000),
-                FirstName = "First Name " + r.Next(1, 10),
-                LastName = "Last Name " + r.Next(1, 10),
-                BirthDate = DateTime.Now.AddYears(r.Next(1, 20)).AddMonths(r.Next(1, 12)).AddDays(r.Next(1, 31))
-                //, new Person()
-                //{
-                //    FirstName = "First Name 2",
-                //    LastName = "Last Name 2",
-                //    BirthDate = DateTime.Now.AddYears(-20).AddMonths(2)
-                //},
-            };
+            //// Add person
+            //var person = new Person()
+            //{
+            //    PersonId = r.Next(1, 10000),
+            //    FirstName = "First Name " + r.Next(1, 10),
+            //    LastName = "Last Name " + r.Next(1, 10),
+            //    BirthDate = DateTime.Now.AddYears(r.Next(1, 20)).AddMonths(r.Next(1, 12)).AddDays(r.Next(1, 31))
+            //    //, new Person()
+            //    //{
+            //    //    FirstName = "First Name 2",
+            //    //    LastName = "Last Name 2",
+            //    //    BirthDate = DateTime.Now.AddYears(-20).AddMonths(2)
+            //    //},
+            //};
 
-            db.Persons.Add(person);
+            //db.Persons.Add(person);
 
 
             // Add author
             var author = new Author()
             {
                 AuthorId = r.Next(1, 10000),
-                PersonId = person.PersonId
+                //PersonId = person.PersonId
             };
             db.Authors.Add(author);
 
@@ -173,14 +173,14 @@ namespace PagedListDemo.Repositories.BooksRepository
 
         public PagedListResult<BooksModel> GetList(BooksFilterOptions filters, PagedListOptions pagedListOptions)
         {
-            try
-            {
-                //Seed();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            //try
+            //{
+            //    //Seed();
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
 
             var data = db.Books.AsQueryable();
 
@@ -207,12 +207,11 @@ namespace PagedListDemo.Repositories.BooksRepository
             pagedListOptions.SortBy = pagedListOptions.SortBy ?? "BookId";
 
             var pagedListResult = data
-                .Select(x => new BooksModel()
+                .Select(x => new BooksModel
                 {
+                    Author = x.Author.FirstName,
                     BookId = x.BookId,
-                    Title = x.Title,
                     Description = x.Description,
-                    Author = x.Author.Person.FirstName + " " + x.Author.Person.LastName,
                     PublishDate = x.PublishDate
                 }).ToPagedListResult(pagedListOptions);
 
