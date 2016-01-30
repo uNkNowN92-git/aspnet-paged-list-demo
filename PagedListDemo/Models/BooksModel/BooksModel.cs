@@ -36,6 +36,8 @@ namespace PagedListDemo.Models.BooksModel
         /// Pusblish date of the book
         /// </summary>
         [JsonProperty(PropertyName = "publishDate")]
+        [JsonConverter(typeof(DayMonthYearDateConverter))]
+        [DataType(DataType.Date)]
         public DateTime? PublishDate { get; set; }
 
         /// <summary>

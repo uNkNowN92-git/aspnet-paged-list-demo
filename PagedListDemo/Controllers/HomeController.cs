@@ -20,7 +20,9 @@ namespace PagedListDemo.Controllers
             {
                 BookId = x.BookId,
                 Description = x.Description,
-                Title = x.Title
+                Title = x.Title,
+                PublishDate = x.PublishDate,
+                Author = x.Author.FirstName + " " + x.Author.LastName
             }).FirstOrDefault();
 
             ViewBag.Book = JsonConvert.SerializeObject(book);

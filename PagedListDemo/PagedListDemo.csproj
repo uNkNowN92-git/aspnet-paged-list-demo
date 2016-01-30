@@ -185,6 +185,7 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Common\CustomValidations.cs" />
+    <Compile Include="Common\DataAnnotations.cs" />
     <Compile Include="Common\HtmlHelpers.cs" />
     <Compile Include="Common\MvcHelper.cs" />
     <Compile Include="Common\PagedList\PagedListDetails.cs" />
@@ -232,8 +233,12 @@
     <Compile Include="Repositories\BooksRepository\IBooksRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Common\bootstrap-datepicker3.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Common\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -247,6 +252,8 @@
       <DependentUpon>Db.edmx</DependentUpon>
       <LastGenOutput>Db.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\PagedListDemo\Common\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\Db.edmx">
@@ -256,6 +263,14 @@
     <Content Include="Models\Db.edmx.diagram">
       <DependentUpon>Db.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\_bootstrap-datetimepicker.less" />
+    <Content Include="Content\bootstrap-datetimepicker-build.less" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\Somee.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -270,11 +285,17 @@
     <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\knockout-3.4.0.debug.js" />
     <Content Include="Scripts\knockout-3.4.0.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\PagedListDemo\Common\knockout-paged-list.js" />
     <Content Include="Scripts\PagedListDemo\Common\knockout-paged-list.min.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PagedListDemo\Common\moment-with-locales.js" />
+    <Content Include="Scripts\PagedListDemo\Common\0-moment.js" />
     <Content Include="Scripts\PagedListDemo\Common\underscore.js" />
     <Content Include="Scripts\PagedListDemo\Home\BooksFormViewModel.js" />
     <Content Include="Scripts\PagedListDemo\Home\BooksViewModel.js" />
@@ -284,6 +305,8 @@
     <Content Include="Scripts\PagedListDemo\Common\underscore.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\PagedListDemo\Common\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="SQL\PagedListDemo.sql" />
     <Content Include="Content\Common\components.css" />
     <Content Include="Content\Common\radio-button-toggle.css" />
@@ -328,7 +351,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Models\ErrorMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

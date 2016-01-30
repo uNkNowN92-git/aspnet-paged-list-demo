@@ -1,4 +1,24 @@
-﻿window.app = window.app || {};
+﻿function GetDefaultDateFormat(e, toISOString) {
+    if (e === null) return;
+
+    var result;
+    var format = $.fn.datetimepicker.defaults.format;
+
+    switch (typeof (e)) {
+        case 'string':
+            result = moment(e, format);
+
+            if (toISOString) result = result.toISOString();
+            break;
+        case 'object':
+            result = moment(e.date._d).format(format);
+            break;
+        default:
+    }
+    return result;
+}
+
+window.app = window.app || {};
 
 window.app.dataContext = (function () {
     return {
@@ -17,6 +37,11 @@ window.app.dataContext = (function () {
     }
 
     function Add(data) {
+        /// <summary>
+        /// Adds a new an entry
+        /// </summary>
+        /// <param name="data">The entry to add.</param>
+        /// <returns></returns>
         return $.post("api/books", data);
     }
 
@@ -29,16 +54,30 @@ window.app.VM = (function (dataContext) {
     var self = this;
 
     self.init = function (params) {
-        self.book(params.book);
+        var book = params.book;
+        self.book(book);
+        self.form(book);
+
+        $('#PublishDate').parent().datetimepicker({
+            defaultDate: GetDefaultDateFormat(book.publishDate)
+        });
+
+        $('#PublishDate').parent().on("dp.change", function (e) {
+            if (moment(e.date).isValid()) {
+                self.form().publishDate = GetDefaultDateFormat(e);
+            }
+        });
+
+        toastr.success("yey!");
     };
 
     self.book = ko.observable();
-    self.form = ko.observable([]);
+    self.form = ko.observable();
     self.isEditing = ko.observable(false);
 
     self.beginEdit = function () {
         self.isEditing(true);
-        var bookValues = ko.mapping.toJS(self.book());
+        var bookValues = ko.toJS(self.book());
         self.form(bookValues);
     };
 
@@ -47,11 +86,18 @@ window.app.VM = (function (dataContext) {
     self.save = function () {
         var $form = $('#books-form');
         if ($form.valid()) {
-            if (dataContext.IsModified(self.book(), self.form())) {
-                var bookId = $('#BookId').val();
-                var data = $form.serialize();
 
-                dataContext.Edit(bookId, data).then(function (data, textStatus, jqXHR) {
+            var bookValues = ko.toJS(self.book());
+            var formValues = ko.toJS(self.form());
+
+            if (dataContext.IsModified(bookValues, formValues)) {
+                var bookId = $('#BookId').val();
+
+                formValues.publishDate = GetDefaultDateFormat(formValues.publishDate, true);
+                formValues.AcceptAndAgree = true;
+                formValues.Conferencing = true;
+
+                dataContext.Edit(bookId, formValues).then(function (data, textStatus, jqXHR) {
                     console.log(data);
                     console.log(textStatus);
                     console.log(jqXHR);
@@ -60,10 +106,13 @@ window.app.VM = (function (dataContext) {
                         alert('error!');
                         return;
                     }
+                    self.book(self.form());
+                    self.isEditing(false);
                 });
+            } else {
+                self.book(self.form());
+                self.isEditing(false);
             }
-            self.book(self.form());
-            self.isEditing(false);
         }
     };
 

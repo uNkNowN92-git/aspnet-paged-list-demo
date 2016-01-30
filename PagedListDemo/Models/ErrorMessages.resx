@@ -120,4 +120,7 @@
   <data name="BooksAcceptAndAgree" xml:space="preserve">
     <value>You must accept the terms and conditions.</value>
   </data>
+  <data name="InvalidDateErrorMessage" xml:space="preserve">
+    <value>Date must be in dd/mm/yyyy format.</value>
+  </data>
 </root>
