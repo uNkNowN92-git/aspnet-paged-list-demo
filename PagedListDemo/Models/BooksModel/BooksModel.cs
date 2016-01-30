@@ -53,7 +53,8 @@ namespace PagedListDemo.Models.BooksModel
         /// <summary>
         /// Determines whether to share the vehicle or not
         /// </summary>
-        [Required]
+        [MustBeTrue(ErrorMessageResourceName = "BooksAcceptAndAgree", ErrorMessageResourceType = typeof(ErrorMessages))]
+        //[Required]
         public bool ShareTransport { get; set; }
 
         private string sharingMessage;
