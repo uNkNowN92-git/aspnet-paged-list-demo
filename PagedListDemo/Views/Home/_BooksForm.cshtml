@@ -1,33 +1,47 @@
 ﻿@using PagedListDemo.Common
 @model   PagedListDemo.Models.BooksModel.BooksModel
 
-@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "books-form" }))
+<style>
+    #books-form .form-group {
+        min-height: 60px;
+    }
+</style>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "books-form", data_bind = "visible: isReady", @style = "display: none" }))
 {
     @*@Html.ValidationSummary()*@
+    <div class="row">
+        <button data-bind="click: beginEdit, visible: !isEditing()" type="button">Edit</button>
+        <button data-bind="click: save, visible: isEditing" class="save" type="button">Save</button>
+    </div>
 
-    <div class="form-group">
+    <div class="form-group col-sm-6">
         @Html.LabelFor(x => x.Author)
-        @Html.TextBoxFor(x => x.Author, new { @class = "form-control" })
+        <p data-bind="text: book().author, visible: !isEditing()"></p>
+        @Html.TextBoxFor(x => x.Author, new { @data_bind = "value: form().author, visible: isEditing", @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Author)
     </div>
-    <div class="form-group">
+    <div class="form-group col-sm-6">
         @Html.LabelFor(x => x.BookId)
-        @Html.TextBoxFor(x => x.BookId, new { @class = "form-control" })
+        <p data-bind="text: book().bookId, visible: !isEditing()"></p>
+        @Html.TextBoxFor(x => x.BookId, new { @data_bind = "value: form().bookId, visible: isEditing", @class = "form-control" })
         @Html.ValidationMessageFor(x => x.BookId)
     </div>
     <div class="form-group">
         @Html.LabelFor(x => x.Description)
-        @Html.TextBoxFor(x => x.Description, new { @class = "form-control" })
+        <p data-bind="text: book().description, visible: !isEditing()"></p>
+        @Html.TextBoxFor(x => x.Description, new { @data_bind = "value: form().description, visible: isEditing", @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Description)
     </div>
     <div class="form-group">
         @Html.LabelFor(x => x.PublishDate)
-        @Html.TextBoxFor(x => x.PublishDate, new { @class = "form-control" })
+        <p data-bind="text: book().publishDate, visible: !isEditing()"></p>
+        @Html.TextBoxFor(x => x.PublishDate, new { @data_bind = "value: form().publishDate, visible: isEditing", @class = "form-control" })
         @Html.ValidationMessageFor(x => x.PublishDate)
     </div>
     <div class="form-group">
         @Html.LabelFor(x => x.Title)
-        @Html.TextBoxFor(x => x.Title, new { @class = "form-control" })
+        <p data-bind="text: book().title, visible: !isEditing()"></p>
+        @Html.TextBoxFor(x => x.Title, new { @data_bind = "value: form().title, visible: isEditing", @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Title)
     </div>
 

@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Web;
 using System.Web.Mvc;
 using PagedListDemo.Models.BooksModel;
+using Newtonsoft.Json;
 
 namespace PagedListDemo.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly Models.PagedListDemoEntities1 db = new Models.PagedListDemoEntities1();
+
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
-            
-            return View(new BooksModel()
+            var book = db.Books.Where("BookId = @0", 1).Select(x => new BooksModel
             {
-                BookId = 1
-                //AcceptAndAgree = false 
-            });
+                BookId = x.BookId,
+                Description = x.Description,
+                Title = x.Title
+            }).FirstOrDefault();
+
+            ViewBag.Book = JsonConvert.SerializeObject(book);
+            return View();
         }
 
         [HttpPost]

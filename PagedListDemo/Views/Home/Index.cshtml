@@ -9,7 +9,8 @@
 
 <div class="panel">
     <div class="panel-body">
-        @Html.Partial("_BooksForm")
+        @Html.Partial("_BooksForm", (PagedListDemo.Models.BooksModel.BooksModel)Newtonsoft.Json
+            .JsonConvert.DeserializeObject<PagedListDemo.Models.BooksModel.BooksModel>(ViewBag.Book))
     </div>
 </div>
 
@@ -28,7 +29,14 @@
 @section scripts {
     <script>
         $(function () {
-            ErrorTooltip.Init(['[type="submit"]']);
+            var viewModel = window.app.VM;
+
+            viewModel.init({
+                book: $.parseJSON('@Html.Raw(ViewBag.Book)')
+            });
+            ko.applyBindings(viewModel, $('#books-form')[0]);
+
+            ErrorTooltip.Init(['[type="submit"]', '.save']);
         });
     </script>
 }

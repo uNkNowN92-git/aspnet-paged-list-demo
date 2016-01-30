@@ -34,23 +34,32 @@ namespace PagedListDemo.Controllers
         [ResponseType(typeof(Book))]
         public IHttpActionResult GetBook(long id)
         {
-            var book = db.Books.Find(id);
-            if (book == null)
-            {
+            //var book = db.Books.Find(id);
+            //if (book == null)
+            //{
+            if (id == 0)
                 return NotFound();
-            }
+            //}
 
-            return Ok(book);
+            return Ok(new Book());
         }
 
         // PUT: api/Books/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutBook(long id, Book book)
+        public IHttpActionResult PutBook(long id, Models.BooksModel.BooksModel booksModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var book = new Book
+            {
+                BookId = id,
+                Description = booksModel.Description,
+                Title = booksModel.Title,
+                PublishDate = booksModel.PublishDate
+            };
 
             if (id != book.BookId)
             {
@@ -69,28 +78,44 @@ namespace PagedListDemo.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return StatusCode(HttpStatusCode.Accepted);
         }
 
         // POST: api/Books
         [ResponseType(typeof(Book))]
-        public IHttpActionResult PostBook(Book book)
+        public IHttpActionResult PostBook(Models.BooksModel.BooksModel booksModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Books.Add(book);
-            db.SaveChanges();
+            var book = new Book
+            {
+                Description = booksModel.Description,
+                Title = booksModel.Title,
+                PublishDate = booksModel.PublishDate
+            };
+            try
+            {
+                db.Books.Add(book);
+                db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = book.BookId }, book);
+                //return CreatedAtRoute("DefaultApi", new { id = book.BookId });
+                return Created("DefaultApi", new { id = book.BookId });
+                //return Ok(new { id = book.BookId });
+            }
+            catch (Exception)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError);
+            }
+
+            //return StatusCode(HttpStatusCode.NoContent);
+
+            //return CreatedAtRoute("DefaultApi", new { id = book.BookId }, book);
         }
 
         // DELETE: api/Books/5
