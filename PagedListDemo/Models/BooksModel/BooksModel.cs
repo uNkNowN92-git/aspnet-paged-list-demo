@@ -37,7 +37,6 @@ namespace PagedListDemo.Models.BooksModel
         /// </summary>
         [JsonProperty(PropertyName = "publishDate")]
         [JsonConverter(typeof(DayMonthYearDateConverter))]
-        [DataType(DataType.Date)]
         public DateTime? PublishDate { get; set; }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace PagedListDemo.Models.BooksModel
         /// <summary>
         /// Determines whether to share the vehicle or not
         /// </summary>
-        [MustBeTrue(ErrorMessageResourceName = "BooksAcceptAndAgree", ErrorMessageResourceType = typeof(ErrorMessages))]
+        //[MustBeTrue(ErrorMessageResourceName = "BooksAcceptAndAgree", ErrorMessageResourceType = typeof(ErrorMessages))]
         //[Required]
         public bool ShareTransport { get; set; }
 

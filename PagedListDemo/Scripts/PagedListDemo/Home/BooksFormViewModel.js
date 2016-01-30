@@ -67,8 +67,6 @@ window.app.VM = (function (dataContext) {
                 self.form().publishDate = GetDefaultDateFormat(e);
             }
         });
-
-        toastr.success("yey!");
     };
 
     self.book = ko.observable();
