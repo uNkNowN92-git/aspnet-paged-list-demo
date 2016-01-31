@@ -2,46 +2,63 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using PagedListDemo.Common.PagedList;
 using PagedListDemo.Models;
+using PagedListDemo.Models.BooksModel;
 
 namespace PagedListDemo.Controllers
 {
     public class BooksController : ApiController
     {
-        private readonly Models.PagedListDemoEntities1 db = new Models.PagedListDemoEntities1();
+        private readonly PagedListDemoEntities1 db = new PagedListDemoEntities1();
 
         // GET: api/Books
-        public IQueryable<Book> GetBooks()
+        public IEnumerable<BooksModel> GetBooks()
         {
-            return db.Books.Select(x => new Book
+            return db.Books.Select(x => new BooksModel
             {
-                Author = x.Author,
                 BookId = x.BookId,
                 Description = x.Description,
-                AuthorId = x.AuthorId,
+                Title = x.Title,
                 PublishDate = x.PublishDate,
-                Title = x.Title
+                Author = x.Author.FirstName + " " + x.Author.LastName
             });
         }
 
+        [Route("api/books/paged", Name = "BooksPaged")]
+        public PagedListResult<BooksModel> GetPagedBooks([FromUri]PagedListOptions pagedListOptions)
+        {
+            return db.Books.Select(x => new BooksModel
+            {
+                BookId = x.BookId,
+                Description = x.Description,
+                Title = x.Title,
+                PublishDate = x.PublishDate,
+                Author = x.Author.FirstName + " " + x.Author.LastName
+            }).AsQueryable().ToPagedListResult(pagedListOptions);
+        }
+
         // GET: api/Books/5
-        [ResponseType(typeof(Book))]
+        [ResponseType(typeof(BooksModel))]
         public IHttpActionResult GetBook(long id)
         {
-            //var book = db.Books.Find(id);
-            //if (book == null)
-            //{
-            if (id == 0)
-                return NotFound();
-            //}
+            var book = db.Books.Where(x => x.BookId == id).Select(x => new BooksModel
+            {
+                BookId = x.BookId,
+                Description = x.Description,
+                Title = x.Title,
+                PublishDate = x.PublishDate,
+                Author = x.Author.FirstName + " " + x.Author.LastName
+            }).FirstOrDefault();
 
-            return Ok(new Book());
+            if (book == null)
+                return NotFound();
+
+            return Ok(book);
         }
 
         // PUT: api/Books/5
@@ -49,36 +66,29 @@ namespace PagedListDemo.Controllers
         public IHttpActionResult PutBook(long id, Models.BooksModel.BooksModel booksModel)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
+            // MAP using SERVICE
             var book = new Book
             {
-                BookId = id,
+                BookId = booksModel.BookId,
                 Description = booksModel.Description,
                 Title = booksModel.Title,
                 PublishDate = booksModel.PublishDate
             };
 
             if (id != book.BookId)
-            {
                 return BadRequest();
-            }
-
-            db.Entry(book).State = EntityState.Modified;
 
             try
             {
+                // UPDATE using SERVICE
+                db.Entry(book).State = EntityState.Modified;
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!BookExists(id))
-                {
-                    return NotFound();
-                }
-                throw;
+                return StatusCode(HttpStatusCode.InternalServerError);
             }
 
             return StatusCode(HttpStatusCode.Accepted);
@@ -89,9 +99,7 @@ namespace PagedListDemo.Controllers
         public IHttpActionResult PostBook(Models.BooksModel.BooksModel booksModel)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var book = new Book
             {
@@ -104,18 +112,12 @@ namespace PagedListDemo.Controllers
                 db.Books.Add(book);
                 db.SaveChanges();
 
-                //return CreatedAtRoute("DefaultApi", new { id = book.BookId });
                 return Created("DefaultApi", new { id = book.BookId });
-                //return Ok(new { id = book.BookId });
             }
             catch (Exception)
             {
                 return StatusCode(HttpStatusCode.InternalServerError);
             }
-
-            //return StatusCode(HttpStatusCode.NoContent);
-
-            //return CreatedAtRoute("DefaultApi", new { id = book.BookId }, book);
         }
 
         // DELETE: api/Books/5

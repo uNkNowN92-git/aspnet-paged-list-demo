@@ -7,6 +7,8 @@ namespace PagedListDemo.Common.PagedList
     {
         public static PagedListResult<T> ToPagedListResult<T>(this IQueryable<T> data, PagedListOptions pagedListOptions)
         {
+            pagedListOptions = pagedListOptions ?? new PagedListOptions();
+
             if (string.IsNullOrEmpty(pagedListOptions.OrderBy))
             {
                 return null;

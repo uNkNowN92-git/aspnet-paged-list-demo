@@ -18,54 +18,86 @@
     return result;
 }
 
+function GetUrlWithId(baseUrl, id) {
+    return baseUrl + (baseUrl.match(/\/$/) === null ? "/" : "") + id;
+}
+
 window.app = window.app || {};
 
 window.app.dataContext = (function () {
-    return {
+    var dataContext = {
         Add: Add,
-        Edit: Edit,
-        //Delete: Delete
+        GetValues: GetValues,
+        Update: Update,
+        Delete: Delete,
         IsModified: IsModified
     };
 
-    function Edit(id, data) {
-        return $.ajax({
-            url: "api/books/" + id,
-            method: "put",
-            data: data
+    function Add(url, data) {
+        return Ajax("post", url, data, function (data) {
+            return data.id;
         });
     }
 
-    function Add(data) {
-        /// <summary>
-        /// Adds a new an entry
-        /// </summary>
-        /// <param name="data">The entry to add.</param>
-        /// <returns></returns>
-        return $.post("api/books", data);
+    function GetValues(url, data) {
+        return Ajax("get", url, data, function (data) {
+            return data;
+        });
+    }
+
+    function Update(url, data) {
+        return Ajax("put", url, data);
+    }
+
+    function Delete(url) {
+        return Ajax("delete", url);
+    }
+
+    function Ajax(method, url, data, callback) {
+        return $.ajax({
+            url: url,
+            method: method,
+            data: data
+        }).then(callback || function () {
+            return;
+        }).fail(Error);
     }
 
     function IsModified(newValue, oldValue) {
         return !_.isEqual(newValue, oldValue);
     }
+
+    function Error() {
+        toastr.error("An error has occured!");
+    }
+
+    return dataContext;
 })();
 
 window.app.VM = (function (dataContext) {
     var self = this;
+    var url;
+    var $form = $('#books-form');
+    var $bookId = $('#BookId');
+    var pagedBooksUrl;
 
     self.init = function (params) {
+        url = params.url;
+        pagedBooksUrl = params.pagedBooksUrl;
+
         var book = params.book;
         self.book(book);
         self.form(book);
 
-        $('#PublishDate').parent().datetimepicker({
+        $publishDateDP = $('#PublishDate').parent();
+
+        $publishDateDP.datetimepicker({
             defaultDate: GetDefaultDateFormat(book.publishDate)
         });
 
-        $('#PublishDate').parent().on("dp.change", function (e) {
-            if (moment(e.date).isValid()) {
+        $publishDateDP.on("dp.change", function (e) {
+            if (moment(e.date).isValid())
                 self.form().publishDate = GetDefaultDateFormat(e);
-            }
         });
     };
 
@@ -80,39 +112,71 @@ window.app.VM = (function (dataContext) {
     };
 
     self.isReady = ko.observable(true);
+    
+    self.getValues = function () {
+        var data = {
+            sortBy: 'BookId'
+        };
+        dataContext.GetValues(pagedBooksUrl, data).done(function (data) {
+            console.log(data);
+        });
+    };
 
-    self.save = function () {
-        var $form = $('#books-form');
+    self.getValue = function () {
+        dataContext.GetValues(GetUrlWithId(url, $bookId.val())).done(function (data) {
+            self.form(data);
+            ApplyChanges();
+        });
+    };
+
+    self.add = function () {
+        if ($form.valid()) {
+            var formValues = ko.toJS(self.form());
+
+            formValues.publishDate = GetDefaultDateFormat(formValues.publishDate, true);
+            formValues.AcceptAndAgree = true;
+            formValues.Conferencing = true;
+
+            dataContext.Add(url, formValues).done(function (id) {
+                if (id) {
+                    self.form().bookId = id;
+                    ApplyChanges();
+                }
+            });
+        }
+    };
+
+    self.archive = function () {
+        dataContext.Delete(GetUrlWithId(url, $bookId.val())).done(function () {
+            toastr.success('deleted');
+            self.book({});
+        });
+    };
+
+    self.update = function () {
         if ($form.valid()) {
 
             var bookValues = ko.toJS(self.book());
             var formValues = ko.toJS(self.form());
 
             if (dataContext.IsModified(bookValues, formValues)) {
-                var bookId = $('#BookId').val();
-
                 formValues.publishDate = GetDefaultDateFormat(formValues.publishDate, true);
                 formValues.AcceptAndAgree = true;
                 formValues.Conferencing = true;
 
-                dataContext.Edit(bookId, formValues).then(function (data, textStatus, jqXHR) {
-                    console.log(data);
-                    console.log(textStatus);
-                    console.log(jqXHR);
-
-                    if (jqXHR.status != 202) {
-                        alert('error!');
-                        return;
-                    }
-                    self.book(self.form());
-                    self.isEditing(false);
+                dataContext.Update(GetUrlWithId(url, $bookId.val()), formValues).done(function () {
+                    ApplyChanges();
                 });
             } else {
-                self.book(self.form());
-                self.isEditing(false);
+                ApplyChanges();
             }
         }
     };
+
+    function ApplyChanges() {
+        self.book(self.form());
+        self.isEditing(false);
+    }
 
     return self;
 })(window.app.dataContext);

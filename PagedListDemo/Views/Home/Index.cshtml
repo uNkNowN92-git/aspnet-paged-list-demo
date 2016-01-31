@@ -9,8 +9,7 @@
 
 <div class="panel">
     <div class="panel-body">
-        @Html.Partial("_BooksForm", (PagedListDemo.Models.BooksModel.BooksModel)Newtonsoft.Json
-            .JsonConvert.DeserializeObject<PagedListDemo.Models.BooksModel.BooksModel>(ViewBag.Book))
+        @Html.Partial("_BooksForm", (PagedListDemo.Models.BooksModel.BooksModel)ViewBag.Book)
     </div>
 </div>
 
@@ -27,12 +26,16 @@
 </div>
 
 @section scripts {
+    @using Newtonsoft.Json
+
     <script>
         $(function () {
             var viewModel = window.app.VM;
 
             viewModel.init({
-                book: $.parseJSON('@Html.Raw(ViewBag.Book)')
+                pagedBooksUrl: '@Url.HttpRouteUrl("BooksPaged", new { })',
+                url: '@Url.HttpRouteUrl("DefaultApi", new { controller = "Books" })',
+                book: $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(ViewBag.Book))')
             });
             ko.applyBindings(viewModel, $('#books-form')[0]);
 

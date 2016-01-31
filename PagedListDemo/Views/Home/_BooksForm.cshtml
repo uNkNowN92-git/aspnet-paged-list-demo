@@ -10,8 +10,12 @@
 {
     @*@Html.ValidationSummary()*@
     <div class="row">
+        <button data-bind="click: getValues, visible: !isEditing()" type="button">Get List</button>
         <button data-bind="click: beginEdit, visible: !isEditing()" type="button">Edit</button>
-        <button data-bind="click: save, visible: isEditing" class="save" type="button">Save</button>
+        <button data-bind="click: archive, visible: !isEditing()" type="button">Delete</button>
+        <button data-bind="click: getValue, visible: isEditing" type="button">Get Value</button>
+        <button data-bind="click: update, visible: isEditing" class="save" type="button">Save</button>
+        <button data-bind="click: add, visible: isEditing" class="save" type="button">Add</button>
     </div>
 
     <div class="form-group col-sm-6">
