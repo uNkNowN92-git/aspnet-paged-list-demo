@@ -89,9 +89,9 @@
                         <pre data-bind="text: ko.toJSON($data)"></pre>
                     </td>*@
                     <td data-bind="text: @Html.GetJsonPropertyName(x => x.Title)"></td>
-                    <td data-bind="text: titleLength"></td>
+                    <td data-bind="text: @Html.GetJsonPropertyName(x => x.BookId)"></td>
                     <td>
-                        <input data-bind="textInput: @Html.GetJsonPropertyName(x => x.Title)" class="form-control" type="text" name="name" />
+                        @*<input data-bind="textInput: @Html.GetJsonPropertyName(x => x.Title)" class="form-control" type="text" name="name" />*@
                     </td>
                     <td data-bind="text: @Html.GetJsonPropertyName(x => x.Description)"></td>
                     <td data-bind="text: @Html.GetJsonPropertyName(x => x.Author)"></td>
@@ -117,7 +117,8 @@
     @*<pre data-bind="text: ko.toJSON(pageNumbers, null, 2)"></pre>*@
     @*<pre data-bind="text: pageNumber"></pre>
     <input type="number" name="pageNumber" data-bind="textInput: pageNumber"/>*@
-    <select data-bind="options: pageNumbers,
+    <select data-bind="disable: loading,
+                       options: pageNumbers,
                        value: pageNumber,
                        event: { change: goToPage}"></select>
 

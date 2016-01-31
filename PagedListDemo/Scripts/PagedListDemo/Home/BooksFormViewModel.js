@@ -1,6 +1,8 @@
-﻿function GetDefaultDateFormat(e, toISOString) {
-    if (e === null) return;
+﻿//"use strict";
 
+function GetDefaultDateFormat(e, toISOString) {
+    if (e === null) return;
+    
     var result;
     var format = $.fn.datetimepicker.defaults.format;
 

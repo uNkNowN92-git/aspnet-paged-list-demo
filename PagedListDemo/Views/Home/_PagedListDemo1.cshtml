@@ -104,6 +104,11 @@
 
     @Html.KoPagedListPager();
 
+    <select data-bind="disable: loading,
+                       options: pageNumbers,
+                       value: pageNumber,
+                       event: { change: goToPage}"></select>
+
     <div class="pager">
         <button data-bind="enable: validInput" class="btn btn-success" type="submit">Submit</button>
     </div>

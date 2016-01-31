@@ -61,14 +61,15 @@ namespace PagedListDemo.Common
             var result = new MvcHtmlString(string.Empty);
             try
             {
-                result = helper.Partial(template);
+                return helper.Partial(template);
             }
             catch (Exception)
             {
-                throw;
+                return helper.Partial(_koPagedListPagerTemplate);
+                //throw;
             }
 
-            return helper.Partial(_koPagedListPagerTemplate);
+            //return helper.Partial(_koPagedListPagerTemplate);
         }
 
         private static object _radioButtonToggleDivDefaultAttrs = new

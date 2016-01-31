@@ -1,6 +1,6 @@
 var BookModel = function (data) {
     ko.mapping.fromJS(data, {}, this);
-
+    // new 
     // Sample additional attribute or property not coming from the server
     this.titleLength = ko.computed(function () {
         // check variable if it is an observable before accessing
@@ -114,7 +114,7 @@ var viewModel1 = new BooksViewModel({
     url: "/api/values",
     entriesPerPage: 5,
     queryOnFilterChangeOnly: false,
-    dataAsObservable: false,
+    //dataAsObservable: false,
 });
 
 var viewModel2 = new BooksViewModel({
@@ -131,5 +131,5 @@ var viewModel2 = new BooksViewModel({
     }
 });
 
-//ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
-ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);
+ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
+//ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);

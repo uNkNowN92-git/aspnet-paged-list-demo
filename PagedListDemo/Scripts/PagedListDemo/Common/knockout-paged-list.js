@@ -1,9 +1,3 @@
-/*
- * knockout-paged-list v1.1.6
- * A KnockoutJS Plugin for Paged List/Grid
- * @repository https://github.com/uNkNowN92-git/knockout-paged-list.git
- * @license ISC
- */
 var PagedList = (function ($, ko) {
     'use strict';
     return function (option) {
@@ -204,13 +198,11 @@ var PagedList = (function ($, ko) {
         };
 
         self.goToPage = function () {
-            // TODO: take note of the loaded pages or check if page entries have been loaded already
+            var pageNumber = _pageNumber();
+            if (pageNumber < 1) return;
 
-            //var pageNumber = _pageNumber();
-            //if (pageNumber < 1) return;
-
-            //_requestedPage(pageNumber);
-            //UpdateDisplayedEntries();
+            _requestedPage(pageNumber);
+            UpdateDisplayedEntries();
         };
 
         self.firstPage = function () {
@@ -403,8 +395,19 @@ var PagedList = (function ($, ko) {
         }
 
         function UpdateNeeded() {
-            return self.loadedEntriesCount() < self.totalEntriesOnNextPage() &&
-                self.loadedEntriesCount() !== self.totalEntries();
+            return (self.loadedEntriesCount() < self.totalEntriesOnNextPage() &&
+                self.loadedEntriesCount() !== self.totalEntries()) ||
+                !EntriesOnPageIsLoaded();
+        }
+
+        function EntriesOnPageIsLoaded() {
+            var result = true;
+            var startIndex = (_requestedPage() - 1) * _requestedEntriesPerPage();
+            var entriesOnPage = self.data.slice(startIndex, startIndex + _requestedEntriesPerPage());
+            $.each(entriesOnPage, function (index, value) {
+                if (isEmptyObject(value)) result = false;
+            });
+            return result;
         }
 
         function PageReloadIsRequired() {
