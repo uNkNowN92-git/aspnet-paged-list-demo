@@ -13,10 +13,10 @@ namespace PagedListDemo.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class PagedListDemoEntities1 : DbContext
+    public partial class PagedListDemoEntities : DbContext
     {
-        public PagedListDemoEntities1()
-            : base("name=PagedListDemoEntities1")
+        public PagedListDemoEntities()
+            : base("name=PagedListDemoEntities")
         {
         }
     

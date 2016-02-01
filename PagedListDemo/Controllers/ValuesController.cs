@@ -24,9 +24,10 @@ namespace PagedListDemo.Controllers
             {
                 return iBooksRepository.GetList(filters, pagedListOptions);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                ex.Message.ToString();
+                return null;
             }
         }
     }

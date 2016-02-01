@@ -14,7 +14,7 @@ namespace PagedListDemo.Controllers
 {
     public class BooksController : ApiController
     {
-        private readonly PagedListDemoEntities1 db = new PagedListDemoEntities1();
+        private readonly PagedListDemoEntities db = new PagedListDemoEntities();
 
         // GET: api/Books
         public IEnumerable<BooksModel> GetBooks()

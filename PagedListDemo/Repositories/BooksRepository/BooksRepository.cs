@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using PagedListDemo.Models.BooksModel;
 using System.Linq.Dynamic;
+using System.Data.Entity;
 
 namespace PagedListDemo.Repositories.BooksRepository
 {
-    internal class BooksRepository : IBooksRepository
+    public class BooksRepository : IBooksRepository
     {
-        private readonly Models.PagedListDemoEntities1 db = new Models.PagedListDemoEntities1();
+        private readonly PagedListDemoEntities db = new PagedListDemoEntities();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CC0068:Unused Method", Justification = "<Pending>")]
         private void Seed()
@@ -171,6 +172,43 @@ namespace PagedListDemo.Repositories.BooksRepository
             db.SaveChanges();
         }
 
+        public void Test()
+        {
+            var authors = new List<Author>
+            {
+                new Author
+                {
+                    BirthDate = DateTime.Now,
+                    FirstName = "First Name"
+                },
+                new Author
+                {
+                    BirthDate = DateTime.Now,
+                    FirstName = "First Name 2"
+                },
+            };
+
+            var books = new List<Book>();
+            authors.ForEach(x =>
+            {
+                var book = new Book
+                {
+                    Description = "Description " + x.AuthorId,
+                    AuthorId = x.AuthorId
+                };
+
+                //db.Authors.Attach(x);
+                //db.Entry(x).State = EntityState.Added;
+
+                x.Books.Add(book);
+            });
+
+            db.Authors.AddRange(authors);
+            db.SaveChanges();
+
+            var id = authors.FirstOrDefault().AuthorId;
+        }
+
         public PagedListResult<BooksModel> GetList(BooksFilterOptions filters, PagedListOptions pagedListOptions)
         {
             //try
@@ -181,6 +219,8 @@ namespace PagedListDemo.Repositories.BooksRepository
             //{
             //    throw ex;
             //}
+
+            Test();
 
             var data = db.Books.AsQueryable();
 
@@ -193,7 +233,7 @@ namespace PagedListDemo.Repositories.BooksRepository
             // filter Author
             if (!string.IsNullOrEmpty(filters.Author))
             {
-                data = data.Where("Author.Person.LastName.Contains(@0) OR Author.Person.FirstName.Contains(@0)", filters.Author);
+                //data = data.Where("Author.Person.LastName.Contains(@0) OR Author.Person.FirstName.Contains(@0)", filters.Author);
                 //data = data.Where("Author.Person.FirstName.Contains(@0)", filters.Author);
             }
 

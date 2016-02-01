@@ -11,7 +11,7 @@ namespace PagedListDemo.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Models.PagedListDemoEntities1 db = new Models.PagedListDemoEntities1();
+        private readonly Models.PagedListDemoEntities db = new Models.PagedListDemoEntities();
 
         public ActionResult Index()
         {
