@@ -28,11 +28,36 @@ IF OBJECT_ID('Books', 'U') IS NOT NULL
     DROP TABLE Books
 GO
 
-CREATE TABLE Books (
-     BookId         BIGINT IDENTITY(1, 1)   NOT NULL CONSTRAINT PK_BookId PRIMARY KEY
-    ,Title          VARCHAR(50) NULL
-    ,Description    VARCHAR(50) NULL
-    ,Author         VARCHAR(50) NULL
-    ,AcceptAndAgree BIT DEFAULT 0
-    )
+--CREATE TABLE Books (
+--     BookId         BIGINT IDENTITY(1, 1)   NOT NULL CONSTRAINT PK_BookId PRIMARY KEY
+--    ,Title          VARCHAR(50) NULL
+--    ,Description    VARCHAR(50) NULL
+--    ,Author         VARCHAR(50) NULL
+--    ,AcceptAndAgree BIT DEFAULT 0
+--    )
+--GO
+
+CREATE TABLE [dbo].[Books] (
+    [BookId]      BIGINT       IDENTITY (1, 1) NOT NULL CONSTRAINT PK_BookId PRIMARY KEY,
+    [Title]       VARCHAR (50) NULL,
+    [Description] VARCHAR (50) NULL,
+    [AuthorId]    BIGINT       NOT NULL,
+    [PublishDate] DATETIME     NULL,
+    CONSTRAINT [PK_BookId] PRIMARY KEY CLUSTERED ([BookId] ASC),
+    CONSTRAINT [FK_Books_Author] FOREIGN KEY ([AuthorId]) REFERENCES [dbo].[Authors] ([AuthorId])
+);
+GO
+
+IF OBJECT_ID('Authors', 'U') IS NOT NULL
+    TRUNCATE TABLE Authors
+    DROP TABLE Authors
+GO
+
+CREATE TABLE [dbo].[Authors] (
+    [AuthorId]  BIGINT       IDENTITY (1, 1) NOT NULL,
+    [FirstName] VARCHAR (50) NULL,
+    [LastName]  VARCHAR (50) NULL,
+    [BirthDate] DATETIME     NULL,
+    PRIMARY KEY CLUSTERED ([AuthorId] ASC)
+);
 GO
