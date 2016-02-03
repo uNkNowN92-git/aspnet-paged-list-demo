@@ -13,7 +13,7 @@ namespace PagedListDemo.Common
     {
         public static void SetNotificationMessage(this Controller controller, string message, Severity severity)
         {
-            var notificationMessage = new NotificationMessageModel()
+            var notificationMessage = new NotificationMessageModel
             {
                 Message = message,
                 Severity = severity

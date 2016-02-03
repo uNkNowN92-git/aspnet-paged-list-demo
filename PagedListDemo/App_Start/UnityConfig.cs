@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
-using PagedListDemo.Repositories.BooksRepository;
+using System.Linq;
 
 namespace PagedListDemo.App_Start
 {
@@ -38,7 +37,13 @@ namespace PagedListDemo.App_Start
 
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IBooksRepository, BooksRepository>();
+            //container.RegisterType<IBooksRepository, BooksRepository>();
+
+            Utility.GetClassListWithAttribute<ServiceInterfaceAttribute>("PagedListDemo").ToList().ForEach(x =>
+            {
+                var _interface = x.GetInterfaces().First();
+                container.RegisterType(_interface, x, new PerRequestLifetimeManager());
+            });
         }
     }
 }

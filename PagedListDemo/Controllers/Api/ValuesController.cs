@@ -7,22 +7,22 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace PagedListDemo.Controllers
+namespace PagedListDemo.Controllers.Api
 {
     public class ValuesController : ApiController
     {
-        private readonly IBooksRepository iBooksRepository;
+        private readonly IBooksRepository _iBooksRepository;
 
-        public ValuesController()
+        public ValuesController(IBooksRepository iBooksRepository)
         {
-            iBooksRepository = DependencyResolver.Current.GetService<IBooksRepository>();
+            _iBooksRepository = iBooksRepository;
         }
 
         public PagedListResult<BooksModel> GetList([FromUri]BooksFilterOptions filters, [FromUri]PagedListOptions pagedListOptions)
         {
             try
             {
-                return iBooksRepository.GetList(filters, pagedListOptions);
+                return _iBooksRepository.GetList(filters, pagedListOptions);
             }
             catch (Exception ex)
             {

@@ -9,7 +9,7 @@ using System.Data.Entity;
 
 namespace PagedListDemo.Repositories.BooksRepository
 {
-    public class BooksRepository : IBooksRepository
+    internal class BooksRepository : IBooksRepository
     {
         private readonly PagedListDemoEntities db = new PagedListDemoEntities();
 

@@ -104,7 +104,8 @@
 
     @Html.KoPagedListPager();
 
-    <select data-bind="disable: loading,
+    <select class="form-control"
+            data-bind="disable: loading,
                        options: pageNumbers,
                        value: pageNumber,
                        event: { change: goToPage}"></select>

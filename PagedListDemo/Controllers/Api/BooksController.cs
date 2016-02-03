@@ -10,7 +10,7 @@ using PagedListDemo.Common.PagedList;
 using PagedListDemo.Models;
 using PagedListDemo.Models.BooksModel;
 
-namespace PagedListDemo.Controllers
+namespace PagedListDemo.Controllers.Api
 {
     public class BooksController : ApiController
     {
