@@ -1,6 +1,6 @@
 using System.Web;
 using System.Web.Optimization;
-using PagedListDemo.Common;
+using DynamicBundles;
 
 namespace PagedListDemo
 {
@@ -29,7 +29,15 @@ namespace PagedListDemo
                         "~/Content/site.css",
                         "~/Content/Common/*.css"));
 
-            MvcHelper.RegisterDynamicBundles(bundles);
+            bundles.RegisterDynamicBundles();
+
+#if DEBUG
+            // disable minification of the bundles
+            foreach (var bundle in BundleTable.Bundles)
+                bundle.Transforms.Clear();
+#endif
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

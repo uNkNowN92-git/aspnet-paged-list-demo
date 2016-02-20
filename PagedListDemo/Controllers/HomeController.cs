@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedListDemo.Models.BooksModel;
 using Newtonsoft.Json;
+using PagedListDemo.Common;
 
 namespace PagedListDemo.Controllers
 {
@@ -27,6 +28,20 @@ namespace PagedListDemo.Controllers
 
             ViewBag.Book = book;
             return View();
+        }
+        
+        public JsonResult Get()
+        {
+            var book = db.Books.Select(x => new BooksModel
+            {
+                BookId = x.BookId,
+                Description = x.Description,
+                Title = x.Title,
+                PublishDate = x.PublishDate,
+                Author = x.Author.FirstName + " " + x.Author.LastName
+            }).FirstOrDefault();
+
+            return Json(book, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
