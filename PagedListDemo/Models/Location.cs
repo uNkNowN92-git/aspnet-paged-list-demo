@@ -15,22 +15,13 @@ namespace PagedListDemo.Models
 using System;
     using System.Collections.Generic;
     
-public partial class Book
+public partial class Location
 {
+    public int LocationID { get; set; }
 
-    public long BookId { get; set; }
+    public System.Data.Entity.Spatial.DbGeography Coordinate { get; set; }
 
-    public string Title { get; set; }
-
-    public string Description { get; set; }
-
-    public long AuthorId { get; set; }
-
-    public Nullable<System.DateTime> PublishDate { get; set; }
-
-
-
-    public virtual Author Author { get; set; }
+    public string Address { get; set; }
 
 }
 

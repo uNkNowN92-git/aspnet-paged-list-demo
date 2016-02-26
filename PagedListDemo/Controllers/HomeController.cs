@@ -29,7 +29,24 @@ namespace PagedListDemo.Controllers
             ViewBag.Book = book;
             return View();
         }
-        
+
+        public PartialViewResult IndexPartial()
+        {
+            ViewBag.Title = "Home Page";
+            var book = db.Books.Select(x => new BooksModel
+            {
+                BookId = x.BookId,
+                Description = x.Description,
+                Title = x.Title,
+                PublishDate = x.PublishDate,
+                Author = x.Author.FirstName + " " + x.Author.LastName
+            }).FirstOrDefault();
+
+            ViewBag.Book = book;
+            ViewBag.IsPartial = true;
+            return PartialView("Index");
+        }
+
         public JsonResult Get()
         {
             var book = db.Books.Select(x => new BooksModel

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PagedListDemoModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PagedListDemoModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Authors">
           <Key>
             <PropertyRef Name="AuthorId" />
@@ -24,6 +24,14 @@
           <Property Name="AuthorId" Type="bigint" Nullable="false" />
           <Property Name="PublishDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="Locations">
+          <Key>
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="Coordinate" Type="geography" />
+          <Property Name="Address" Type="varchar" MaxLength="50" />
+        </EntityType>
         <Association Name="FK_Books_Author">
           <End Role="Authors" Type="Self.Authors" Multiplicity="1" />
           <End Role="Books" Type="Self.Books" Multiplicity="*" />
@@ -39,13 +47,13 @@
         <EntityContainer Name="PagedListDemoModel1StoreContainer">
           <EntitySet Name="Authors" EntityType="Self.Authors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Books" EntityType="Self.Books" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Locations" EntityType="Self.Locations" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Books_Author" Association="Self.FK_Books_Author">
             <End Role="Authors" EntitySet="Authors" />
             <End Role="Books" EntitySet="Books" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PagedListDemoModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -89,7 +97,16 @@
             <End Role="Authors" EntitySet="Authors" />
             <End Role="Books" EntitySet="Books" />
           </AssociationSet>
+          <EntitySet Name="Locations" EntityType="PagedListDemoModel1.Location" />
         </EntityContainer>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="Coordinate" Type="Geography" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -114,6 +131,15 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
                 <ScalarProperty Name="PublishDate" ColumnName="PublishDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="PagedListDemoModel1.Location">
+              <MappingFragment StoreEntitySet="Locations">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Coordinate" ColumnName="Coordinate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

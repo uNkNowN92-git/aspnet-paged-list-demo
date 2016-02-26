@@ -2,7 +2,7 @@
 
 function GetDefaultDateFormat(e, toISOString) {
     if (e === null) return;
-    
+
     var result;
     var format = $.fn.datetimepicker.defaults.format;
 
@@ -77,10 +77,12 @@ window.app.dataContext = (function () {
 })();
 
 window.app.VM = (function (dataContext) {
-    var self = this;
+    "use strict";
+
+    var self = {};
     var url;
-    var $form = $('#books-form');
-    var $bookId = $('#BookId');
+    var $form;
+    var $publishDateDP;
     var pagedBooksUrl;
 
     self.init = function (params) {
@@ -91,6 +93,7 @@ window.app.VM = (function (dataContext) {
         self.book(book);
         self.form(book);
 
+        $form = $('#books-form');
         $publishDateDP = $('#PublishDate').parent();
 
         $publishDateDP.datetimepicker({
@@ -114,7 +117,7 @@ window.app.VM = (function (dataContext) {
     };
 
     self.isReady = ko.observable(true);
-    
+
     self.getValues = function () {
         var data = {
             sortBy: 'BookId'
@@ -125,7 +128,7 @@ window.app.VM = (function (dataContext) {
     };
 
     self.getValue = function () {
-        dataContext.GetValues(GetUrlWithId(url, $bookId.val())).done(function (data) {
+        dataContext.GetValues(GetUrlWithId(url, self.form().bookId)).done(function (data) {
             self.form(data);
             ApplyChanges();
         });
@@ -149,7 +152,7 @@ window.app.VM = (function (dataContext) {
     };
 
     self.archive = function () {
-        dataContext.Delete(GetUrlWithId(url, $bookId.val())).done(function () {
+        dataContext.Delete(GetUrlWithId(url, self.form().bookId)).done(function () {
             toastr.success('deleted');
             self.book({});
         });
@@ -166,7 +169,7 @@ window.app.VM = (function (dataContext) {
                 formValues.AcceptAndAgree = true;
                 formValues.Conferencing = true;
 
-                dataContext.Update(GetUrlWithId(url, $bookId.val()), formValues).done(function () {
+                dataContext.Update(GetUrlWithId(url, self.form().bookId), formValues).done(function () {
                     ApplyChanges();
                 });
             } else {

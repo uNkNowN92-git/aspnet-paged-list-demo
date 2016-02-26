@@ -8,4 +8,44 @@
 {
     var books = (PagedListDemo.Models.Book)ViewData["Books"];
     <pre>Selected ID: @books.BookId</pre>
+
+}
+
+<button id="open-btn" data-toggle="modal" data-target="#result-modal" class="btn btn-default">Open Modal</button>
+
+<div id="result-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Header</h4>
+            <div class="close" data-dismiss="modal">X</div>
+        </div>
+        <div class="modal-body"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            "use strict";
+
+            var $resultModal = $('#result-modal');
+            var $resultModalBody = $resultModal.find(".modal-body");
+
+            $('#open-btn').click(function () {
+                loadContent();
+            });
+
+            function loadContent() {
+                $.ajax({
+                    url: '@Url.Action("IndexPartial", "Home")',
+                    success: success,
+                });
+            }
+
+            function success(data) {
+                var html = $resultModalBody.html(data);
+                $.validator.unobtrusive.parse(html);
+            }
+        });
+    </script>
 }

@@ -1,6 +1,10 @@
 ﻿@{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (ViewBag.IsPartial == null)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 }
 
 <h2>Paged List Demo</h2>
@@ -25,9 +29,26 @@
     </div>
 </div>
 
-@section scripts {
-    @using Newtonsoft.Json
+@using Newtonsoft.Json
+@if (ViewBag.IsPartial != null)
+{
+    <script>
+        $(function () {
+            var viewModel = window.app.VM;
 
+            viewModel.init({
+                pagedBooksUrl: '@Url.HttpRouteUrl("BooksPaged", new { })',
+                url: '@Url.HttpRouteUrl("DefaultApi", new { controller = "Books" })',
+                book: $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(ViewBag.Book))')
+            });
+            ko.applyBindings(viewModel, $('#books-form')[0]);
+
+            ErrorTooltip.Init(['[type="submit"]', '.save']);
+        });
+    </script>
+}
+
+@section scripts {
     <script>
         $(function () {
             var viewModel = window.app.VM;
