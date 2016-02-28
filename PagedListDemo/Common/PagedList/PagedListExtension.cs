@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Dynamic;
 
 namespace PagedListDemo.Common.PagedList
@@ -14,17 +15,28 @@ namespace PagedListDemo.Common.PagedList
                 return null;
             }
 
-            var pagedList = data
-                .OrderBy(pagedListOptions.OrderBy)
-                .Skip(pagedListOptions.Start)
-                .Take(pagedListOptions.ShowAll ? data.Count() : pagedListOptions.Entries);
+            var pagedList = data.ToPagedListData(pagedListOptions);
 
-            var details = new PagedListDetails
+            var details = data.ToPagedListDetails();
+
+            return new PagedListResult<T>(pagedList, details);
+        }
+
+        public static PagedListDetails ToPagedListDetails<T>(this IQueryable<T> data)
+        {
+            // TODO: search for COUNT(*) equivalent for LINQ
+            return new PagedListDetails
             {
                 TotalEntries = data.Count()
             };
+        }
 
-            return new PagedListResult<T>(pagedList, details);
+        public static IEnumerable<T> ToPagedListData<T>(this IQueryable<T> data, PagedListOptions pagedListOptions)
+        {
+            return data
+                .OrderBy(pagedListOptions.OrderBy)
+                .Skip(pagedListOptions.Start)
+                .Take(pagedListOptions.ShowAll ? data.Count() : pagedListOptions.Entries);
         }
     }
 }

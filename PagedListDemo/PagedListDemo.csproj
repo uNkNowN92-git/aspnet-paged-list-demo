@@ -198,13 +198,16 @@
     <Compile Include="Common\HtmlHelpers.cs" />
     <Compile Include="Common\DynamicBundles.cs" />
     <Compile Include="Common\JsonNetResult.cs" />
+    <Compile Include="Common\LocationUtils\LocationUtilsConstants.cs" />
+    <Compile Include="Common\LocationUtils\LocationUtilsExtensions.cs" />
+    <Compile Include="Common\LocationUtils\LocationUtilsHelpers.cs" />
     <Compile Include="Common\PagedList\PagedListDetails.cs" />
     <Compile Include="Common\PagedList\PagedListExtension.cs" />
     <Compile Include="Common\PagedList\PagedListOptions.cs" />
     <Compile Include="Common\PagedList\PagedListResult.cs" />
     <Compile Include="Common\ServiceInterfaceAttribute.cs" />
     <Compile Include="Controllers\Api\BooksController.cs" />
-    <Compile Include="Controllers\Api\LocationsController.cs" />
+    <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\ComponentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Api\ValuesController.cs" />
@@ -224,10 +227,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Models\JourneyModel.cs" />
     <Compile Include="Models\Location.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Location\LocationModel.cs" />
+    <Compile Include="Common\LocationUtils\LocationUtilsFilter.cs" />
+    <Compile Include="Models\Locations\LocationModel.cs" />
+    <Compile Include="Common\LocationUtils\LocationUtilsFilterOptions.cs" />
+    <Compile Include="Models\Locations\ResultModel.cs" />
+    <Compile Include="Models\Locations\ResultsFilter.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
