@@ -207,10 +207,10 @@
     <Compile Include="Common\PagedList\PagedListResult.cs" />
     <Compile Include="Common\ServiceInterfaceAttribute.cs" />
     <Compile Include="Controllers\Api\BooksController.cs" />
-    <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\ComponentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Api\ValuesController.cs" />
+    <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
