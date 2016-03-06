@@ -1,0 +1,83 @@
+@model PagedListDemo.Models.Booking.RepeatBookingModel
+
+@{
+//var daysOfWeek = DayOfWeek
+}
+
+<style>
+    #repeat-booking-container input[type="radio"] + label {
+        font-weight: normal;
+    }
+</style>
+
+<div id="repeat-booking-container">
+
+    @Html.RadioButtonFor(x => x.RepeatType, (int)PagedListDemo.Models.Booking.RepeatType.Daily, new { id = "daily" })
+    <label for="daily">repeat every</label>
+    @Html.TextBoxFor(x => x.Every, new { data_bind = "dateAdd: { period: 'd', output: daysNext }, value: form().days", type = "", min = 0, @class = "form-control" })
+    <span data-bind="text: daysNext"></span>
+
+    @Html.RadioButtonFor(x => x.RepeatType, (int)PagedListDemo.Models.Booking.RepeatType.Weekly, new { id = "weekly" })
+    <label for="weekly">repeat every</label>
+    @Html.TextBoxFor(x => x.Every, new { data_bind = "dateAdd: { period: 'w', output: weeksNext }, value: form().weeks", type = "", min = 0, @class = "form-control" })
+    <span data-bind="text: weeksNext"></span>
+
+    @Html.RadioButtonFor(x => x.RepeatType, (int)PagedListDemo.Models.Booking.RepeatType.Monthly, new { id = "monthly" })
+    <label for="monthly">repeat every</label>
+    @Html.TextBoxFor(x => x.Every, new { data_bind = "dateAdd: { period: 'M', output: monthsNext }, value: form().months", type = "", min = 0, @class = "form-control" })
+    <span data-bind="text: monthsNext"></span>
+
+    <pre data-bind="text: ko.toJSON($root, null, 2)"></pre>
+
+</div>
+
+<script>
+var RepeatBookingViewModel = function () {
+    "use strict";
+    var self = this;
+
+    self.form = ko.observable({});
+    self.daysNext = ko.observable();
+    self.weeksNext = ko.observable();
+    self.monthsNext = ko.observable();
+};
+
+(function () {
+    ko.bindingHandlers.dateAdd = {
+        init: function (element, valueAccessor, allBindingsAccessor) {
+            var period = valueAccessor().period,
+                format = valueAccessor().format || 'DD/MM/YYYY';
+
+            updateOutput(element);
+
+            $(element)
+                .spinner({})
+                .on('keyup', function () {
+                    updateOutput(this);
+                })
+                .on("spinstop", function () {
+                    updateOutput(this, $(element).spinner("value"));
+                });
+
+            $(element).spinner({});
+
+            function updateOutput(element, val) {
+                var $this = $(element),
+                    value = val || $this.val(),
+                    intValue = parseInt(value),
+                    output = valueAccessor().output;
+
+                if (!isNaN(intValue) || $.trim(value).length === 0) {
+                    var result = moment().add(value, period);
+                    var formatted = result.format(format);
+
+                    output(formatted);
+                } else {
+                    output('Invalid input');
+                }
+            }
+        },
+    };
+})();
+</script>
+
