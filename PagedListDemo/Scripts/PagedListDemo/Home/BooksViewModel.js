@@ -131,5 +131,5 @@ var viewModel2 = new BooksViewModel({
     }
 });
 
-ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
+//ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
 //ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);

@@ -7,10 +7,12 @@ using System.Web.Mvc;
 using PagedListDemo.Models.BooksModel;
 using Newtonsoft.Json;
 using PagedListDemo.Common;
+using System.Net;
+using PagedListDemo.Models.NotificationMessage;
 
 namespace PagedListDemo.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly Models.PagedListDemoEntities db = new Models.PagedListDemoEntities();
 
@@ -58,7 +60,20 @@ namespace PagedListDemo.Controllers
                 Author = x.Author.FirstName + " " + x.Author.LastName
             }).FirstOrDefault();
 
-            return Json(book, JsonRequestBehavior.AllowGet);
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [JsonHandler]
+        public JsonResult GetJSON()
+        {
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [JsonHandler]
+        [HttpGet]
+        public JsonResult Get(HttpStatusCode code, NotificationMessageModel message)
+        {
+            return CreateStatusResult(code, message.Message, message.Severity);
         }
 
         [HttpPost]

@@ -54,7 +54,7 @@ namespace PagedListDemo.Models.Locations
         {
             get
             {
-                return Distance.ToMiles(LocationUtilsConstants.MilesDecimalPlaces);
+                return Distance.ToMiles();
             }
         }
 

@@ -20,8 +20,14 @@ namespace PagedListDemo
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/respond.js",
                         "~/Scripts/jquery.validate*",
+#if DEBUG
+                        "~/Scripts/knockout-3.4.0.debug.js",
+                        "~/Scripts/knockout.mapping-latest.debug.js"
+#else
                         "~/Scripts/knockout-3.4.0.js",
-                        "~/Scripts/knockout.mapping-latest.debug.js").IncludeDirectory(
+                        "~/Scripts/knockout.mapping-latest.js"
+#endif
+                        ).IncludeDirectory(
                         "~/Scripts/PagedListDemo/Common", "*.js", true));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

@@ -18,7 +18,7 @@ namespace PagedListDemo.Controllers
             ViewData["Books"] = (BooksModel)TempData["Books"];
             ViewBag.Id = id;
 
-            this.SetNotificationMessage("test", Severity.Success);
+            //this.SetNotificationMessage("test", Severity.Success);
 
             return View();
         }

@@ -81,9 +81,9 @@
                     </td>
                     <td>
                         <span data-bind="text: @Html.GetJsonPropertyName(x => x.Title)"></span>
-                        @Html.TextBoxFor(x => x.Title, new { @data_bind = "textInput: " + @Html.GetJsonPropertyName(x => x.Title), @class = "form-control" })
+                        @*@Html.TextBoxFor(x => x.Title, new { @data_bind = "textInput: " + @Html.GetJsonPropertyName(x => x.Title), @class = "form-control" })*@
                     </td>
-                    <td data-bind="text: @Html.GetJsonPropertyName(x => x.Description)"></td>
+                    <td data-bind="toFixedWithTitle: @Html.GetJsonPropertyName(x => x.Description)"></td>
                     <td data-bind="text: @Html.GetJsonPropertyName(x => x.Author)"></td>
                 </tr>
             </tbody>
@@ -104,6 +104,8 @@
 
     @Html.KoPagedListPager();
 
+    <span data-bind="toFixedWithTitle: totalEntries"></span>
+    
     <select class="form-control"
             data-bind="disable: loading,
                        options: pageNumbers,

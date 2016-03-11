@@ -5,6 +5,8 @@
     {
         Layout = "~/Views/Shared/_Layout.cshtml";
     }
+
+    var daysOfWeek = EnumHelpers.ToValueTextModel<DayOfWeek>();
 }
 
 <h2>Paged List Demo</h2>
@@ -13,13 +15,20 @@
 
 <div class="panel">
     <div class="panel-body">
-        @Html.Partial("_BooksForm", (PagedListDemo.Models.BooksModel.BooksModel)ViewBag.Book)
+        @Html.Partial("_ToggleButton")
+        @Html.Partial("_RepeatBooking")
     </div>
 </div>
 
 <div class="panel">
     <div class="panel-body">
-        @Html.Partial("_PagedListDemo1")
+        @*  @Html.Partial("_BooksForm", (PagedListDemo.Models.BooksModel.BooksModel)ViewBag.Book)*@
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        @*@Html.Partial("_PagedListDemo1")*@
     </div>
 </div>
 
@@ -32,33 +41,30 @@
 @using Newtonsoft.Json
 @if (ViewBag.IsPartial != null)
 {
-    <script>
-        $(function () {
-            var viewModel = window.app.VM;
 
-            viewModel.init({
-                pagedBooksUrl: '@Url.HttpRouteUrl("BooksPaged", new { })',
-                url: '@Url.HttpRouteUrl("DefaultApi", new { controller = "Books" })',
-                book: $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(ViewBag.Book))')
-            });
-            ko.applyBindings(viewModel, $('#books-form')[0]);
-
-            ErrorTooltip.Init(['[type="submit"]', '.save']);
-        });
-    </script>
 }
 
 @section scripts {
     <script>
         $(function () {
-            var viewModel = window.app.VM;
+            var viewModel = new RepeatBookingViewModel({
+                daysOfWeek: $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(daysOfWeek))')
+            });
+            ko.applyBindings(viewModel, $('#repeat-booking-container')[0]);
+        });
+
+        $(function () {
+            @*var viewModel = window.app.VM;
 
             viewModel.init({
                 pagedBooksUrl: '@Url.HttpRouteUrl("BooksPaged", new { })',
                 url: '@Url.HttpRouteUrl("DefaultApi", new { controller = "Books" })',
                 book: $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(ViewBag.Book))')
             });
-            ko.applyBindings(viewModel, $('#books-form')[0]);
+            ko.applyBindings(viewModel, $('#books-form')[0]);*@
+
+            var viewModel = new ToggleButtonViewModel();
+            ko.applyBindings(viewModel, $('#toggle-button-container')[0]);
 
             ErrorTooltip.Init(['[type="submit"]', '.save']);
         });
