@@ -1,4 +1,44 @@
-﻿/*!
+﻿/*
+    Autcomplete styles
+*/
+
+
+.ui-autocomplete.ui-widget {
+    font-family: Open Sans;
+    font-size: 14px;
+    list-style-type: none !important;
+    padding-left: 0;
+    border: 1px solid #ccc;
+    position: absolute !important;
+    z-index: 999;
+    max-height: 65%;
+    overflow-y: auto;
+}
+
+.ui-widget-content {
+    background: white !important;
+}
+
+.ui-menu .ui-menu-item {
+    padding-left: 12px;
+}
+
+.ui-menu-item.ui-state-focus {
+    background: #1E90FF !important;
+    color: white !important;
+    border: none !important;
+}
+
+.ui-autocomplete-loading,
+.loading {
+    background-color: white;
+    /*background-image: url('/content/images/ui-anim_basic_16x16.gif');*/
+    background-position: 88% center;
+    background-repeat: no-repeat;
+}
+
+
+/*!
  * jQuery UI Spinner 1.11.4
  * http://jqueryui.com
  *

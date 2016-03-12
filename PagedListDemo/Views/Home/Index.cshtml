@@ -7,22 +7,25 @@
     }
 
     var daysOfWeek = EnumHelpers.ToValueTextModel<DayOfWeek>();
+    var searchForOptions = EnumHelpers.ToValueTextModel<PagedListDemo.Models.BooksModel.SearchFor>();
+    var s = EnumHelpers.GetSelectList<PagedListDemo.Models.BooksModel.SearchFor>();
+    //var searchForOptions2 = EnumHelper.GetSelectList(typeof(PagedListDemo.Models.BooksModel.SearchFor));
 }
 
 <h2>Paged List Demo</h2>
 
 @*@Html.ValidationSummary()*@
 
-<div class="panel">
+@*<div class="panel">
     <div class="panel-body">
         @Html.Partial("_ToggleButton")
         @Html.Partial("_RepeatBooking")
     </div>
-</div>
+</div>*@
 
 <div class="panel">
     <div class="panel-body">
-        @*  @Html.Partial("_BooksForm", (PagedListDemo.Models.BooksModel.BooksModel)ViewBag.Book)*@
+          @Html.Partial("_BooksForm", (PagedListDemo.Models.BooksModel.BooksModel)ViewBag.Book)
     </div>
 </div>
 
@@ -38,7 +41,12 @@
     </div>
 </div>
 
-@using Newtonsoft.Json
+<button onclick="JourneyTabs.OnclickRenderPartial('@Url.Action("IndexPartial", "Components")', 'components-partial')">
+    Load Components Page
+</button>
+<div id="components-partial"></div>
+
+@*@using Newtonsoft.Json*@
 @if (ViewBag.IsPartial != null)
 {
 
@@ -47,24 +55,28 @@
 @section scripts {
     <script>
         $(function () {
-            var viewModel = new RepeatBookingViewModel({
+            @*var viewModel = new RepeatBookingViewModel({
                 daysOfWeek: $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(daysOfWeek))')
             });
-            ko.applyBindings(viewModel, $('#repeat-booking-container')[0]);
+            ko.applyBindings(viewModel, $('#repeat-booking-container')[0]);*@
+            //var viewModel = new ToggleButtonViewModel();
+            //ko.applyBindings(viewModel, $('#toggle-button-container')[0]);
         });
 
         $(function () {
-            @*var viewModel = window.app.VM;
+
+
+            var viewModel = window.app.VM;
 
             viewModel.init({
+                searchForOptions: $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(searchForOptions))'),
+                autocompleteUrl: '@Url.HttpRouteUrl("BooksAutocomplete", new { })',
                 pagedBooksUrl: '@Url.HttpRouteUrl("BooksPaged", new { })',
                 url: '@Url.HttpRouteUrl("DefaultApi", new { controller = "Books" })',
                 book: $.parseJSON('@Html.Raw(JsonConvert.SerializeObject(ViewBag.Book))')
             });
-            ko.applyBindings(viewModel, $('#books-form')[0]);*@
+            ko.applyBindings(viewModel, $('#books-form')[0]);
 
-            var viewModel = new ToggleButtonViewModel();
-            ko.applyBindings(viewModel, $('#toggle-button-container')[0]);
 
             ErrorTooltip.Init(['[type="submit"]', '.save']);
         });

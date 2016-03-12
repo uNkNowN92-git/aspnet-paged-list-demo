@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using PagedListDemo.Common;
 using System.Net;
 using PagedListDemo.Models.NotificationMessage;
+using PagedListDemo.Common.PagedList;
 
 namespace PagedListDemo.Controllers
 {
@@ -49,7 +50,8 @@ namespace PagedListDemo.Controllers
             return PartialView("Index");
         }
 
-        public JsonResult Get()
+        [JsonNetResult]
+        public PagedListResult<BooksModel> Get(PagedListOptions pagedListOptions)
         {
             var book = db.Books.Select(x => new BooksModel
             {
@@ -58,9 +60,9 @@ namespace PagedListDemo.Controllers
                 Title = x.Title,
                 PublishDate = x.PublishDate,
                 Author = x.Author.FirstName + " " + x.Author.LastName
-            }).FirstOrDefault();
+            }).ToPagedListResult(pagedListOptions);
 
-            return Json(null, JsonRequestBehavior.AllowGet);
+            return book;
         }
 
         [JsonHandler]
@@ -69,12 +71,12 @@ namespace PagedListDemo.Controllers
             return Json(null, JsonRequestBehavior.AllowGet);
         }
 
-        [JsonHandler]
-        [HttpGet]
-        public JsonResult Get(HttpStatusCode code, NotificationMessageModel message)
-        {
-            return CreateStatusResult(code, message.Message, message.Severity);
-        }
+        //[JsonHandler]
+        //[HttpGet]
+        //public JsonResult Get(HttpStatusCode code, NotificationMessageModel message)
+        //{
+        //    return CreateStatusResult(code, message.Message, message.Severity);
+        //}
 
         [HttpPost]
         public ActionResult Index(BooksModel book)

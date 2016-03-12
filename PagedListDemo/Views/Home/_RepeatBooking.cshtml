@@ -1,0 +1,68 @@
+﻿@model PagedListDemo.Models.Booking.RepeatBookingModel
+
+@{
+    var selectList = new SelectList(new List<ValueTextModel>(), "Value", "Text");
+}
+
+
+<style>
+    #repeat-booking-container input[type="radio"] + label {
+        font-weight: normal;
+    }
+</style>
+
+<div id="repeat-booking-container">
+
+    <pre data-bind="text: startDate"></pre>
+
+    DAILY
+    <div class="form-inline">
+        @Html.RadioButtonFor(x => x.RepeatType, (int)PagedListDemo.Models.Booking.RepeatType.Weekly, new { id = "weekly" })
+        <label for="weekly">repeat on weekday</label>
+        @Html.HiddenFor(x => x.Every,
+        new
+        {
+            data_bind = "dateAdd: { period: 'd', output: weeksNext, startDate: startDate, dayOfWeek: 'weekday' }",
+            type = "",
+            min = 1,
+            @class = "hidden"
+        })
+        <span data-bind="text: weeksNext"></span>
+    </div>
+
+    WEEKLY
+    <div class="form-inline">
+
+        @Html.RadioButtonFor(x => x.RepeatType, (int)PagedListDemo.Models.Booking.RepeatType.Daily, new { id = "daily" })
+        <label for="daily">repeat every</label>
+        @Html.TextBoxFor(x => x.Every,
+        new
+        {
+            data_bind = @"dateAdd: { period: 'w', output: daysNext, startDate: startDate, dayOfWeek: dailyDayOfWeek },
+                        value: form().days",
+            type = "",
+            min = 1,
+            @class = "form-control"
+        })
+        <span data-bind="text: daysNext"></span>
+
+        @Html.DropDownListFor(x => x.DayOfWeek, selectList,
+        new
+        {
+            @class = "form-control",
+            data_bind = @"options: daysOfWeek,
+                        optionsValue: 'Value',
+                        optionsText: 'Text',
+                        value: dailyDayOfWeek"
+        })
+    </div>
+
+
+    @Html.RadioButtonFor(x => x.RepeatType, (int)PagedListDemo.Models.Booking.RepeatType.Monthly, new { id = "monthly" })
+    <label for="monthly">repeat every</label>
+    @Html.TextBoxFor(x => x.Every, new { data_bind = "dateAdd: { period: 'M', output: monthsNext }, value: form().months", type = "", min = 0, @class = "form-control" })
+    <span data-bind="text: monthsNext"></span>
+
+    <pre data-bind="text: ko.toJSON($root, null, 2)"></pre>
+
+</div>

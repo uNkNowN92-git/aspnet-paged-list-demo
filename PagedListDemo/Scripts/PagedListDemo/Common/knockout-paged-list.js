@@ -568,7 +568,13 @@ var PagedList = (function ($, ko) {
         }
 
         function ProcessError(jqXHR, status, error) {
-            if (jqXHR.status === 200) return;
+
+            // fix for null result from JsonResult
+            if (jqXHR.status === 200) {
+                responseTotalEntries = 0;
+                ProcessResponseDetails();
+                return;
+            }
 
             self.error({
                 jqXHR: jqXHR,

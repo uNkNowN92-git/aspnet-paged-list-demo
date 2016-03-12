@@ -23,6 +23,11 @@ namespace PagedListDemo.Controllers
             return View();
         }
 
+        public PartialViewResult IndexPartial()
+        {
+            return PartialView("Index");
+        }
+
         [Route("Components/ErrorTooltip")]
         public PartialViewResult ErrorTooltip()
         {

@@ -1,4 +1,55 @@
-﻿var ErrorTooltip = (function ($) { 'use strict';
+﻿var JourneyTabs = function () {
+    var request,
+        previousUrl;
+
+    return {
+        OnclickTab: function (tabsId, url, renderPartialView) {
+            if (renderPartialView) {
+                if (!$("#" + tabsId).attr("partial-render"))
+                    JourneyTabs.OnclickRenderPartial(url, tabsId)
+            }
+            else {
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        tabsId: tabsId,
+                        __RequestVerificationToken: $('[name=__RequestVerificationToken]').val()
+                    },
+                    dataType: "json"
+                });
+            }
+        },
+        OnclickRenderPartial: function (url, tabsId) {
+            if (request && url === previousUrl) {
+                request.abort();
+            }
+            previousUrl = url;
+
+            request = $.ajax({
+                url: url,
+                type: "Get",
+                data: { tabsId: tabsId },
+                dataType: "html",
+                cache: false,
+                async: true,
+                success: function (partialView) {
+                    $('#' + tabsId).html(partialView);
+
+                    if ($.validator && $.validator.unobtrusive)
+                        $.validator.unobtrusive.parse($('#' + tabsId));
+
+                    $("#" + tabsId).attr("partial-render", "true");
+                }
+            });
+        }
+    }
+}();
+
+
+
+var ErrorTooltip = (function ($) {
+    'use strict';
 
     var ErrorTooltip = {};
     var _errorTooltipTemplate;

@@ -24,58 +24,6 @@ function GetUrlWithId(baseUrl, id) {
     return baseUrl + (baseUrl.match(/\/$/) === null ? "/" : "") + id;
 }
 
-window.app = window.app || {};
-
-window.app.dataContext = (function () {
-    var dataContext = {
-        Add: Add,
-        GetValues: GetValues,
-        Update: Update,
-        Delete: Delete,
-        IsModified: IsModified
-    };
-
-    function Add(url, data) {
-        return Ajax("post", url, data, function (data) {
-            return data.id;
-        });
-    }
-
-    function GetValues(url, data) {
-        return Ajax("get", url, data, function (data) {
-            return data;
-        });
-    }
-
-    function Update(url, data) {
-        return Ajax("put", url, data);
-    }
-
-    function Delete(url) {
-        return Ajax("delete", url);
-    }
-
-    function Ajax(method, url, data, callback) {
-        return $.ajax({
-            url: url,
-            method: method,
-            data: data
-        }).then(callback || function () {
-            return;
-        }).fail(Error);
-    }
-
-    function IsModified(newValue, oldValue) {
-        return !_.isEqual(newValue, oldValue);
-    }
-
-    function Error() {
-        toastr.error("An error has occured!");
-    }
-
-    return dataContext;
-})();
-
 window.app.VM = (function (dataContext) {
     "use strict";
 
@@ -84,14 +32,18 @@ window.app.VM = (function (dataContext) {
     var $form;
     var $publishDateDP;
     var pagedBooksUrl;
+    var autocompleteUrl;
 
     self.init = function (params) {
         url = params.url;
+        autocompleteUrl = params.autocompleteUrl;
         pagedBooksUrl = params.pagedBooksUrl;
 
         var book = params.book;
         self.book(book);
+        //self.selectedBook(book);
         self.form(book);
+        self.searchForOptions(params.searchForOptions);
 
         $form = $('#books-form');
         $publishDateDP = $('#PublishDate').parent();
@@ -178,10 +130,63 @@ window.app.VM = (function (dataContext) {
         }
     };
 
+    var searchForOptions = [];
+    var autocompleteOptions = {
+        searchFor: searchForOptions[0],
+        maxResults: 100
+    };
+
+    self.searchForOptions = ko.observableArray();
+    self.autocompleteOptions = ko.observable(autocompleteOptions);
+
+    //self.selectedBook = ko.observable();
+
+    self.selectBook = function (event, ui) {
+        self.book(ui.item.book);
+    };
+
+    self.getBooks = function (request, response) {
+        var data = {
+            searchTerm: request.term
+        };
+        $.extend(data, self.autocompleteOptions());
+
+        dataContext
+            .GetData(autocompleteUrl, data)
+            .done(function (data) {
+                response($.map(data, function (book) {
+                    var result = {
+                        book: book,
+                        value: "",
+                    };
+                    var searchForIndex = self.autocompleteOptions().searchFor;
+                    switch (self.searchForOptions()[searchForIndex].Text) {
+                        case 'Title':
+                            result.value = book.title;
+                            break;
+                        case 'Description':
+                            result.value = book.description;
+                            break;
+                        case 'Author Name':
+                            result.value = book.authorName;
+                            break;
+                    }
+
+                    return result;
+                }));
+            });
+    };
+
     function ApplyChanges() {
-        self.book(self.form());
+        var formValues = ko.toJS(self.form());
+        setAuthorName(formValues);
+        self.book(formValues);
         self.isEditing(false);
     }
+
+    function setAuthorName(form) {
+        form.authorName = form.authorFirstName + " " + form.authorLastName;
+    };
 
     return self;
 })(window.app.dataContext);

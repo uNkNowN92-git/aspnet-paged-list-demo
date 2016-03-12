@@ -240,7 +240,7 @@ namespace PagedListDemo.Repositories.BooksRepository
             // filter Description
             if (!string.IsNullOrEmpty(filters.Description))
             {
-                data = data.Where("Description.Contains(@0)", filters.Description);
+                data = data.Where(x => x.Description.Contains(filters.Description));
             }
 
             // REQUIRED
@@ -250,22 +250,22 @@ namespace PagedListDemo.Repositories.BooksRepository
             var pagedListResult = data
                 .Select(x => new BooksModel
                 {
-                    Author = x.Author.FirstName,
+                    AuthorFirstName = x.Author.FirstName,
                     BookId = x.BookId,
-                    //Description = r.Next(9999, int.MaxValue).ToString(), //x.Description,
+                    //Description = Common.QueryHelpers.BookingCost, //r.Next(9999, int.MaxValue).ToString(), //x.Description,
                     PublishDate = x.PublishDate
                 }).ToPagedListResult(pagedListOptions);
 
             var res = new List<BooksModel>();
-             
-                pagedListResult.Data.ToList()
-                .ForEach(x =>
-                {
-                    var a = r.Next(9999, int.MaxValue) * .0001;
-                    x.Description = a.ToString();
 
-                    res.Add(x);
-                });
+            pagedListResult.Data.ToList()
+            .ForEach(x =>
+            {
+                var a = r.Next(9999, int.MaxValue) * .0001;
+                x.Description = a.ToString();
+
+                res.Add(x);
+            });
 
             //pagedListResult.Data = res;
 

@@ -190,6 +190,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Common\EnumUtils.cs" />
+    <Compile Include="Common\JsonNetResultAttribute.cs" />
     <Compile Include="Common\JsonHandlerAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Common\PagedList\PagedListExtension.cs" />
     <Compile Include="Common\PagedList\PagedListOptions.cs" />
     <Compile Include="Common\PagedList\PagedListResult.cs" />
+    <Compile Include="Common\QueryHelpers.cs" />
     <Compile Include="Common\ServiceInterfaceAttribute.cs" />
     <Compile Include="Controllers\Api\BooksController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -227,6 +229,7 @@
     <Compile Include="Models\Booking\RepeatBookingModel.cs" />
     <Compile Include="Models\BooksModel\BooksFilterOptions.cs" />
     <Compile Include="Models\BooksModel\BooksModel.cs" />
+    <Compile Include="Models\BooksModel\SearchModel.cs" />
     <Compile Include="Models\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -269,6 +272,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\Common\toastr.css" />
+    <Content Include="Content\images\ui-anim_basic_16x16.gif" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -285,6 +289,7 @@
     </Content>
     <Content Include="Scripts\PagedListDemo\Common\app.dataContext.js" />
     <Content Include="Scripts\PagedListDemo\Common\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\PagedListDemo\Common\knockout-autocomplete-bindinghandler.js" />
     <Content Include="Scripts\PagedListDemo\Common\ko-custom-bindinghandlers.js" />
     <Content Include="Scripts\PagedListDemo\Common\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
@@ -324,6 +329,7 @@
     <Content Include="Scripts\PagedListDemo\Common\moment-with-locales.js" />
     <Content Include="Scripts\PagedListDemo\Common\0-moment.js" />
     <Content Include="Scripts\PagedListDemo\Common\underscore.js" />
+    <Content Include="Scripts\PagedListDemo\Components\components.js" />
     <Content Include="Scripts\PagedListDemo\Home\BooksFormViewModel.js" />
     <Content Include="Scripts\PagedListDemo\Home\BooksViewModel.js" />
     <Content Include="Scripts\PagedListDemo\Common\error-tooltip.js" />

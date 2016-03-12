@@ -26,11 +26,29 @@ namespace PagedListDemo.Models.BooksModel
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
 
+        [JsonProperty(PropertyName = "authorId")]
+        public long AuthorId { get; set; }
+
         /// <summary>
         /// Author of the book
         /// </summary>
-        [JsonProperty(PropertyName = "author")]
+        [JsonProperty(PropertyName = "authorName")]
+        public string AuthorFullName
+        {
+            get
+            {
+                return AuthorFirstName + " " + AuthorLastName;
+            }
+        }
+
+        [JsonIgnore]
         public string Author { get; set; }
+
+        [JsonProperty(PropertyName = "authorFirstName")]
+        public string AuthorFirstName { get; set; }
+
+        [JsonProperty(PropertyName = "authorLastName")]
+        public string AuthorLastName { get; set; }
 
         /// <summary>
         /// Pusblish date of the book

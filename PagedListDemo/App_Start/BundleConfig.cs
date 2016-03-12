@@ -38,9 +38,9 @@ namespace PagedListDemo
             bundles.RegisterDynamicBundles();
 
 #if DEBUG
-            // disable minification of the bundles
             foreach (var bundle in BundleTable.Bundles)
-                bundle.Transforms.Clear();
+                // disable minification of the bundles
+                bundle.Transforms.RemoveAt(0);
 #endif
 
             BundleTable.EnableOptimizations = true;

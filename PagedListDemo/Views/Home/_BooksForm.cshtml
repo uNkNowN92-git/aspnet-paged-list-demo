@@ -19,11 +19,34 @@
         <button class="btn btn-primary save" data-bind="click: update, visible: isEditing" type="button">Save</button>
         <button class="btn btn-success save" data-bind="click: add, visible: isEditing" type="button">Add</button>
     </div>
+    <hr />
+    <div class="form-inline">
+        <label>Search term</label>
+        @Html.TextBoxFor(x => x.Title,
+        new
+        {
+            data_bind = "autocomplete: { source: getBooks, select: selectBook }",
+            @class = "form-control"
+        })
+
+        <label>by</label>
+        <select class="form-control"
+                data-bind="value: autocompleteOptions().searchFor,
+                options: searchForOptions,
+                optionsText: 'Text' ,
+                optionsValue: 'Value'"></select>
+        <label>Max results</label>
+        <input data-bind="value: autocompleteOptions().maxResults" type="number" class="form-control" min="1" value="" />
+    </div>
+    <hr />
+
+    <pre data-bind="text: ko.toJSON(book, null, 2)"></pre>
 
     <div class="form-group col-sm-6">
         @Html.LabelFor(x => x.Author)
-        <p data-bind="text: book().author, visible: !isEditing()"></p>
-        @Html.TextBoxFor(x => x.Author, new { @data_bind = "value: form().author, visible: isEditing", @class = "form-control" })
+        <p data-bind="text: book().authorName, visible: !isEditing()"></p>
+        @Html.TextBoxFor(x => x.Author, new { @data_bind = "value: form().authorFirstName, visible: isEditing", @class = "form-control" })
+        @Html.TextBoxFor(x => x.Author, new { @data_bind = "value: form().authorLastName, visible: isEditing", @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Author)
     </div>
     <div class="form-group col-sm-6">

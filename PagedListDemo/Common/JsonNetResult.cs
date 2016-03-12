@@ -46,7 +46,10 @@ namespace PagedListDemo.Common
             if (ContentEncoding != null)
                 response.ContentEncoding = ContentEncoding;
             if (Data == null)
+            {
+                var type = Data.GetType();
                 return;
+            }
 
             var scriptSerializer = JsonSerializer.Create(Settings);
             scriptSerializer.Serialize(response.Output, Data);

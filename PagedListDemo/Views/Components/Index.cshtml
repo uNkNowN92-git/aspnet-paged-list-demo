@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;//"~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Components";
 }
 
@@ -9,10 +9,23 @@
 <pre>@ViewBag.Id</pre>
 <pre>@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["Books"], Newtonsoft.Json.Formatting.Indented))</pre>
 
+<button id="init">Init</button>
+
 @*@Html.Partial("_RadioButtonToggle")*@
 
-@section scripts {
-    @Styles.Render("~/Content/components")
-    <link href="http://jmblog.github.io/color-themes-for-google-code-prettify/css/themes/github.css" rel="stylesheet" />
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-}
+@*@section scripts {*@
+@*@Styles.Render("~/Content/components")*@
+
+<script>
+    $(function () {
+        $('#init').click(function () {
+            var result = components.init();
+            console.log(result);
+        });
+    });
+</script>
+
+<link href="http://jmblog.github.io/color-themes-for-google-code-prettify/css/themes/github.css" rel="stylesheet" />
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+@Html.RenderControllerScriptBundle("Components");
+@*  *@}

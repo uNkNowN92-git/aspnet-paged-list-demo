@@ -25,8 +25,49 @@ namespace PagedListDemo.Controllers.Api
                 Description = x.Description,
                 Title = x.Title,
                 PublishDate = x.PublishDate,
-                Author = x.Author.FirstName + " " + x.Author.LastName
+                AuthorFirstName = x.Author.FirstName,
+                AuthorLastName = x.Author.LastName
             });
+        }
+
+        [Route("api/books/autocomplete", Name = "BooksAutocomplete")]
+        public IEnumerable<BooksModel> GetAutocomplete([FromUri]SearchModel searchModel)
+        {
+            var booksQuery = db.Books.AsQueryable();
+            searchModel.SearchTerm = searchModel.SearchTerm ?? "";
+
+            switch (searchModel.SearchFor)
+            {
+                case SearchFor.Title:
+                    booksQuery = booksQuery
+                        .Where(x => x.Title.Contains(searchModel.SearchTerm));
+                    break;
+
+                case SearchFor.Description:
+                    booksQuery = booksQuery
+                        .Where(x => x.Description.Contains(searchModel.SearchTerm));
+                    break;
+
+                case SearchFor.AuthorName:
+                    booksQuery = booksQuery
+                        .Where(x => x.Author.FirstName.Contains(searchModel.SearchTerm)
+                            || x.Author.LastName.Contains(searchModel.SearchTerm));
+                    break;
+            }
+
+            var books = booksQuery.Take(searchModel.MaxResults)
+                .Select(x => new BooksModel
+                {
+                    BookId = x.BookId,
+                    Description = x.Description,
+                    Title = x.Title,
+                    PublishDate = x.PublishDate,
+                    AuthorFirstName = x.Author.FirstName,
+                    AuthorLastName = x.Author.LastName,
+                    AuthorId = x.AuthorId,
+                });
+
+            return books;
         }
 
         [Route("api/books/paged", Name = "BooksPaged")]
@@ -63,22 +104,27 @@ namespace PagedListDemo.Controllers.Api
 
         // PUT: api/Books/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutBook(long id, Models.BooksModel.BooksModel booksModel)
+        public IHttpActionResult PutBook(long id, BooksModel booksModel)
         {
+            if (id != booksModel.BookId)
+                return BadRequest();
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // MAP using SERVICE
-            var book = new Book
-            {
-                BookId = booksModel.BookId,
-                Description = booksModel.Description,
-                Title = booksModel.Title,
-                PublishDate = booksModel.PublishDate
-            };
+            var book = db.Books.Find(id);
 
-            if (id != book.BookId)
-                return BadRequest();
+            if (book == null)
+                return StatusCode(HttpStatusCode.NotFound);
+
+            // MAP using SERVICE
+            book.BookId = booksModel.BookId;
+            book.Description = booksModel.Description;
+            book.Title = booksModel.Title;
+            book.PublishDate = booksModel.PublishDate;
+
+            book.Author.FirstName = booksModel.AuthorFirstName;
+            book.Author.LastName = booksModel.AuthorLastName;
 
             try
             {

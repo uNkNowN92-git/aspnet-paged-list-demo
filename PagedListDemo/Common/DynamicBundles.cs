@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -55,12 +56,19 @@ namespace DynamicBundles
         public static MvcHtmlString RenderControllerStyleBundle(this HtmlHelper helper)
         {
             var controllerName = helper.ViewContext.RouteData.Values["controller"].ToString();
-            var bundle = BundleTable.Bundles.GetBundleFor(controllerName.GetPathFromTemplate(_stylesPathTemplate));
 
-            if (bundle != null)
-                return new MvcHtmlString(Styles.Render(bundle.Path).ToString());
+            return helper.RenderStyleBundle(controllerName);
+        }
 
-            return new MvcHtmlString(null);
+        /// <summary>
+        /// Renders the style bundle based on the controller name.
+        /// </summary>
+        /// <param name="helper">The HtmlHelper</param>
+        /// <param name="controllerName">The controller name</param>
+        /// <returns>Returns the link tags for the controller bundle.</returns>
+        public static MvcHtmlString RenderControllerStyleBundle(this HtmlHelper helper, string controllerName)
+        {
+            return helper.RenderStyleBundle(controllerName);
         }
 
         /// <summary>
@@ -71,12 +79,19 @@ namespace DynamicBundles
         public static MvcHtmlString RenderControllerScriptBundle(this HtmlHelper helper)
         {
             var controllerName = helper.ViewContext.RouteData.Values["controller"].ToString();
-            var bundle = BundleTable.Bundles.GetBundleFor(controllerName.GetPathFromTemplate(_bundlesPathTemplate));
 
-            if (bundle != null)
-                return new MvcHtmlString(Scripts.Render(bundle.Path).ToString());
+            return helper.RenderScriptBundle(controllerName);
+        }
 
-            return new MvcHtmlString(null);
+        /// <summary>
+        /// Renders the script bundle based on the controller name.
+        /// </summary>
+        /// <param name="helper">The HtmlHelper</param>
+        /// <param name="controllerName">The controller name</param>
+        /// <returns>Returns the script tags for the controller bundle.</returns>
+        public static MvcHtmlString RenderControllerScriptBundle(this HtmlHelper helper, string controllerName)
+        {
+            return helper.RenderScriptBundle(controllerName);
         }
 
         /// <summary>
@@ -102,9 +117,28 @@ namespace DynamicBundles
                         .IncludeDirectory(contentPath, "*.css", true));
 
                 if (Directory.Exists(scriptsServerPath))
-                    bundles.Add(new ScriptBundle(bundlesPath)
+                    bundles.Add(new Bundle(bundlesPath, new JsMinify(), new JsSourceUrlTransform())
                         .IncludeDirectory(scriptsPath, "*.js", true));
             });
+        }
+        static MvcHtmlString RenderScriptBundle(this HtmlHelper helper, string controllerName)
+        {
+            var bundle = BundleTable.Bundles.GetBundleFor(controllerName.GetPathFromTemplate(_bundlesPathTemplate));
+
+            if (bundle != null)
+                return new MvcHtmlString(Scripts.Render(bundle.Path).ToString());
+
+            return new MvcHtmlString(null);
+        }
+
+        static MvcHtmlString RenderStyleBundle(this HtmlHelper helper, string controllerName)
+        {
+            var bundle = BundleTable.Bundles.GetBundleFor(controllerName.GetPathFromTemplate(_stylesPathTemplate));
+
+            if (bundle != null)
+                return new MvcHtmlString(Styles.Render(bundle.Path).ToString());
+
+            return new MvcHtmlString(null);
         }
 
         static List<string> GetControllerNames()
@@ -134,6 +168,34 @@ namespace DynamicBundles
                 return s.Substring(0, s.Length - suffix.Length);
 
             return s;
+        }
+    }
+
+    /// <summary>
+    /// Javascript Source Url Transform
+    /// </summary>
+    public class JsSourceUrlTransform : IBundleTransform
+    {
+        /// <summary>
+        /// Adds '//# sourceURL=pathToJS'  at the end of the script to be able to map the script
+        /// on the sources tab of the browser for debugging.
+        /// </summary>
+        public JsSourceUrlTransform() { }
+
+        /// <summary>
+        /// Process the transform
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="response"></param>
+        public void Process(BundleContext context, BundleResponse response)
+        {
+            var sb = new StringBuilder(response.Content);
+            sb.AppendLine();
+            sb.AppendLine(string.Format(@"//# sourceURL={0}{1}",
+                HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority),
+                VirtualPathUtility.ToAbsolute(context.BundleVirtualPath)));
+
+            response.Content = sb.ToString();
         }
     }
 }
