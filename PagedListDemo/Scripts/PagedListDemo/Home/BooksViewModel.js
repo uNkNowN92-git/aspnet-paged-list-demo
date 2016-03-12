@@ -110,26 +110,4 @@ var BooksViewModel = function (params) {
     //console.log(self.headers()['Authorization']);
 };
 
-var viewModel1 = new BooksViewModel({
-    url: "/api/values",
-    entriesPerPage: 5,
-    queryOnFilterChangeOnly: false,
-    //dataAsObservable: false,
-});
 
-var viewModel2 = new BooksViewModel({
-    url: "/api/values",
-    entriesPerPage: 5,
-    queryOnLoad: false,
-    //queryOnFilterChangeOnly: false
-    dataAsObservable: true,
-    // setting dataAsObservable to false will make the mapping option to be useless
-    mapping: {
-        create: function (options) {
-            return new BookModel(options.data);
-        }
-    }
-});
-
-//ko.applyBindings(viewModel1, $("#paged-list-demo")[0]);
-//ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);

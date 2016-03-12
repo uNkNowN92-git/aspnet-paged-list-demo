@@ -1,6 +1,13 @@
+/*
+ * knockout-paged-list v1.1.9
+ * A KnockoutJS Plugin for Paged List/Grid
+ * @repository https://github.com/uNkNowN92-git/knockout-paged-list.git
+ * @license ISC
+ */
 var PagedList = (function ($, ko) {
     'use strict';
-    return function (option) {
+
+    function PagedList(option) {
         var self = this;
 
 
@@ -37,10 +44,10 @@ var PagedList = (function ($, ko) {
 
         var _defaultUrl = "/";
         var _dataAsObservable;
-        var _queryOnLoad = true;
-        var _defaultEntriesPerPage = 5;
-        var _clearLoadedDataOnError = false;
-        var _queryOnFilterChangeOnly = true;
+        var _queryOnLoad;
+        var _defaultEntriesPerPage;
+        var _clearLoadedDataOnError;
+        var _queryOnFilterChangeOnly;
 
         /* Server-related variables */
         var responseData;
@@ -83,6 +90,11 @@ var PagedList = (function ($, ko) {
 
 
         /* HELPERS */
+
+        /* Misc */
+
+        self.isReady = ko.observable(false);
+
 
         /* Paging helpers */
 
@@ -281,11 +293,15 @@ var PagedList = (function ($, ko) {
             _url(url !== undefined ? url : _defaultUrl);
         };
 
-        self.getList = function (data, event) {
-            if (_isPreserveCurrentPage === true) _requestedPage(self.currentPage());
-            else _requestedPage(1);
+        self.getList = function (data, event, url) {
+            if (url) {
+                self.setUrl(url);
+            } else {
+                if (_isPreserveCurrentPage === true) _requestedPage(self.currentPage());
+                else _requestedPage(1);
 
-            GetDataUrl(event);
+                GetDataUrl(event);
+            }
 
             UpdateDisplayedEntries();
         };
@@ -446,6 +462,8 @@ var PagedList = (function ($, ko) {
                     url: _url().toString(),
                     method: 'get',
                     dataType: 'json',
+                    cache: false,
+                    async: true,
                     data: _queryOptions(),
                     success: ProcessResponse,
                     error: ProcessError,
@@ -569,7 +587,7 @@ var PagedList = (function ($, ko) {
 
         function ProcessError(jqXHR, status, error) {
 
-            // fix for null result from JsonResult
+            // fix for null JsonResult from server
             if (jqXHR.status === 200) {
                 responseTotalEntries = 0;
                 ProcessResponseDetails();
@@ -619,13 +637,12 @@ var PagedList = (function ($, ko) {
         /* Initialization */
 
         function ConfigureOptions() {
-
             if (option) {
                 _defaultUrl = ValueOrDefault(option.url, _defaultUrl);
-                _queryOnLoad = ValueOrDefault(option.queryOnLoad, _queryOnLoad);
-                _defaultEntriesPerPage = ValueOrDefault(option.entriesPerPage, _defaultEntriesPerPage);
-                _clearLoadedDataOnError = ValueOrDefault(option.clearLoadedDataOnError, _clearLoadedDataOnError);
-                _queryOnFilterChangeOnly = ValueOrDefault(option.queryOnFilterChangeOnly, _queryOnFilterChangeOnly);
+                _queryOnLoad = PagedList.setup.queryOnLoad || ValueOrDefault(option.queryOnLoad, PagedList.defaults.queryOnLoad);
+                _defaultEntriesPerPage = PagedList.setup.defaultEntriesPerPage || ValueOrDefault(option.entriesPerPage, PagedList.defaults.defaultEntriesPerPage);
+                _clearLoadedDataOnError = PagedList.setup.clearLoadedDataOnError || ValueOrDefault(option.clearLoadedDataOnError, PagedList.defaults.clearLoadedDataOnError);
+                _queryOnFilterChangeOnly = PagedList.setup.queryOnFilterChangeOnly || ValueOrDefault(option.queryOnFilterChangeOnly, PagedList.defaults.queryOnFilterChangeOnly);
                 _mapping = ValueOrDefault(option.mapping, _mapping);
                 // setting dataAsObservable to false will make the mapping option to be useless
                 _dataAsObservable = ValueOrDefault(option.dataAsObservable,
@@ -639,6 +656,7 @@ var PagedList = (function ($, ko) {
             }
         }
 
+
         function Init() {
 
             if (_defaultUrl !== undefined) {
@@ -648,9 +666,56 @@ var PagedList = (function ($, ko) {
                 if (_queryOnLoad)
                     self.getList();
             }
+
+            self.isReady(true);
         }
 
         Init();
+    }
 
+
+    /* Setup */
+
+    PagedList.setup = {};
+
+
+    /* Defaults */
+
+    PagedList.defaults = {
+        queryOnLoad: true,
+        defaultEntriesPerPage: 5,
+        clearLoadedDataOnError: false,
+        queryOnFilterChangeOnly: true
     };
+
+
+    /* Static functions */
+
+    // Sets the default option values if not defined during instatiation.
+    PagedList.setDefaults = function (options) {
+        if (options) $.extend(PagedList.defaults, options);
+
+        // for intellisense only
+        var _options = [
+            options.queryOnLoad,
+            options.defaultEntriesPerPage,
+            options.clearLoadedDataOnError,
+            options.queryOnFilterChangeOnly
+        ];
+    };
+
+    // Overrides the all the options defined during the instatiation.
+    PagedList.setup = function (options) {
+        if (options) $.extend(PagedList.setup, options);
+
+        // for intellisense only
+        var _options = [
+            options.queryOnLoad,
+            options.defaultEntriesPerPage,
+            options.clearLoadedDataOnError,
+            options.queryOnFilterChangeOnly
+        ];
+    };
+
+    return PagedList;
 })(jQuery, ko);

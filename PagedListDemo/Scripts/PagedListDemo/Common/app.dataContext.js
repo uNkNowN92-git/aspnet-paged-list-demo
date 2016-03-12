@@ -1,7 +1,11 @@
 ﻿window.app = window.app || {};
 
 window.app.dataContext = (function () {
-    var dataContext = {
+    function dataContext() {
+
+    }
+
+    var prototypes = {
         Add: Add,
         Post: Post,
         GetData: GetData,
@@ -9,6 +13,8 @@ window.app.dataContext = (function () {
         Delete: Delete,
         IsModified: IsModified
     };
+
+    dataContext.prototype = prototypes;
 
     var requests = [];
     var request;
@@ -137,4 +143,4 @@ window.app.dataContext = (function () {
     };
 
     return dataContext;
-})();
+}());

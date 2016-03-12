@@ -24,17 +24,17 @@ function GetUrlWithId(baseUrl, id) {
     return baseUrl + (baseUrl.match(/\/$/) === null ? "/" : "") + id;
 }
 
-window.app.VM = (function (dataContext) {
+window.app.VM = (function (_dataContext) {
     "use strict";
 
-    var self = {};
+    var dataContext = new window.app.dataContext();
     var url;
     var $form;
     var $publishDateDP;
     var pagedBooksUrl;
     var autocompleteUrl;
 
-    self.init = function (params) {
+    function init(params) {
         url = params.url;
         autocompleteUrl = params.autocompleteUrl;
         pagedBooksUrl = params.pagedBooksUrl;
@@ -57,6 +57,7 @@ window.app.VM = (function (dataContext) {
                 self.form().publishDate = GetDefaultDateFormat(e);
         });
     };
+    var self = init.prototype;
 
     self.book = ko.observable();
     self.form = ko.observable();
@@ -188,5 +189,5 @@ window.app.VM = (function (dataContext) {
         form.authorName = form.authorFirstName + " " + form.authorLastName;
     };
 
-    return self;
-})(window.app.dataContext);
+    return init;
+}(window.app.dataContext));
