@@ -39,7 +39,7 @@ window.app.VM = (function (_dataContext) {
         autocompleteUrl = params.autocompleteUrl;
         pagedBooksUrl = params.pagedBooksUrl;
 
-        var book = params.book;
+        var book = params.book || {};
         self.book(book);
         //self.selectedBook(book);
         self.form(book);
@@ -75,13 +75,17 @@ window.app.VM = (function (_dataContext) {
         var data = {
             sortBy: 'BookId'
         };
-        dataContext.GetValues(pagedBooksUrl, data).done(function (data) {
+        dataContext.GetData(pagedBooksUrl, data).done(function (data) {
             console.log(data);
+            var books = data.Data;
+            var myBooks = _.pluck(_.where(books, { 'title': 'New Title' }), 'bookId');
+            self.cards(books);
+            self.selectedCards(myBooks);
         });
     };
 
     self.getValue = function () {
-        dataContext.GetValues(GetUrlWithId(url, self.form().bookId)).done(function (data) {
+        dataContext.GetData(GetUrlWithId(url, self.form().bookId)).done(function (data) {
             self.form(data);
             ApplyChanges();
         });
@@ -144,6 +148,24 @@ window.app.VM = (function (_dataContext) {
 
     self.selectBook = function (event, ui) {
         self.book(ui.item.book);
+    };
+
+    self.cards = ko.observableArray([]);
+    self.selectedCards = ko.observableArray([]);
+    
+    self.getCards = function () {
+        //var cards = [{
+        //    id: "2",
+        //    description: "Card 1"
+        //},
+        //{
+        //    id: 4,
+        //    description: "Card Abc"
+        //}];
+        //cards = ko.toJS(cards);
+        
+        self.selectedCards([7,8]);
+        //self.cards(cards);
     };
 
     self.getBooks = function (request, response) {

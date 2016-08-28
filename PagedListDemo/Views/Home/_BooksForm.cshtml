@@ -9,6 +9,17 @@
 
 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "books-form", data_bind = "visible: isReady", @style = "display: none" }))
 {
+    <div data-bind="foreach: cards">
+        <label>
+            <input data-bind="value: bookId, checked: $root.selectedCards" type="checkbox" />
+            <span data-bind="text: description"></span>
+        </label>
+    </div>
+    <button data-bind="click: getCards" class="btn btn-default">Get cards</button>
+    <pre data-bind="text: ko.toJSON(selectedCards, null, 2)"></pre>
+    <pre data-bind="text: ko.toJSON(cards, null, 2)"></pre>
+
+
     @*@Html.ValidationSummary()*@
     <div class="row">
         <button class="btn btn-default" data-bind="click: getValues, visible: !isEditing()" type="button">Get List</button>
@@ -40,7 +51,7 @@
     </div>
     <hr />
 
-    <pre data-bind="text: ko.toJSON(book, null, 2)"></pre>
+    @*<pre data-bind="text: ko.toJSON(book, null, 2)"></pre>*@
 
     <div class="form-group col-sm-6">
         @Html.LabelFor(x => x.Author)
@@ -64,9 +75,12 @@
 
     <div class="form-group">
         @Html.LabelFor(x => x.PublishDate)
+        @Html.DisplayFor(x => x.PublishDate)
+        @Html.EditorFor(x => x.PublishDate)
+
         <p data-bind="text: book().publishDate, visible: !isEditing()"></p>
         <div data-bind="visible: isEditing" class="input-group date">
-            @Html.TextBoxFor(x => x.PublishDate, new { @data_bind = "value: form().publishDate", @class = "form-control" })
+            @*@Html.TextBoxFor(x => x.PublishDate, new { @data_bind = "value: form().publishDate", @class = "form-control" })*@
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>

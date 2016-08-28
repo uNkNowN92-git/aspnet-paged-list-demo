@@ -55,6 +55,7 @@ namespace PagedListDemo.Models.BooksModel
         /// </summary>
         [JsonProperty(PropertyName = "publishDate")]
         [JsonConverter(typeof(DayMonthYearDateConverter))]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? PublishDate { get; set; }
 
         /// <summary>

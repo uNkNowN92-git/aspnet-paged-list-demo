@@ -31,13 +31,13 @@
 
 <div class="panel">
     <div class="panel-body">
-        @Html.Partial("_PagedListDemo1")
+        @*@Html.Partial("_PagedListDemo1")*@
     </div>
 </div>
 
 <div class="panel">
     <div class="panel-body">
-        @*@Html.Partial("_PagedListDemo2")*@
+        @Html.Partial("_PagedListDemo2")
     </div>
 </div>
 
@@ -108,8 +108,8 @@
                 }
             });
 
-            ko.applyBindings(booksViewModel, $("#paged-list-demo")[0]);
-            //ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);
+            //ko.applyBindings(booksViewModel, $("#paged-list-demo")[0]);
+            ko.applyBindings(viewModel2, $("#paged-list-demo-2")[0]);
 
             ErrorTooltip.Init(['[type="submit"]', '.save']);
         });
